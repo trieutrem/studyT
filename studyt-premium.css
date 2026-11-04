@@ -1,0 +1,364 @@
+/* StudyT Aurora UI — shared presentation layer for index.html & admin.html.
+   Adds a functional dashboard and restyles existing controls without replacing their behavior. */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap');
+:root{
+  --stux-navy:#151f58;--stux-indigo:#495fe7;--stux-violet:#8070fa;--stux-lilac:#a89cff;
+  --stux-text:#232c66;--stux-muted:#727aaa;--stux-border:rgba(133,134,211,.19);
+  --stux-shadow:0 16px 42px rgba(64,70,150,.11),0 3px 9px rgba(72,66,158,.05);
+  --stux-glass:rgba(255,255,255,.77);
+  --bg:#f2f2ff;--panel:#fff;--ink:#252d63;--muted:#737ba4;--line:#dfe3fa;
+  --primary:#635ce8;--primary2:#4d78e7;--u-r:20px;--u-r2:13px;
+}
+html body{font-family:'Be Vietnam Pro',Inter,system-ui,-apple-system,'Segoe UI',sans-serif!important;color:var(--ink)}
+html:not([data-theme="dark"]) body{background:linear-gradient(130deg,#eff4ff 0%,#f3efff 50%,#ecebff 100%);color:var(--stux-text)}
+html body #landingView#landingView{
+  position:relative;max-width:none!important;min-height:100vh;box-sizing:border-box;
+  margin:0!important;padding:22px 26px 74px 298px!important;
+  background:radial-gradient(ellipse 520px 380px at 71% 15%,rgba(124,127,247,.20),transparent 75%),radial-gradient(ellipse 550px 380px at 18% 80%,rgba(171,153,255,.15),transparent 75%),linear-gradient(135deg,#eef2ff 0%,#f8f6ff 42%,#ececff 100%)!important;
+}
+html body #landingView#landingView > :not(#homeTabs){width:100%;max-width:1480px!important;margin-right:auto!important;margin-left:auto!important;box-sizing:border-box}
+html body #landingView .home-pane{max-width:1480px!important;margin:0 auto!important;min-width:0}
+/* Persistent navigation: warm navy with neon active state, like the reference. */
+html body nav#homeTabs.home-tabs{
+  position:fixed!important;inset:0 auto 0 0!important;top:0!important;bottom:0!important;left:0!important;right:auto!important;
+  transform:none!important;width:270px!important;height:100vh!important;max-height:100vh!important;
+  margin:0!important;padding:22px 14px 16px!important;box-sizing:border-box;gap:6px!important;
+  display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;
+  overflow-x:hidden!important;overflow-y:auto!important;scrollbar-width:thin;scrollbar-color:#686ad4 transparent;
+  border:0!important;border-right:1px solid rgba(173,179,255,.28)!important;border-radius:0!important;
+  background:radial-gradient(ellipse at 0 95%,rgba(112,107,228,.52),transparent 40%),linear-gradient(155deg,#151e57 3%,#171d59 45%,#292b83 100%)!important;
+  box-shadow:12px 0 35px rgba(44,51,127,.13)!important;z-index:200!important;
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+}
+html body nav#homeTabs.home-tabs::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.43;background:radial-gradient(circle at 92% 10%,rgba(118,160,255,.2),transparent 35%),radial-gradient(circle at 26% 100%,rgba(217,131,255,.27),transparent 34%);border-radius:0}
+html body nav#homeTabs.home-tabs::after{content:"";pointer-events:none;position:fixed;left:269px;top:0;bottom:0;width:1px;background:linear-gradient(transparent,#98a3ff77,transparent)}
+html body nav#homeTabs.home-tabs > button{
+  position:relative;flex:0 0 auto!important;width:100%!important;min-height:46px!important;
+  padding:10px 14px!important;margin:0!important;display:flex!important;flex-direction:row!important;justify-content:flex-start!important;align-items:center!important;
+  gap:14px!important;border:1px solid transparent!important;border-radius:16px!important;
+  background:transparent!important;color:#c3caff!important;text-align:left!important;font-size:13.5px!important;line-height:1.3!important;font-weight:650!important;
+  white-space:normal!important;text-shadow:none!important;box-shadow:none!important;
+  transform:none!important;transition:background .23s ease,box-shadow .23s ease,transform .23s ease,color .23s ease!important;
+}
+html body nav#homeTabs.home-tabs > button:hover:not(.on){background:rgba(125,152,255,.13)!important;border-color:rgba(178,202,255,.22)!important;color:#fff!important;transform:translateX(3px)!important}
+html body nav#homeTabs.home-tabs > button.on{
+ background:linear-gradient(112deg,rgba(59,109,255,.92),rgba(110,96,227,.92))!important;
+ border:1px solid rgba(195,219,255,.48)!important;color:#fff!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.56),0 0 0 1px rgba(105,161,255,.32),0 0 22px rgba(75,135,255,.43),0 8px 20px rgba(15,18,82,.27)!important;
+ transform:none!important;
+}
+html body nav#homeTabs.home-tabs > button .ic{width:31px!important;flex:none!important;font-size:22px!important;color:#adb7ff!important;filter:drop-shadow(0 2px 4px rgba(16,12,79,.18))}
+html body nav#homeTabs.home-tabs > button.on .ic{color:#e7f6ff!important;filter:drop-shadow(0 0 8px #7ddcffaa)}
+html body nav#homeTabs.home-tabs > button .ic svg{max-width:30px;max-height:30px}
+html body nav#homeTabs.home-tabs > button>span:last-child{font-size:inherit!important;min-width:0;text-align:left}
+html body #homeTabs button[data-p="st"]{margin-top:4px!important}
+html body nav#homeTabs .nv-subs{
+  position:static!important;left:auto!important;right:auto!important;bottom:auto!important;transform:none!important;
+  width:100%!important;max-width:none!important;min-width:0!important;margin:0!important;padding:3px 0 5px 18px!important;gap:2px!important;
+  background:transparent!important;border:0!important;border-radius:14px!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+}
+html body nav#homeTabs .nv-subs button{color:#c4cbff!important;background:transparent!important;text-shadow:none!important;box-shadow:none!important;font-size:12px!important;border:0!important;border-radius:13px!important;text-align:left!important;width:100%!important;max-width:100%!important;min-width:0!important;transform:none!important}
+html body nav#homeTabs .nv-subs button:hover,html body nav#homeTabs .nv-subs button.on{color:#fff!important;background:rgba(132,158,255,.19)!important}
+html body nav#homeTabs button[data-p="tk"]::after{right:16px!important;top:50%!important;margin-top:-5px!important;width:7px!important;height:7px!important;border-color:currentColor!important}
+html body .stux-brand{position:relative;display:flex;align-items:center;gap:12px;padding:2px 7px 16px;margin-bottom:12px;border-bottom:1px solid rgba(226,226,255,.1);color:#fff;cursor:pointer;min-height:74px;outline-offset:4px}
+html body .stux-brand img{width:56px;height:56px;object-fit:contain;filter:drop-shadow(0 3px 12px rgba(169,151,255,.48));animation:stuxLogoFloat 4s ease-in-out infinite}
+html body .stux-brand strong{font-size:26px;line-height:1.1;letter-spacing:-.9px;font-weight:900;display:block;text-shadow:0 4px 18px rgba(15,11,65,.3)}
+html body .stux-brand small{display:block;letter-spacing:.15em;font-weight:800;color:#a9b8ff;font-size:9px;margin-top:7px}
+html body .stux-brand:focus-visible{outline:3px solid #a4b5ff;border-radius:13px}
+html body .stux-sidefoot{position:relative;flex:none;margin-top:auto;min-height:220px;display:flex;flex-direction:column;justify-content:flex-end;padding-top:72px}
+html body .stux-sidefoot>img{position:absolute;width:225px;max-width:100%;height:230px;object-fit:contain;bottom:62px;left:1px;filter:drop-shadow(0 12px 18px rgba(168,129,255,.24));animation:stuxPigHover 4.5s ease-in-out infinite;pointer-events:none;z-index:0}
+html body .stux-sidefoot-card{position:relative;z-index:1;border:1px solid rgba(201,215,255,.27);border-radius:19px;padding:16px;background:linear-gradient(140deg,rgba(96,152,255,.86),rgba(81,73,201,.77));color:#fff;box-shadow:inset 0 1px rgba(255,255,255,.43),0 12px 30px rgba(19,20,80,.27);backdrop-filter:blur(10px)}
+html body .stux-sidefoot-card strong{display:block;font-size:13px;margin-bottom:7px}
+html body .stux-sidefoot-card span{display:block;font-size:11px;color:#e7e7ff;line-height:1.6}
+html body .stux-sidefoot-card a{font-size:11px;font-weight:800;text-decoration:none;color:#fff;margin-top:10px;display:inline-flex;gap:5px;align-items:center}
+/* Functional top bar; existing theme settings and controls remain intact. */
+html body #landingView .landing-nav{display:none!important}
+html body #stux-topbar{
+ width:100%;height:66px;display:flex;align-items:center;justify-content:space-between;gap:18px;
+ padding:0 4px 4px;margin:0 auto 21px!important;background:transparent;box-shadow:none;
+}
+html body .stux-search-trigger{
+ display:flex;align-items:center;gap:14px;max-width:590px;min-width:160px;flex:1;height:54px;padding:0 20px;
+ border:1px solid rgba(166,177,255,.5);border-radius:999px;background:linear-gradient(105deg,rgba(84,105,213,.12),rgba(120,100,218,.15));
+ box-shadow:inset 0 1px rgba(255,255,255,.9),0 8px 24px rgba(108,111,197,.09);color:#5f69a5;text-align:left;cursor:pointer;transition:background .18s,box-shadow .18s;
+}
+html body .stux-search-trigger:hover{background:rgba(218,220,255,.66);box-shadow:0 8px 28px rgba(96,91,195,.15)}
+html body .stux-search-trigger>svg{color:#746bca;flex:none}
+html body .stux-search-trigger span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;color:#7278a7;font-size:13px}
+html body .stux-search-trigger kbd{font:600 11px 'Be Vietnam Pro',system-ui;letter-spacing:.01em;color:#6d71b8;border:1px solid rgba(150,156,220,.33);border-radius:7px;padding:5px 7px;background:#ffffff77;white-space:nowrap}
+html body .stux-top-actions{display:flex;align-items:center;gap:11px;flex:none}
+html body .stux-tool-btn{position:relative;height:44px;min-width:44px;display:flex;justify-content:center;align-items:center;gap:6px;color:#6161bd;border:1px solid #d9dcfb;border-radius:15px;background:linear-gradient(135deg,#fff,#e8e9ff);box-shadow:0 6px 14px #6a75ca1c;cursor:pointer}
+html body .stux-tool-btn:hover{box-shadow:0 6px 22px #6566db35;transform:translateY(-2px)}
+html body .stux-tool-divider{height:17px;width:1px;background:#c5c7ed}
+html body .stux-indicator{position:absolute;top:7px;right:7px;width:6px;height:6px;border-radius:50%;background:#fe6da1;box-shadow:0 0 0 3px #ff75a433}
+html body .stux-avatar{width:46px;height:46px;display:grid;place-items:center;background:linear-gradient(145deg,#f4cde0,#b0b2ef);border:2px solid white;border-radius:50%;color:#514e86;font-size:19px;font-weight:900;box-shadow:0 6px 18px rgba(76,80,149,.15);cursor:pointer}
+html body .stux-mobile-nav{display:none}
+/* Modern home dashboard (fully interactive cards, no mock values). */
+html body #stux-dashboard{--stux-txt:#262a69;--stux-sub:#6870aa;position:relative;color:var(--stux-txt);padding-bottom:12px;display:block;font-size:14px}
+html body #stux-dashboard *{box-sizing:border-box}
+html body #stux-dashboard button{font-family:inherit;cursor:pointer}
+html body #stux-dashboard button:focus-visible,html body #stux-topbar button:focus-visible{outline:3px solid #8276ef;outline-offset:3px}
+html body #stux-dashboard .stux-hero-grid{display:grid;grid-template-columns:minmax(0,1fr) 286px;gap:16px;align-items:stretch}
+html body #stux-dashboard .stux-hero{position:relative;overflow:hidden;min-height:289px;padding:29px 35px;border-radius:29px;background:radial-gradient(circle at 78% 20%,#5273ecbd,transparent 49%),radial-gradient(circle at 20% 85%,#8b5fd477,transparent 55%),linear-gradient(110deg,#243279 0%,#343ca3 55%,#5466df 100%);box-shadow:0 14px 36px rgba(57,61,151,.21),inset 0 1px rgba(255,255,255,.25);color:#fff}
+html body #stux-dashboard .stux-hero::before{content:"";position:absolute;width:290px;height:290px;top:-120px;left:8%;border:1px solid rgba(200,204,255,.17);border-radius:50%;box-shadow:0 0 0 68px rgba(230,218,255,.035),0 0 0 133px rgba(230,218,255,.026)}
+html body #stux-dashboard .stux-hero::after{content:"✦";position:absolute;top:23px;right:42%;font-size:23px;color:#f6e19a;filter:drop-shadow(0 0 13px #d6bdff);animation:stuxTwinkle 2.7s ease-in-out infinite alternate}
+html body #stux-dashboard .stux-hero-copy{position:relative;z-index:3;width:61%;max-width:600px;padding-top:4px}
+html body #stux-dashboard .stux-eyebrow{display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;border-radius:999px;padding:5px 11px;background:rgba(212,215,255,.12);border:1px solid rgba(232,224,255,.25);font-size:10px;letter-spacing:.11em;color:#e1deff;font-weight:800}
+html body #stux-dashboard .stux-hero h1{font-size:clamp(24px,2.7vw,36px);line-height:1.28;letter-spacing:-1.2px;color:#fff;margin:0 0 8px;font-weight:900;text-shadow:0 3px 13px rgba(14,18,60,.17)}
+html body #stux-dashboard .stux-hero h1 span{display:inline-block;transform-origin:80% 80%;animation:stuxWave 4s ease-in-out infinite}
+html body #stux-dashboard .stux-hero p{font-size:clamp(12px,1.2vw,16px);font-weight:500;line-height:1.65;margin:0;color:#e8e7ff}
+html body #stux-dashboard .stux-quote{display:flex;gap:12px;align-items:center;border-radius:20px;border:1px solid rgba(230,230,255,.15);background:linear-gradient(120deg,rgba(218,213,255,.2),rgba(184,191,255,.11));backdrop-filter:blur(9px);padding:13px 18px;margin-top:23px;max-width:390px;box-shadow:inset 0 1px rgba(255,255,255,.17);color:#f9f8ff;font-size:12px;line-height:1.7}
+html body #stux-dashboard .stux-quote>span:first-child{font-size:32px;line-height:1;color:#c0c8ff}
+html body #stux-dashboard .stux-hero-pig{position:absolute;width:min(48%,390px);height:auto;right:-1px;bottom:-10px;z-index:2;object-fit:contain;filter:drop-shadow(0 20px 20px rgba(16,16,85,.25));animation:stuxPigHover 4.4s ease-in-out infinite}
+html body #stux-dashboard .stux-progress-card{background:linear-gradient(145deg,rgba(44,65,153,.96),rgba(64,66,143,.96));color:#fff;border:1px solid rgba(195,194,255,.37);border-radius:29px;padding:21px 22px;box-shadow:0 15px 31px rgba(57,65,151,.20),inset 0 1px rgba(255,255,255,.23);min-height:289px;display:flex;flex-direction:column}
+html body #stux-dashboard .stux-section-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}
+html body #stux-dashboard .stux-section-heading h2{font-size:16px;color:#fff;margin:0;font-weight:800}
+html body #stux-dashboard .stux-glow-dot{width:8px;height:8px;background:#83f5ce;border-radius:50%;box-shadow:0 0 12px #5cffe5}
+html body #stux-dashboard .stux-progress-ring{width:137px;height:137px;margin:13px auto 10px;padding:13px;border-radius:50%;background:conic-gradient(#55ecd7 var(--stux-angle),rgba(201,225,255,.26) 0);filter:drop-shadow(0 3px 10px rgba(69,246,228,.12));display:grid;place-items:center}
+html body #stux-dashboard .stux-progress-ring>div{background:#303e9b;border-radius:50%;width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center}
+html body #stux-dashboard .stux-progress-ring strong{font-size:28px;font-weight:900;letter-spacing:-.6px;color:#fff}
+html body #stux-dashboard .stux-progress-ring small{font-size:9px;color:#dae8ff;margin-top:2px;max-width:91px;line-height:1.5}
+html body #stux-dashboard .stux-progress-legend{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:5px 2px;font-size:11px;color:#e4ebff}
+html body #stux-dashboard .stux-progress-legend>span{display:inline-flex;align-items:center;gap:8px}
+html body #stux-dashboard .stux-progress-legend i{display:block;width:10px;height:10px;border-radius:50%;background:#59e9e5}
+html body #stux-dashboard .stux-progress-legend i.muted{background:#bfc7ff}
+html body #stux-dashboard .stux-progress-legend strong{font-size:12px;color:#fff}
+html body #stux-dashboard .stux-progress-link{margin:12px auto 0;display:flex;align-items:center;gap:8px;border:1px solid rgba(209,205,255,.12);background:rgba(145,139,232,.38);padding:10px 20px;border-radius:999px;font-size:11px;font-weight:800;color:#fff;transition:transform .2s,background .2s}
+html body #stux-dashboard .stux-progress-link:hover{background:rgba(182,173,255,.48);transform:translateY(-2px)}
+html body #stux-dashboard .stux-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:17px 0 18px}
+html body #stux-dashboard .stux-stat-card{min-width:0;min-height:105px;display:flex;align-items:center;gap:12px;text-align:left;padding:17px 18px;border:1px solid rgba(255,255,255,.78);border-radius:23px;box-shadow:0 10px 24px rgba(81,80,171,.10),inset 0 1px rgba(255,255,255,.75);color:#24316d;transition:transform .22s,box-shadow .22s}
+html body #stux-dashboard .stux-stat-card:hover{transform:translateY(-4px);box-shadow:0 16px 30px rgba(81,80,171,.20)}
+html body #stux-dashboard .stux-stat-card.blue{background:linear-gradient(120deg,#e0f3ff,#c4dcff)}
+html body #stux-dashboard .stux-stat-card.mint{background:linear-gradient(120deg,#dffdf2,#bcece5)}
+html body #stux-dashboard .stux-stat-card.pink{background:linear-gradient(120deg,#f6e2ff,#e3cdff)}
+html body #stux-dashboard .stux-stat-card.peach{background:linear-gradient(120deg,#fff0d9,#ffd6c8)}
+html body #stux-dashboard .stux-stat-icon{display:grid;place-items:center;flex:none;width:49px;height:49px;border-radius:16px;color:#fff;background:linear-gradient(145deg,#62b5ff,#4b73e8);box-shadow:0 7px 13px rgba(67,124,230,.26),inset 0 1px rgba(255,255,255,.4);transform:rotate(-4deg)}
+html body #stux-dashboard .mint .stux-stat-icon{background:linear-gradient(145deg,#52deb4,#2cb983);box-shadow:0 7px 13px rgba(19,168,119,.24)}
+html body #stux-dashboard .pink .stux-stat-icon{background:linear-gradient(145deg,#ff91ca,#ce61df);box-shadow:0 7px 13px rgba(180,85,194,.25)}
+html body #stux-dashboard .peach .stux-stat-icon{background:linear-gradient(145deg,#ffc25c,#f58a34);box-shadow:0 7px 13px rgba(211,132,48,.25)}
+html body #stux-dashboard .stux-stat-card>span:last-child{min-width:0;display:flex;flex-direction:column;gap:2px}
+html body #stux-dashboard .stux-stat-card small{font-size:11.5px;font-weight:800;color:#414b8c;line-height:1.45}
+html body #stux-dashboard .stux-stat-card strong{font-size:25px;color:#25276f;font-weight:900;letter-spacing:-.5px;line-height:1.35}
+html body #stux-dashboard .stux-stat-card em{font-size:9px;font-style:normal;color:#59639b;background:rgba(255,255,255,.44);border-radius:999px;align-self:flex-start;padding:3px 8px;white-space:normal}
+html body #stux-dashboard .stux-content-grid{display:grid;grid-template-columns:minmax(0,1.92fr) minmax(285px,1fr);gap:16px;align-items:stretch}
+html body #stux-dashboard .stux-glass-card{background:var(--stux-glass);border:1px solid rgba(255,255,255,.92);border-radius:25px;box-shadow:var(--stux-shadow),inset 0 1px rgba(255,255,255,.9);backdrop-filter:blur(13px);-webkit-backdrop-filter:blur(13px);min-width:0;padding:20px}
+html body #stux-dashboard .stux-panel-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:17px}
+html body #stux-dashboard .stux-panel-title h2{font-size:17px;line-height:1.45;letter-spacing:-.3px;margin:0;font-weight:900;color:#282969}
+html body #stux-dashboard .stux-panel-title h2>span{margin-right:4px}
+html body #stux-dashboard .stux-panel-title button{display:flex;align-items:center;gap:4px;border:0;background:transparent;color:#5b5ddd;font-size:11px;font-weight:800;white-space:nowrap;padding:5px}
+html body #stux-dashboard .stux-panel-title button:hover{color:#3737a8;text-decoration:underline}
+html body #stux-dashboard .stux-features{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+html body #stux-dashboard .stux-feature-card{min-width:0;min-height:199px;padding:9px 7px 14px;display:flex;align-items:center;flex-direction:column;justify-content:flex-start;text-align:center;gap:5px;border-radius:22px;border:1px solid rgba(255,255,255,.96);background:linear-gradient(180deg,rgba(244,244,255,.89),rgba(235,237,255,.91));box-shadow:inset 0 1px #fff,0 4px 13px rgba(111,103,193,.1);transition:transform .22s,box-shadow .22s,border-color .22s}
+html body #stux-dashboard .stux-feature-card:hover{transform:translateY(-5px);border-color:#b7b9fc;box-shadow:0 16px 24px rgba(97,96,190,.18)}
+html body #stux-dashboard .stux-feature-img{width:95px;height:95px;display:grid;place-items:center;margin:0 auto 3px;border-radius:28px;background:radial-gradient(circle,#fff 12%,#e5e9ff 70%,transparent 72%);filter:drop-shadow(0 7px 13px rgba(99,92,175,.12))}
+html body #stux-dashboard .stux-feature-img img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 5px rgba(110,93,206,.17))}
+html body #stux-dashboard .stux-feature-card strong{display:block;color:#262b70;font-size:11.5px;line-height:1.5;font-weight:900;max-width:134px}
+html body #stux-dashboard .stux-feature-card>span:last-child{font-size:9.5px;line-height:1.65;color:#555fa1;max-width:120px}
+html body #stux-dashboard .stux-today-sub{font-size:10px;color:#8586ad;margin:-6px 0 13px}
+html body #stux-dashboard .stux-task-list{display:grid;gap:8px}
+html body #stux-dashboard .stux-task{display:flex;align-items:center;gap:9px;width:100%;min-height:65px;padding:11px;border-radius:15px;text-align:left;background:rgba(247,247,255,.85);border:1px solid rgba(225,223,252,.85);color:#7773b6;transition:transform .18s,border-color .18s,background .18s}
+html body #stux-dashboard .stux-task:hover{background:#fff;border-color:#bcbafc;transform:translateX(2px)}
+html body #stux-dashboard .stux-task>span:nth-child(2){flex:1;min-width:0;display:grid;gap:3px}
+html body #stux-dashboard .stux-task strong{font-size:11.5px;color:#30316e;font-weight:800;line-height:1.45}
+html body #stux-dashboard .stux-task small{color:#777bad;font-size:9.5px;line-height:1.5}
+html body #stux-dashboard .stux-task-ico{width:36px;height:36px;flex:none;border-radius:11px;background:#ece6ff;display:grid;place-items:center;color:#9068de;box-shadow:0 3px 8px #8174cb14}
+html body #stux-dashboard .stux-task-ico.tone-1{background:#ddfbed;color:#25b98a}
+html body #stux-dashboard .stux-task-ico.tone-2{background:#ffe8d9;color:#fb9b44}
+html body #stux-dashboard .stux-bottom-grid{display:grid;grid-template-columns:minmax(0,1.19fr) minmax(0,1fr);gap:16px;margin-top:17px}
+html body #stux-dashboard .stux-activity-card{min-height:184px}
+html body #stux-dashboard .stux-activity-list{display:grid;gap:3px}
+html body #stux-dashboard .stux-activity-row{display:flex;align-items:center;gap:10px;padding:5px 4px;border-bottom:1px solid #e1e0fa99}
+html body #stux-dashboard .stux-activity-row:last-child{border-bottom:0}
+html body #stux-dashboard .stux-activity-symbol{display:grid;place-items:center;width:32px;height:32px;flex:none;border-radius:10px;background:#e6deff;color:#8468e6}
+html body #stux-dashboard .stux-activity-symbol.mint{background:#ddfbeb;color:#1dbf83}
+html body #stux-dashboard .stux-activity-symbol.peach{background:#ffeddd;color:#f39a4f}
+html body #stux-dashboard .stux-activity-row>span:last-child{display:grid;gap:2px;min-width:0}
+html body #stux-dashboard .stux-activity-row strong{font-size:10.5px;color:#303471;font-weight:750;line-height:1.4}
+html body #stux-dashboard .stux-activity-row small{font-size:9px;color:#8387b4;line-height:1.45}
+html body #stux-dashboard .stux-banner{position:relative;min-height:202px;overflow:hidden;border-radius:26px;border:1px solid rgba(255,255,255,.7);background:radial-gradient(circle at 20% 45%,#7774fa77,transparent 48%),linear-gradient(115deg,#253cac,#6349cf 70%,#784dc6);box-shadow:0 14px 34px #5458b744,inset 0 1px rgba(255,255,255,.32);display:flex;align-items:center;justify-content:flex-end;padding:26px 23px;color:#fff}
+html body #stux-dashboard .stux-banner::before{content:"✦";position:absolute;top:13px;right:16px;font-size:23px;color:#f8cb76;filter:drop-shadow(0 0 5px #fff38e)}
+html body #stux-dashboard .stux-banner img{position:absolute;left:-12px;bottom:-22px;width:54%;max-width:280px;height:auto;object-fit:contain;filter:drop-shadow(0 10px 12px #21167b55);animation:stuxPigHover 4s ease-in-out infinite}
+html body #stux-dashboard .stux-banner>div{position:relative;z-index:2;max-width:49%;text-align:center;display:grid;justify-items:center;gap:7px}
+html body #stux-dashboard .stux-banner strong{font-size:clamp(16px,1.5vw,22px);white-space:nowrap;font-weight:900;letter-spacing:-.5px}
+html body #stux-dashboard .stux-banner strong>span{color:#ffdb85}
+html body #stux-dashboard .stux-banner p{font-size:10.5px;line-height:1.65;margin:0;color:#f4eaff}
+html body #stux-dashboard .stux-banner button{display:flex;align-items:center;gap:8px;border:0;border-radius:999px;background:linear-gradient(120deg,#fff0a6,#ffc766);color:#40306f;font-size:11px;font-weight:900;padding:10px 13px;white-space:nowrap;box-shadow:0 7px 17px #ffd36d55;transition:transform .2s}
+html body #stux-dashboard .stux-banner button:hover{transform:translateY(-2px)}
+/* Original modules remain below and inherit the same visual language. */
+html body #landingView .home-h{color:#262b69!important;font-size:19px!important;font-weight:900!important;letter-spacing:-.3px;border-radius:15px;margin-top:24px!important}
+html body #landingView .home-h small{font-size:11px!important;color:#777caf!important;font-weight:500!important}
+html body #landingView .subj,html body #landingView .mode-card,html body #landingView .news-item,html body .dsh-card,html body .gc-card,html body .pf-id{
+ border-radius:22px!important;border:1px solid rgba(215,215,252,.9)!important;
+ background:linear-gradient(140deg,rgba(255,255,255,.92),rgba(247,245,255,.94))!important;
+ box-shadow:0 10px 24px rgba(79,73,160,.1),inset 0 1px rgba(255,255,255,.9)!important;
+ color:var(--stux-text);transition:transform .2s,box-shadow .2s;
+}
+html body #landingView .subj:hover,html body #landingView .mode-card:hover,html body #landingView .news-item:hover{transform:translateY(-3px)!important;box-shadow:0 17px 34px rgba(79,73,160,.16)!important}
+html body .app{max-width:1550px;border-radius:0;min-height:100vh;padding:24px clamp(16px,3vw,44px) 56px;background:linear-gradient(145deg,#eef3ff,#f9f6ff 60%,#f0eaff)}
+html body .app .topbar{border:1px solid rgba(216,218,250,.75);border-radius:21px;background:rgba(255,255,255,.88);box-shadow:var(--stux-shadow);padding:14px 20px;margin-bottom:20px;backdrop-filter:blur(14px)}
+html body .panel,html body .modal,html body .essay-area,html body .hero-stat,html body .practicebar,html body .result{border-radius:21px!important;box-shadow:var(--stux-shadow);border-color:rgba(200,205,248,.8)}
+html body .primary,html body .teal,html body .pf-cta{background:linear-gradient(125deg,#5e77f4,#745be8)!important;color:#fff!important;border:1px solid rgba(255,255,255,.22)!important;border-radius:13px!important;box-shadow:0 6px 14px #6066dd26!important;transition:transform .18s,box-shadow .18s}
+html body .primary:hover,html body .teal:hover,html body .pf-cta:hover{transform:translateY(-2px);box-shadow:0 11px 20px #6066dd33!important}
+html body input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),html body textarea,html body select{border-radius:11px}
+html body #authView{max-width:475px!important;margin:clamp(40px,8vh,130px) auto!important;position:relative;z-index:1}
+html body #authView::before{content:"";position:fixed;z-index:-1;inset:0;pointer-events:none;background:radial-gradient(circle at 7% 14%,#d2ccff,transparent 33%),radial-gradient(circle at 91% 82%,#c0e9ff,transparent 32%),linear-gradient(135deg,#f8f8ff,#e9efff)}
+html body #authView>.brand{padding:16px 10px;justify-content:center}
+html body #authView>.brand h1{font-size:34px;font-weight:900;letter-spacing:-1px;color:#333886}
+html body #authView>.panel{background:rgba(255,255,255,.88);padding:27px;border-radius:24px!important;box-shadow:0 25px 65px #5554b62c}
+/* Premium panels are now visually consistent with StudyT. Pig replaces old launch buttons. */
+html body #stp-panel,html body #stpro-app{border-radius:25px!important;border:1px solid #d9dafe!important;box-shadow:0 30px 80px #29266044!important}
+html body #stp-panel .stp-head,html body #stpro-head{background:linear-gradient(112deg,#415ccc,#8673ed)!important;color:#fff!important}
+html body #stpro-shell{backdrop-filter:blur(13px)}
+html body #studyt-pig-trigger{filter:drop-shadow(0 12px 17px rgba(70,55,156,.28));transition:transform .25s,filter .25s}
+html body #studyt-pig-trigger:hover{transform:translateY(-6px) scale(1.06);filter:drop-shadow(0 18px 20px rgba(70,55,156,.39))}
+html body #studyt-pig-menu{background:rgba(255,255,255,.94);border:1px solid #dedaff;box-shadow:0 20px 42px #4a46a53d;border-radius:21px}
+/* Appearance when the user has selected dark mode. */
+html[data-theme="dark"]{--stux-text:#f0edff;--stux-muted:#bfc1e8;--stux-glass:rgba(36,42,89,.86);--stux-border:rgba(166,168,237,.22);--stux-shadow:0 16px 35px rgba(8,11,42,.26);--bg:#171c36;--panel:#252943;--ink:#f0edff;--muted:#b1b8d9;--line:#4a4b75}
+html[data-theme="dark"] body #landingView#landingView{background:radial-gradient(circle at 70% 10%,#38408060,transparent 46%),linear-gradient(125deg,#171b3a,#222449 62%,#2c2852)!important}
+html[data-theme="dark"] body #stux-dashboard{--stux-txt:#fff;--stux-sub:#d3d3ed}
+html[data-theme="dark"] body #stux-topbar .stux-search-trigger{background:#32365d;border-color:#555a94;color:#fff}
+html[data-theme="dark"] body #stux-topbar .stux-search-trigger span{color:#d8d8f6}
+html[data-theme="dark"] body #stux-topbar .stux-search-trigger kbd{color:#d7d2fb;background:#444877;border-color:#6265a2}
+html[data-theme="dark"] body #stux-topbar .stux-tool-btn{background:#32345b;color:#e2dbff;border-color:#585a8e}
+html[data-theme="dark"] body #stux-dashboard .stux-glass-card{background:rgba(45,48,94,.86);border-color:#5b5b9d}
+html[data-theme="dark"] body #stux-dashboard .stux-panel-title h2,html[data-theme="dark"] body #stux-dashboard .stux-feature-card strong,html[data-theme="dark"] body #stux-dashboard .stux-task strong,html[data-theme="dark"] body #stux-dashboard .stux-activity-row strong{color:#f5f2ff}
+html[data-theme="dark"] body #stux-dashboard .stux-feature-card,html[data-theme="dark"] body #stux-dashboard .stux-task{background:#3b4075;border-color:#6669a9;color:#d5d8ff}
+html[data-theme="dark"] body #stux-dashboard .stux-feature-card>span:last-child,html[data-theme="dark"] body #stux-dashboard .stux-task small,html[data-theme="dark"] body #stux-dashboard .stux-today-sub,html[data-theme="dark"] body #stux-dashboard .stux-activity-row small{color:#c4c2ec}
+html[data-theme="dark"] body #landingView .home-h{color:#f1ecff!important}
+html[data-theme="dark"] body #landingView .home-h small{color:#c8c4ed!important}
+html[data-theme="dark"] body #landingView .subj,html[data-theme="dark"] body #landingView .mode-card,html[data-theme="dark"] body #landingView .news-item,html[data-theme="dark"] body .dsh-card{background:#2a3056!important;color:#fff!important;border-color:#4f548c!important}
+html[data-theme="dark"] body .app{background:linear-gradient(130deg,#151933,#222348)!important}
+html[data-theme="dark"] body .app .topbar{background:#2a2e51!important;border-color:#484d82!important}
+html[data-theme="dark"] body #authView::before{background:linear-gradient(135deg,#161936,#29214f)}
+html[data-theme="dark"] body #authView>.panel{background:#262946!important}
+/* Screens from 900–1179px: compact rail to preserve working space. */
+@media(max-width:1179px) and (min-width:701px){
+ html body nav#homeTabs.home-tabs{width:91px!important;padding:17px 6px!important;gap:5px!important}
+ html body nav#homeTabs.home-tabs::after{left:90px}
+ html body nav#homeTabs.home-tabs > button{flex-direction:column!important;justify-content:center!important;gap:4px!important;padding:9px 3px!important;font-size:9px!important;text-align:center!important;min-height:59px!important}
+ html body nav#homeTabs.home-tabs > button>span:last-child{font-size:9px!important;text-align:center!important}
+ html body nav#homeTabs.home-tabs > button .ic{width:auto!important;font-size:22px!important}
+ html body .stux-brand{padding:0 4px 12px;justify-content:center;margin-bottom:6px;min-height:59px}
+ html body .stux-brand>span{display:none}
+ html body .stux-brand img{width:52px;height:52px}
+ html body .stux-sidefoot{min-height:92px;padding:0;margin-top:auto}
+ html body .stux-sidefoot>img{width:85px;height:105px;left:0;bottom:4px}
+ html body .stux-sidefoot-card{display:none}
+ html body #landingView#landingView{padding-left:112px!important;padding-right:18px!important}
+ html body nav#homeTabs .nv-subs{position:absolute!important;bottom:60px!important;left:76px!important;width:235px!important;background:#30377e!important;border:1px solid #959cf1!important;box-shadow:0 17px 33px #18174d55!important}
+ html body nav#homeTabs .nv-subs button{font-size:12px!important}
+ html body #stux-dashboard .stux-hero-grid{grid-template-columns:minmax(0,1fr) 265px}
+ html body #stux-dashboard .stux-hero-copy{width:61%}
+ html body #stux-dashboard .stux-hero{padding:27px 24px}
+ html body #stux-dashboard .stux-content-grid{grid-template-columns:minmax(0,1fr)}
+ html body #stux-dashboard .stux-task-list{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:900px){
+ html body #stux-dashboard .stux-hero-grid{grid-template-columns:minmax(0,1fr)}
+ html body #stux-dashboard .stux-hero{min-height:265px}
+ html body #stux-dashboard .stux-progress-card{min-height:0;display:grid;grid-template-columns:1fr 145px 1fr;gap:8px 18px;align-items:center}
+ html body #stux-dashboard .stux-progress-card>.stux-section-heading{grid-column:1/2}
+ html body #stux-dashboard .stux-progress-ring{grid-column:2;grid-row:1/4;margin:0 auto}
+ html body #stux-dashboard .stux-progress-link{grid-column:3;grid-row:1/4;margin:auto 0;white-space:nowrap}
+ html body #stux-dashboard .stux-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ html body #stux-dashboard .stux-features{grid-template-columns:repeat(4,minmax(0,1fr))}
+ html body #stux-dashboard .stux-bottom-grid{grid-template-columns:1fr}
+}
+/* Phones: keep the existing functional bottom navigation, now in the shared palette. */
+@media(max-width:700px){
+ html body #landingView#landingView{padding:14px 12px calc(106px + env(safe-area-inset-bottom,0px))!important}
+ html body nav#homeTabs.home-tabs{
+   position:fixed!important;top:auto!important;right:10px!important;bottom:calc(8px + env(safe-area-inset-bottom,0px))!important;
+   left:10px!important;transform:none!important;width:calc(100vw - 20px)!important;height:auto!important;max-height:90px!important;
+   margin:0!important;padding:5px!important;display:flex!important;flex-direction:row!important;justify-content:space-around!important;align-items:stretch!important;gap:1px!important;overflow:visible!important;
+   background:linear-gradient(110deg,rgba(29,38,111,.94),rgba(66,63,160,.94))!important;border:1px solid rgba(204,205,255,.42)!important;border-radius:24px!important;box-shadow:0 13px 32px #31327a4e!important;backdrop-filter:blur(20px)!important;-webkit-backdrop-filter:blur(20px)!important;
+ }
+ html body nav#homeTabs.home-tabs::after,html body nav#homeTabs.home-tabs::before{display:none}
+ html body nav#homeTabs.home-tabs > button{width:auto!important;flex:1 1 0!important;min-height:56px!important;min-width:0!important;padding:7px 1px!important;display:flex!important;flex-direction:column!important;gap:3px!important;align-items:center!important;justify-content:center!important;white-space:normal!important;font-size:9px!important;border:0!important;border-radius:19px!important;text-align:center!important}
+ html body nav#homeTabs.home-tabs > button .ic{font-size:19px!important;width:24px!important}
+ html body nav#homeTabs.home-tabs > button>span:last-child{font-size:9px!important;text-align:center!important}
+ html body nav#homeTabs.home-tabs > button.on{box-shadow:inset 0 1px #ffffff55,0 3px 15px #5f83ff45!important}
+ html body #homeTabs .stux-brand,html body #homeTabs .stux-sidefoot{display:none!important}
+ html body nav#homeTabs .nv-subs{position:absolute!important;left:50%!important;right:auto!important;bottom:calc(100% + 9px)!important;transform:translateX(-50%)!important;width:min(300px,calc(100vw - 26px))!important;background:#343f93!important;border:1px solid #8f9eef!important;box-shadow:0 19px 39px #25235d70!important;padding:8px!important}
+ html body nav#homeTabs .nv-subs button{font-size:12px!important;padding:10px!important}
+ html body #stux-topbar{height:53px;gap:8px;margin-bottom:12px!important}
+ html body .stux-search-trigger{height:44px;padding:0 13px;gap:9px}
+ html body .stux-search-trigger span{font-size:11px}
+ html body .stux-search-trigger kbd{display:none}
+ html body .stux-top-actions{gap:6px}
+ html body .stux-tool-btn{height:39px;min-width:39px;border-radius:12px}
+ html body .stux-tool-btn .stux-tool-divider,html body .stux-tool-btn svg:last-of-type:not(:first-of-type){display:none}
+ html body .stux-avatar{width:39px;height:39px;font-size:15px}
+ html body #stux-dashboard .stux-hero{min-height:248px;padding:19px;border-radius:24px}
+ html body #stux-dashboard .stux-hero h1{font-size:25px}
+ html body #stux-dashboard .stux-hero-copy{width:62%}
+ html body #stux-dashboard .stux-eyebrow{font-size:8px}
+ html body #stux-dashboard .stux-hero p{font-size:11px}
+ html body #stux-dashboard .stux-quote{font-size:9px;line-height:1.7;padding:10px;margin-top:15px}
+ html body #stux-dashboard .stux-quote>span:first-child{font-size:22px}
+ html body #stux-dashboard .stux-hero-pig{right:-24px;bottom:-4px;width:55%}
+ html body #stux-dashboard .stux-progress-card{grid-template-columns:1fr 105px;gap:6px 12px;padding:16px 18px;border-radius:23px}
+ html body #stux-dashboard .stux-progress-ring{width:104px;height:104px;padding:10px;grid-column:2;grid-row:1/5}
+ html body #stux-dashboard .stux-progress-ring strong{font-size:22px}
+ html body #stux-dashboard .stux-progress-link{grid-column:1;grid-row:auto;justify-self:start;margin:4px 0 0;padding:8px 12px}
+ html body #stux-dashboard .stux-section-heading h2{font-size:13px}
+ html body #stux-dashboard .stux-stat-grid{gap:9px;margin:12px 0}
+ html body #stux-dashboard .stux-stat-card{padding:10px;min-height:83px;gap:8px;border-radius:17px}
+ html body #stux-dashboard .stux-stat-icon{width:38px;height:38px;border-radius:12px}
+ html body #stux-dashboard .stux-stat-icon svg{width:23px}
+ html body #stux-dashboard .stux-stat-card strong{font-size:20px}
+ html body #stux-dashboard .stux-stat-card small{font-size:10px}
+ html body #stux-dashboard .stux-stat-card em{font-size:8px}
+ html body #stux-dashboard .stux-content-grid{grid-template-columns:1fr;gap:12px}
+ html body #stux-dashboard .stux-glass-card{padding:15px;border-radius:21px}
+ html body #stux-dashboard .stux-panel-title h2{font-size:15px}
+ html body #stux-dashboard .stux-features{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ html body #stux-dashboard .stux-feature-card{min-height:176px}
+ html body #stux-dashboard .stux-feature-img{width:90px;height:90px}
+ html body #stux-dashboard .stux-task-list{grid-template-columns:1fr;gap:6px}
+ html body #stux-dashboard .stux-bottom-grid{gap:12px;margin-top:12px}
+ html body #stux-dashboard .stux-banner{min-height:179px}
+ html body #stux-dashboard .stux-banner img{max-width:230px;width:54%}
+ html body #studyt-pig-dock{bottom:calc(85px + env(safe-area-inset-bottom,0px))!important;right:12px!important}
+ html body .app{padding:13px 10px 105px}
+}
+@media(max-width:410px){
+ html body #stux-dashboard .stux-hero{min-height:237px;padding:15px}
+ html body #stux-dashboard .stux-hero-copy{width:64%}
+ html body #stux-dashboard .stux-hero h1{font-size:21px}
+ html body #stux-dashboard .stux-hero-pig{width:57%;right:-29px}
+ html body #stux-dashboard .stux-quote{margin-top:9px;padding:8px}
+ html body #stux-dashboard .stux-feature-img{width:79px;height:79px}
+ html body #stux-dashboard .stux-feature-card{min-height:164px}
+ html body #stux-dashboard .stux-stat-card{gap:7px}
+ html body #stux-dashboard .stux-stat-icon{width:33px;height:33px}
+ html body #stux-dashboard .stux-stat-icon svg{width:20px}
+ html body #stux-dashboard .stux-stat-card strong{font-size:18px}
+ html body #stux-dashboard .stux-banner strong{font-size:16px}
+ html body #stux-dashboard .stux-banner p{font-size:9px}
+ html body #stux-dashboard .stux-banner button{font-size:9px;padding:9px}
+}
+@keyframes stuxPigHover{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-7px) rotate(1deg)}}
+@keyframes stuxLogoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes stuxTwinkle{from{transform:scale(.8) rotate(0deg);opacity:.55}to{transform:scale(1.2) rotate(16deg);opacity:1}}
+@keyframes stuxWave{0%,87%,100%{transform:rotate(0)}91%{transform:rotate(16deg)}95%{transform:rotate(-10deg)}}
+@media(prefers-reduced-motion:reduce){html body .stux-brand img,html body #stux-dashboard .stux-hero-pig,html body #stux-dashboard .stux-banner img,html body .stux-sidefoot>img,html body #stux-dashboard .stux-hero::after,html body #stux-dashboard .stux-hero h1 span{animation:none!important}html body #stux-dashboard *,html body #stux-topbar *,html body #homeTabs *{transition:none!important;scroll-behavior:auto!important}}
+
+/* Accessible account actions from the new top bar (old buttons remain untouched). */
+html body #stux-topbar{position:relative}
+html body #stux-topbar .stux-user-menu{position:absolute;right:0;top:calc(100% + 3px);z-index:260;display:grid;gap:5px;width:250px;padding:10px;border-radius:20px;background:rgba(255,255,255,.97);color:#333376;border:1px solid #deddfd;box-shadow:0 24px 55px rgba(59,54,133,.26);backdrop-filter:blur(16px)}
+html body #stux-topbar .stux-user-menu[hidden]{display:none!important}
+html body #stux-topbar .stux-menu-heading{display:grid;gap:4px;border-bottom:1px solid #e6e4fc;padding:9px 11px 12px;margin-bottom:2px}
+html body #stux-topbar .stux-menu-heading strong{font-size:13px;color:#2f3075}
+html body #stux-topbar .stux-menu-heading small{font-size:10px;color:#8585b5;overflow-wrap:anywhere}
+html body #stux-topbar .stux-user-menu button{display:flex;align-items:center;gap:12px;border:0;border-radius:12px;padding:11px 12px;background:transparent;color:#44447f;font-size:12px;font-weight:750;text-align:left;cursor:pointer}
+html body #stux-topbar .stux-user-menu button:hover{background:#eeeaff;color:#5046ce}
+html body #stux-topbar .stux-user-menu button:last-child{color:#b74d70}
+html body #stux-dashboard .stux-progress-ring[role="button"]{cursor:pointer;transition:transform .2s}
+html body #stux-dashboard .stux-progress-ring[role="button"]:hover{transform:scale(1.035)}
+html body #stux-dashboard .stux-progress-ring[role="button"]:focus-visible{outline:3px solid #8af7ff;outline-offset:4px}
+html[data-theme="dark"] body #stux-topbar .stux-user-menu{background:#313459;color:#f5f2ff;border-color:#595c91}
+html[data-theme="dark"] body #stux-topbar .stux-menu-heading strong{color:#f5f2ff}
+html[data-theme="dark"] body #stux-topbar .stux-menu-heading small{color:#c3c1e7}
+html[data-theme="dark"] body #stux-topbar .stux-user-menu button{color:#eeeaff}
+html[data-theme="dark"] body #stux-topbar .stux-user-menu button:hover{background:#494f86}
