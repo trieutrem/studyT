@@ -329,7 +329,8 @@ img,video{max-width:100%}
   <div class="panel">
     <div class="tabs2"><button class="secondary" id="tabLogin">Đăng nhập</button><button class="ghost" id="tabReg">Đăng ký</button></div>
     <label class="field" id="fName" style="display:none"><span>Họ và tên</span><input id="auName" autocomplete="name"></label>
-    <label class="field"><span>Tên đăng nhập</span><input id="auUser" autocomplete="username" autocapitalize="none" placeholder="chữ thường, số, dấu . _ -"></label>
+    <label class="field"><span id="auUserLabel">Gmail hoặc tên đăng nhập cũ</span><input id="auUser" autocomplete="username" autocapitalize="none" placeholder="Gmail hoặc tên đăng nhập cũ"></label>
+    <label class="field" id="fGmail" style="display:none"><span>Gmail <b aria-hidden="true">*</b></span><input id="auEmail" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="tenban@gmail.com" required><small>Dùng Gmail thật để xác nhận và bảo vệ tài khoản. Mỗi địa chỉ Gmail chỉ đăng ký một lần.</small></label>
     <label class="field"><span>Mật khẩu</span><input id="auPass" type="password" autocomplete="current-password" placeholder="ít nhất 6 ký tự"></label>
     <div class="notice" id="auMsg"></div>
     <button class="primary full" id="auGo">Đăng nhập</button>
@@ -807,14 +808,53 @@ let sb=null,me=null,exams=[],myAtt={},myGr={},readyServer=null,authMode='login';
 const EMAIL=u=>u+'@studyt.app',EMAIL_OLD=u=>u+'@quizmaster.app',fmtT=d=>new Date(d).toLocaleString('vi-VN',{dateStyle:'short',timeStyle:'short'});
 restoreExam=function(){};
 function auMsg(m,t){const n=$('auMsg');n.textContent=m;n.className=m?'notice show '+(t||'error'):'notice'}
-function setAuthMode(m){authMode=m;$('fName').style.display=m==='reg'?'block':'none';$('auGo').textContent=m==='reg'?'Tạo tài khoản':'Đăng nhập';$('tabLogin').className=m==='login'?'secondary':'ghost';$('tabReg').className=m==='reg'?'secondary':'ghost';auMsg('')}
+function setAuthMode(m){
+  authMode=m;const reg=m==='reg';
+  $('fName').style.display=reg?'block':'none';$('fGmail').style.display=reg?'block':'none';
+  $('auEmail').required=reg;$('auUser').placeholder=reg?'Tên tài khoản (3–30 ký tự)':'Gmail hoặc tên đăng nhập cũ';
+  $('auUserLabel').textContent=reg?'Tên tài khoản':'Gmail hoặc tên đăng nhập cũ';
+  $('auPass').autocomplete=reg?'new-password':'current-password';
+  $('auGo').textContent=reg?'Tạo tài khoản':'Đăng nhập';$('tabLogin').className=reg?'ghost':'secondary';$('tabReg').className=reg?'secondary':'ghost';auMsg('')
+} 
 $('tabLogin').onclick=()=>setAuthMode('login');$('tabReg').onclick=()=>setAuthMode('reg');
-$('auGo').onclick=async()=>{if(!sb){auMsg('Chưa cấu hình Supabase.');return}const u=$('auUser').value.trim().toLowerCase(),pw=$('auPass').value,nm=$('auName').value.trim();
- if(!/^[a-z0-9._-]{3,30}$/.test(u)){auMsg('Tên đăng nhập 3–30 ký tự: chữ thường không dấu, số, . _ -');return}if(pw.length<6){auMsg('Mật khẩu cần ít nhất 6 ký tự.');return}
- $('auGo').disabled=true;try{
-  if(authMode==='reg'){if(!nm){auMsg('Hãy nhập họ và tên.');return}const {data,error}=await sb.auth.signUp({email:EMAIL(u),password:pw,options:{data:{full_name:nm}}});if(error)throw error;if(!data.session){auMsg('Đã tạo tài khoản. Nhờ admin tắt “Confirm email” trong Supabase hoặc xác nhận rồi đăng nhập.','info');return}await onLogin()}
-  else{let {error}=await sb.auth.signInWithPassword({email:EMAIL(u),password:pw});if(error&&/Invalid login/i.test(error.message)){const r2=await sb.auth.signInWithPassword({email:EMAIL_OLD(u),password:pw});if(!r2.error)error=null}if(error)throw error;await onLogin()}
- }catch(e){auMsg(e.message==='IS_ADMIN'?'Tài khoản quản trị không được đăng nhập ở trang này. Vui lòng dùng trang quản trị.':/Invalid login/i.test(e.message)?'Sai tên đăng nhập hoặc mật khẩu.':/already/i.test(e.message)?'Tên đăng nhập này đã có người dùng.':e.message)}finally{$('auGo').disabled=false}};
+/* Gmail canonicalization: lowercase, remove +aliases and dots for gmail.com only.
+   Existing username@studyt.app accounts still sign in unchanged. */
+const stuxGmail=v=>{const e=String(v||'').trim().toLowerCase();const a=e.match(/^([^@\s]+)@gmail\.com$/);if(!a)return null;const local=a[1].split('+')[0].replace(/\./g,'');return /^[a-z0-9]{1,64}$/.test(local)?local+'@gmail.com':null};
+$('auGo').onclick=async()=>{
+ if(!sb){auMsg('Chưa cấu hình Supabase.');return}
+ const u=$('auUser').value.trim().toLowerCase(),pw=$('auPass').value,nm=$('auName').value.trim();
+ if(authMode==='reg'&&!/^[a-z0-9._-]{3,30}$/.test(u)){auMsg('Tên tài khoản cần 3–30 ký tự, chỉ dùng chữ không dấu, số, . _ -');return}
+ if(!u){auMsg('Hãy nhập Gmail hoặc tên tài khoản.');return}
+ if(pw.length<6){auMsg('Mật khẩu cần ít nhất 6 ký tự.');return}
+ $('auGo').disabled=true;
+ try{
+  if(authMode==='reg'){
+   if(!nm){auMsg('Hãy nhập họ và tên.');return}
+   const email=stuxGmail($('auEmail').value);
+   if(!email){auMsg('Hãy nhập địa chỉ Gmail hợp lệ, ví dụ tenban@gmail.com.');return}
+   const {data,error}=await sb.auth.signUp({email,password:pw,options:{data:{full_name:nm,username:u}}});
+   if(error)throw error;
+   if(!data?.session){auMsg('Nếu Gmail này chưa có tài khoản, hãy mở hộp thư Gmail để xác nhận đăng ký rồi đăng nhập.','info');return}
+   await onLogin();
+  }else{
+   let error=null;
+   if(u.includes('@')){
+    const email=stuxGmail(u)||u;
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){auMsg('Địa chỉ email chưa đúng định dạng.');return}
+    const r=await sb.auth.signInWithPassword({email,password:pw});error=r.error;
+   }else{
+    if(!/^[a-z0-9._-]{3,30}$/.test(u)){auMsg('Tên đăng nhập cũ chưa hợp lệ.');return}
+    const r=await sb.auth.signInWithPassword({email:EMAIL(u),password:pw});error=r.error;
+    if(error&&/Invalid login/i.test(error.message)){const r2=await sb.auth.signInWithPassword({email:EMAIL_OLD(u),password:pw});error=r2.error}
+   }
+   if(error)throw error;
+   await onLogin();
+  }
+ }catch(e){
+  const msg=String(e?.message||'Có lỗi khi kết nối, vui lòng thử lại.');
+  auMsg(msg==='IS_ADMIN'?'Tài khoản quản trị vui lòng đăng nhập tại trang quản trị.':/Invalid login/i.test(msg)?'Gmail / tên tài khoản hoặc mật khẩu không đúng.':/already registered|already exists|already in use/i.test(msg)?'Gmail này đã có tài khoản. Hãy chọn Đăng nhập.':msg);
+ }finally{$('auGo').disabled=false}
+};
 async function onLogin(){const {data:{user}}=await sb.auth.getUser();const {data:p,error}=await sb.from('profiles').select('*').eq('id',user.id).single();if(error)throw error;me={id:user.id,name:p.full_name||p.username,role:p.role};if(p.role==='admin'){await sb.auth.signOut();me=null;throw new Error('IS_ADMIN')}
  examRun=null;subjects=[];document.body.classList.add('authed');$('whoami').textContent=me.name+(me.role==='admin'?' · admin':'');document.body.classList.toggle('is-admin',me.role==='admin');$('landingView').style.display='block';$('quizView').style.display='none';$('essayView').style.display='none';$('examView').style.display='none';$('auPass').value='';await loadExams();renderHome()}
 async function doLogout(){if(!confirm('Đăng xuất?'))return;await sb.auth.signOut();me=null;examRun=null;subjects=[];saveExam();document.body.classList.remove('authed','is-admin');setAuthMode('login')}
@@ -6621,5 +6661,7 @@ trigger.addEventListener('click',()=>{const on=menu.classList.toggle('open');tri
 
 <link rel="stylesheet" href="./studyt-premium.css" data-studyt-theme="aurora-v1">
 <script src="./studyt-premium.js" data-studyt-theme="aurora-v1"></script>
+<link rel="stylesheet" href="./studyt-ux2.css">
+<script src="./studyt-ux2.js" defer></script>
 </body>
 </html>

@@ -1,3 +1,62 @@
+STUDYT AURORA V2 — CẬP NHẬT 04/11/2026
+==========================================
+BẢN SỬA TỪ HAI FILE STUDYT AURORA (HỌC VIÊN + QUẢN TRỊ)
+
+CẬP NHẬT GIAO DIỆN
+1) Chuông góc phải: hiện bảng tin ngay trong popover (dùng lại #newsBox và renderNews từ mã cũ).
+   Mục Bảng tin ở phần nội dung phía dưới đã bị ẩn. Quản trị vẫn có thể đăng/sửa/xóa tin từ popover.
+2) Avatar chữ cái: mở trực tiếp màn Cài đặt (#stPane); không còn hiển thị mục Cài đặt
+   ở sidebar. Trong Cài đặt có các nút Đăng xuất, và Sao lưu/Khôi phục cho quản trị.
+3) Admin: ẩn mục Phân tích trên sidebar và giao diện phân tích riêng;
+   không xóa các xử lý dữ liệu liên quan, để giảm nguy cơ hỏng chức năng cũ.
+4) Trang mới khi chưa đăng nhập: trang giới thiệu StudyT với hình chú heo, mô tả
+   tính năng, và CTA Đăng nhập/Đăng ký. Hộp đăng nhập hiện khi nhấn CTA.
+5) Hiển thị tốt trên desktop và mobile; chuyển động tôn trọng reduced-motion.
+
+ĐĂNG NHẬP VÀ ĐĂNG KÝ
+- Người dùng mới (chỉ trang index.html) điền Họ tên, Tên tài khoản, Gmail và Mật khẩu.
+- Gmail bắt buộc dạng @gmail.com cho luồng đăng ký mới; ứng dụng chuẩn hóa
+  dấu chấm (.) và bí danh +... của Gmail về cùng một địa chỉ để giảm trùng lặp.
+- Supabase Auth nhận Gmail thật (không dùng tài khoản @studyt.app giả cho người mới).
+- Đăng nhập hỗ trợ Gmail của người mới và Tên đăng nhập cũ của người dùng hiện hữu.
+- Trang admin.html KHÔNG cho đăng ký quản trị công khai; quyền admin vẫn phải
+  được gán và kiểm tra từ profiles/RLS trong hệ thống hiện tại.
+
+CẤU HÌNH SUPABASE CẦN KIỂM TRA TRƯỚC KHI TRIỂN KHAI
+1. Authentication -> Providers -> Email: bật Confirm Email (Xác nhận email)
+   nếu muốn chỉ Gmail được xác thực mới đăng nhập. Cài Site URL/Redirect URLs.
+2. Kiểm tra trigger tạo profiles từ auth.users: phải hỗ trợ email Gmail thật,
+   đọc raw_user_meta_data.username và full_name; nếu trigger chỉ chấp nhận email
+   giả @studyt.app, đăng ký có thể chưa tạo hồ sơ. KHÔNG tự sửa trigger vì chưa có SQL.
+3. Supabase Auth duy trì tính duy nhất của email đăng ký trong Auth; việc frontend
+   kiểm tra format và chuẩn hóa Gmail không thay thế xác minh và bảo vệ ở server.
+   Khi Confirm Email bật, hệ thống có thể trả phản hồi không cho biết email đã
+   đăng ký để tránh tiết lộ tài khoản; giao diện hiển thị thông báo trung tính.
+4. Kiểm tra RLS trên profiles, exams, attempts, announcements; trang quản trị
+   không được dựa riêng vào UI để chặn quyền truy cập.
+5. Tài khoản cũ dùng @studyt.app/@quizmaster.app vẫn được giữ nguyên; bộ này
+   KHÔNG chuyển email hoặc thay đổi dữ liệu của các tài khoản đã tồn tại.
+
+KIỂM TRA ĐÃ THỰC HIỆN
+- Node.js kiểm tra cú pháp 38 khối script inline của index.html,
+  25 khối script inline của admin.html, JS chính và JS V2: không lỗi cú pháp.
+- Kiểm tra ID trùng trong hai file: không phát hiện.
+- Kiểm tra tương tác trên DOM mô phỏng: guest page, modal đăng nhập, di chuyển
+  newsBox vào chuông, ẩn nav Cài đặt: đạt.
+- Chưa kiểm tra đầy đủ luồng end-to-end trên hosting thật hoặc tài khoản Supabase:
+  môi trường Chromium chặn địa chỉ localhost. Cần kiểm thử đăng ký qua Gmail,
+  xác nhận email, đăng nhập, phân quyền, đăng bảng tin và các màn hình cũ.
+
+CÁCH TRIỂN KHAI
+- Sao lưu website cũ và dữ liệu Supabase trước.
+- Triển khai đầy đủ nội dung thư mục (index.html, admin.html, CSS, JS,
+  thư mục assets, icons, sw.js và manifest.webmanifest) trong cùng thư mục web.
+- Không tách hai file HTML khỏi các tài nguyên đi kèm.
+- Triển khai lên HTTPS với đường dẫn cấu hình đúng để Service Worker hoạt động.
+- Sau khi cập nhật, dùng Ctrl+Shift+R để nạp tài nguyên mới; nếu PWA cũ còn cache,
+  xóa cache của website hoặc cập nhật phiên bản Service Worker theo hệ thống của bạn.
+
+---------------- HƯỚNG DẪN TRƯỚC ĐÂY ----------------
 StudyT AURORA PREMIUM · 04/11/2026
 ===================================
 

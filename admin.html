@@ -347,7 +347,7 @@ img,video{max-width:100%}
   <div class="panel">
     <div class="tabs2"><button class="secondary" id="tabLogin">Đăng nhập quản trị</button><button class="ghost" id="tabReg" style="display:none">Đăng ký</button></div>
     <label class="field" id="fName" style="display:none"><span>Họ và tên</span><input id="auName" autocomplete="name"></label>
-    <label class="field"><span>Tên đăng nhập</span><input id="auUser" autocomplete="username" autocapitalize="none" placeholder="chữ thường, số, dấu . _ -"></label>
+    <label class="field"><span>Gmail hoặc tên đăng nhập cũ</span><input id="auUser" autocomplete="username" autocapitalize="none" placeholder="Gmail hoặc tên đăng nhập cũ"></label>
     <label class="field"><span>Mật khẩu</span><input id="auPass" type="password" autocomplete="current-password" placeholder="ít nhất 6 ký tự"></label>
     <div class="notice" id="auMsg"></div>
     <button class="primary full" id="auGo">Đăng nhập</button>
@@ -826,14 +826,30 @@ let sb=null,me=null,exams=[],myAtt={},myGr={},readyServer=null,authMode='login';
 const EMAIL=u=>u+'@studyt.app',EMAIL_OLD=u=>u+'@quizmaster.app',fmtT=d=>new Date(d).toLocaleString('vi-VN',{dateStyle:'short',timeStyle:'short'});
 restoreExam=function(){};
 function auMsg(m,t){const n=$('auMsg');n.textContent=m;n.className=m?'notice show '+(t||'error'):'notice'}
-function setAuthMode(m){authMode=m;$('fName').style.display=m==='reg'?'block':'none';$('auGo').textContent=m==='reg'?'Tạo tài khoản':'Đăng nhập';$('tabLogin').className=m==='login'?'secondary':'ghost';$('tabReg').className=m==='reg'?'secondary':'ghost';auMsg('')}
+function setAuthMode(m){authMode='login';$('fName').style.display='none';$('auGo').textContent='Đăng nhập quản trị';$('tabLogin').className='secondary';$('tabReg').className='ghost';auMsg('')} 
 $('tabLogin').onclick=()=>setAuthMode('login');$('tabReg').onclick=()=>setAuthMode('reg');
-$('auGo').onclick=async()=>{if(!sb){auMsg('Chưa cấu hình Supabase.');return}const u=$('auUser').value.trim().toLowerCase(),pw=$('auPass').value,nm=$('auName').value.trim();
- if(!/^[a-z0-9._-]{3,30}$/.test(u)){auMsg('Tên đăng nhập 3–30 ký tự: chữ thường không dấu, số, . _ -');return}if(pw.length<6){auMsg('Mật khẩu cần ít nhất 6 ký tự.');return}
- $('auGo').disabled=true;try{
-  if(authMode==='reg'){if(!nm){auMsg('Hãy nhập họ và tên.');return}const {data,error}=await sb.auth.signUp({email:EMAIL(u),password:pw,options:{data:{full_name:nm}}});if(error)throw error;if(!data.session){auMsg('Đã tạo tài khoản. Nhờ admin tắt “Confirm email” trong Supabase hoặc xác nhận rồi đăng nhập.','info');return}await onLogin()}
-  else{let {error}=await sb.auth.signInWithPassword({email:EMAIL(u),password:pw});if(error&&/Invalid login/i.test(error.message)){const r2=await sb.auth.signInWithPassword({email:EMAIL_OLD(u),password:pw});if(!r2.error)error=null}if(error)throw error;await onLogin()}
- }catch(e){auMsg(e.message==='NOT_ADMIN'?'Tài khoản này không có quyền quản trị. Học viên vui lòng dùng trang index.html.':/Invalid login/i.test(e.message)?'Sai tên đăng nhập hoặc mật khẩu.':e.message)}finally{$('auGo').disabled=false}};
+$('auGo').onclick=async()=>{
+ if(!sb){auMsg('Chưa cấu hình Supabase.');return}
+ const u=$('auUser').value.trim().toLowerCase(),pw=$('auPass').value;
+ if(!u){auMsg('Hãy nhập Gmail hoặc tên đăng nhập cũ.');return}
+ if(pw.length<6){auMsg('Mật khẩu cần ít nhất 6 ký tự.');return}
+ $('auGo').disabled=true;
+ try{
+  let error=null;
+  if(u.includes('@')){
+   const address=u.match(/^([^@]+)@gmail\.com$/)?u.split('@')[0].split('+')[0].replace(/\./g,'')+'@gmail.com':u;
+   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address)){auMsg('Gmail chưa đúng định dạng.');return}
+   const r=await sb.auth.signInWithPassword({email:address,password:pw});error=r.error;
+  }else{
+   if(!/^[a-z0-9._-]{3,30}$/.test(u)){auMsg('Tên đăng nhập cũ không hợp lệ.');return}
+   const r=await sb.auth.signInWithPassword({email:EMAIL(u),password:pw});error=r.error;
+   if(error&&/Invalid login/i.test(error.message)){const r2=await sb.auth.signInWithPassword({email:EMAIL_OLD(u),password:pw});error=r2.error}
+  }
+  if(error)throw error;
+  await onLogin();
+ }catch(e){const msg=String(e?.message||'Không đăng nhập được.');auMsg(msg==='NOT_ADMIN'?'Tài khoản này không có quyền quản trị. Vui lòng dùng trang học viên.':/Invalid login/i.test(msg)?'Email / tên đăng nhập hoặc mật khẩu không đúng.':msg)}
+ finally{$('auGo').disabled=false}
+};
 async function onLogin(){const {data:{user}}=await sb.auth.getUser();const {data:p,error}=await sb.from('profiles').select('*').eq('id',user.id).single();if(error)throw error;me={id:user.id,name:p.full_name||p.username,role:p.role,em:!!p.exam_manager};if(p.role!=='admin'){await sb.auth.signOut();throw new Error('NOT_ADMIN')}
  examRun=null;subjects=[];document.body.classList.add('authed');$('whoami').textContent=me.name+(me.role==='admin'?(me.em?' · quản lý kỳ thi':' · admin'):'');document.body.classList.toggle('is-admin',me.role==='admin');document.body.classList.toggle('exam-mgr',!!me.em);$('landingView').style.display='block';$('quizView').style.display='none';$('essayView').style.display='none';$('examView').style.display='none';$('auPass').value='';await loadExams();renderHome();if(me.em&&typeof homePane==='function'&&!['home','exam','st'].includes(HP))homePane('home')}
 async function doLogout(){if(!confirm('Đăng xuất?'))return;await sb.auth.signOut();me=null;examRun=null;subjects=[];saveExam();document.body.classList.remove('authed','is-admin','exam-mgr');setAuthMode('login')}
@@ -1355,7 +1371,7 @@ function dAlertsV(){const al=dAlerts(),bad=al.filter(a=>a.lvl!=='ok').length;
 function dshRender(){dshNav();const m=$('dshMain');if(!DSH.recs.length){m.innerHTML='<div class="dsh-card dsh-empty"><div style="font-size:48px">📭</div><h3>Chưa có dữ liệu phân tích</h3><p>Hãy làm ít nhất một bài thi để xem biểu đồ, so sánh điểm và cảnh báo.</p><button class="primary" onclick="dshClose()">Về trang chủ</button></div>';return}
  m.innerHTML=({overview:dOverview,scores:dScores,compare:dCompare,accuracy:dAccuracy,alerts:dAlertsV})[DSH.tab]()}
 let HP='home',dshReady=false;
-const HP_TABS=[['home','📰','Bảng tin'],['exam','📋','Quản lý kỳ thi'],['pr','📚','Bài ôn'],['dash','📈','Phân tích']];
+const HP_TABS=[['home','🏠','Trang chủ'],['exam','📋','Quản lý kỳ thi'],['pr','📚','Bài ôn']];
 function homeSetup(){const L=$('landingView');if(!L||L.querySelector('.home-tabs'))return;
  const panes={home:document.createElement('div'),exam:document.createElement('div'),pr:document.createElement('div'),self:document.createElement('div')};
  Object.keys(panes).forEach(k=>{panes[k].className='home-pane';panes[k].dataset.pane=k});
@@ -4419,5 +4435,7 @@ trigger.addEventListener('click',()=>{const on=menu.classList.toggle('open');tri
 
 <link rel="stylesheet" href="./studyt-premium.css" data-studyt-theme="aurora-v1">
 <script src="./studyt-premium.js" data-studyt-theme="aurora-v1"></script>
+<link rel="stylesheet" href="./studyt-ux2.css">
+<script src="./studyt-ux2.js" defer></script>
 </body>
 </html>
