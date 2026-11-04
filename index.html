@@ -6145,9 +6145,8 @@ let total=null,online=null,tries=0;
 const el=document.createElement('div');el.id='qmVisit';el.setAttribute('aria-label','Thống kê truy cập');
 const paint=()=>{el.innerHTML='<span title="Tổng số lượt truy cập"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg><b>'+fmt(total)+'</b></span><span title="Số người đang truy cập"><i class="on-dot"></i><b>'+fmt(online)+'</b> online</span>'};
 paint();document.body.appendChild(el);
-/* nâng khung đếm lên trên thanh tab dưới (điện thoại/máy tính bảng) để không đè nhau */
-const place=()=>{try{const t=document.getElementById('homeTabs');let b='';if(t){const cs=getComputedStyle(t),r=t.getBoundingClientRect();if(cs.position==='fixed'&&cs.display!=='none'&&r.height>0&&r.width>innerWidth*.6&&r.top>innerHeight*.5)b=(innerHeight-r.top+6)+'px'}el.style.bottom=b}catch(e){}};
-addEventListener('resize',place);addEventListener('orientationchange',place);setInterval(place,1500);place();
+const mountOnHome=()=>{const home=document.querySelector('#landingView .home-pane[data-pane="home"]');if(home&&el.parentNode!==home)home.append(el)};
+mountOnHome();document.addEventListener('DOMContentLoaded',mountOnHome);setTimeout(mountOnHome,500);
 const rpc=async n=>{try{const r=await sb.rpc(n);if(r.error)return null;const v=Array.isArray(r.data)?r.data[0]:r.data;return v==null?null:+v}catch(e){return null}};
 async function init(){
  if(typeof sb==='undefined'||!sb){if(++tries<40)setTimeout(init,500);return}
@@ -6496,7 +6495,7 @@ html body .qa-drawer{transition:left .2s ease}
   `;
   document.head.appendChild(style);
 
-  const launch=el('button','', 'ST+');launch.id='stp-launch';launch.type='button';launch.title='StudyT Premium — Ctrl + K';launch.setAttribute('aria-label','Mở StudyT Premium');
+  const launch=el('button','', 'ST+');launch.id='stp-launch';launch.type='button';launch.title='StudyT Premium — Tiện ích';launch.setAttribute('aria-label','Mở StudyT Premium');
   const panel=el('section');panel.id='stp-panel';panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','false');panel.setAttribute('aria-label','StudyT Premium Companion');
   const head=el('div','stp-head');const brand=el('div');brand.append(el('div','stp-brand','StudyT Premium'),el('div','stp-sub',ROLE==='admin'?'Không gian tiện ích quản trị':'Không gian tiện ích học tập'));
   const close=el('button','stp-icon','Đóng');close.type='button';close.setAttribute('aria-label','Đóng bảng tiện ích');head.append(brand,close);panel.append(head);
@@ -6509,7 +6508,7 @@ html body .qa-drawer{transition:left .2s ease}
   const results=el('div','stp-results');const searchHint=el('div','stp-notehint','Tìm trong nội dung đang hiển thị trên trang này; không truy vấn dữ liệu máy chủ.');searchView.append(search,results,searchHint);
   const noteView=el('div','stp-view');noteView.dataset.view='note';const note=el('textarea');note.placeholder='Ghi nhanh ý tưởng, công thức, việc cần làm…';note.setAttribute('aria-label','Ghi chú nhanh');note.value=typeof state.note==='string'?state.note:'';const noteHint=el('div','stp-notehint','Ghi chú được lưu cục bộ trên trình duyệt và thiết bị này, không tự đồng bộ lên Supabase.');const noteActions=el('div','stp-actions');const copyNote=el('button','stp-action','Sao chép');const downloadNote=el('button','stp-action','Xuất .txt');const clearNote=el('button','stp-action','Xóa ghi chú');noteActions.append(copyNote,downloadNote,clearNote);noteView.append(note,noteHint,noteActions);
   const timerView=el('div','stp-view');timerView.dataset.view='timer';const timer=el('div','stp-timer','25:00');const timerLabel=el('div','stp-center','Phiên tập trung · 25 phút');const timerActions=el('div','stp-actions');timerActions.style.justifyContent='center';const startTimer=el('button','stp-action stp-primary','Bắt đầu');const resetTimer=el('button','stp-action','Đặt lại');const focusToggle=el('button','stp-action',state.focus?'Tắt chế độ tập trung':'Bật chế độ tập trung');timerActions.append(startTimer,resetTimer,focusToggle);timerView.append(timer,timerLabel,timerActions);
-  const helpView=el('div','stp-view');helpView.dataset.view='help';const shortcuts=el('div','stp-shortcuts');[['Mở bảng tiện ích','Ctrl / ⌘ + K'],['Đóng bảng','Esc'],['Tìm nhanh','Nhập từ khóa ở tab Tìm nhanh'],['Đi tới nội dung','Chọn kết quả tìm kiếm'],['Ghi chú','Tự lưu trên thiết bị']].forEach(([a,b])=>{shortcuts.append(el('div','',a),el('div','',b))});helpView.append(shortcuts,el('p','stp-notehint','Các phím tắt chỉ hoạt động khi không nhập trong ô văn bản, trừ Ctrl/⌘ + K và Esc.'));
+  const helpView=el('div','stp-view');helpView.dataset.view='help';const shortcuts=el('div','stp-shortcuts');[['Mở bảng tiện ích','Nhấn biểu tượng heo StudyT'],['Đóng bảng','Esc'],['Tìm nhanh','Nhập từ khóa ở tab Tìm nhanh'],['Đi tới nội dung','Chọn kết quả tìm kiếm'],['Ghi chú','Tự lưu trên thiết bị']].forEach(([a,b])=>{shortcuts.append(el('div','',a),el('div','',b))});helpView.append(shortcuts,el('p','stp-notehint','Các phím tắt chỉ hoạt động khi không nhập trong ô văn bản, trừ Ctrl/⌘ + K và Esc.'));
   const diagView=el('div','stp-view');diagView.dataset.view='diag';const diagIntro=el('p','stp-notehint','Kiểm tra nhanh ngay trên trình duyệt. Báo cáo không đọc dữ liệu cá nhân và không xác nhận trạng thái máy chủ Supabase.');const diagList=el('div','stp-results');const runDiag=el('button','stp-action stp-primary','Chạy kiểm tra');const copyDiag=el('button','stp-action','Sao chép báo cáo');const diagActions=el('div','stp-actions');diagActions.append(runDiag,copyDiag);diagView.append(diagIntro,diagList,diagActions);
   viewWrap.append(searchView,noteView,timerView,helpView,diagView);panel.append(tabs,viewWrap);
   const status=el('div','stp-status','Tiện ích độc lập · Không thay thế dữ liệu StudyT');panel.append(status);
@@ -6545,7 +6544,7 @@ html body .qa-drawer{transition:left .2s ease}
   startTimer.addEventListener('click',()=>{if(running){stopTimer();return}running=true;startTimer.textContent='Tạm dừng';interval=setInterval(()=>{remaining=Math.max(0,remaining-1);showTime();if(remaining===0){stopTimer();timerLabel.textContent='Hoàn thành phiên tập trung! Hãy nghỉ ngắn nhé.';try{if('Notification'in window&&Notification.permission==='granted')new Notification('StudyT',{body:'Bạn đã hoàn thành phiên tập trung 25 phút.'})}catch(_){}}},1000)});
   resetTimer.addEventListener('click',()=>{stopTimer();remaining=25*60;timerLabel.textContent='Phiên tập trung · 25 phút';showTime()});
   const setFocus=on=>{state.focus=!!on;document.body.classList.toggle('stp-focus-mode',!!on);focusToggle.textContent=on?'Tắt chế độ tập trung':'Bật chế độ tập trung';saveState()};setFocus(!!state.focus);focusToggle.addEventListener('click',()=>setFocus(!document.body.classList.contains('stp-focus-mode')));
-  document.addEventListener('keydown',e=>{const k=(e.key||'').toLowerCase(),mod=e.ctrlKey||e.metaKey;if(mod&&k==='k'){e.preventDefault();if(panel.classList.contains('open'))shut();else open();return}if(k==='escape'&&panel.classList.contains('open')){shut();return}});
+  document.addEventListener('keydown',e=>{const k=(e.key||'').toLowerCase(),mod=e.ctrlKey||e.metaKey;if(false&&mod&&k==='k'){e.preventDefault();if(panel.classList.contains('open'))shut();else open();return}if(k==='escape'&&panel.classList.contains('open')){shut();return}});
   const net=()=>{status.textContent=navigator.onLine?'Tiện ích độc lập · Kết nối mạng đang khả dụng':'Đang ngoại tuyến · Ghi chú vẫn lưu trên thiết bị';};window.addEventListener('online',net);window.addEventListener('offline',net);
   let lastDiag=[];const runDiagnostics=()=>{const checks=[];checks.push(['JavaScript','Đang hoạt động',true]);checks.push(['Kết nối mạng',navigator.onLine?'Có kết nối':'Đang ngoại tuyến',!!navigator.onLine]);let storage=false;try{const k=STORE+'_probe';localStorage.setItem(k,'1');storage=localStorage.getItem(k)==='1';localStorage.removeItem(k)}catch(_){}checks.push(['Bộ nhớ trình duyệt',storage?'Có thể đọc và ghi':'Không thể đọc/ghi',storage]);checks.push(['IndexedDB',typeof indexedDB!=='undefined'?'Trình duyệt hỗ trợ':'Không khả dụng',typeof indexedDB!=='undefined']);checks.push(['Thư viện Supabase',window.supabase&&typeof window.supabase.createClient==='function'?'SDK đã được nạp':'Không phát hiện SDK',!!(window.supabase&&typeof window.supabase.createClient==='function')]);checks.push(['Giao diện',!!$('#landingView')?'Đã tìm thấy vùng ứng dụng':'Chưa tìm thấy vùng ứng dụng',!!$('#landingView')]);lastDiag=checks.map(([a,b,ok])=>`${ok?'[OK]':'[LƯU Ý]'} ${a}: ${b}`);diagList.replaceChildren();checks.forEach(([a,b,ok])=>{const row=el('div','stp-result');const left=el('span');left.append(el('span','',a),el('small','',b));row.append(left,el('span','',ok?'✓':'!'));diagList.append(row)});status.textContent='Đã kiểm tra cục bộ · Không kiểm tra quyền RLS hoặc kết nối database';};runDiag.addEventListener('click',runDiagnostics);copyDiag.addEventListener('click',async()=>{if(!lastDiag.length)runDiagnostics();try{await navigator.clipboard.writeText('StudyT · Báo cáo kiểm tra cục bộ\n'+lastDiag.join('\n'));status.textContent='Đã sao chép báo cáo kiểm tra'}catch(_){status.textContent='Không thể truy cập clipboard trên trình duyệt này'}});
   switchTab('search');renderSearch();net();
@@ -6659,11 +6658,12 @@ trigger.addEventListener('click',()=>{const on=menu.classList.toggle('open');tri
 </script>
 
 
-<link rel="stylesheet" href="./studyt-premium.css" data-studyt-theme="aurora-v1">
-<script src="./studyt-premium.js" data-studyt-theme="aurora-v1"></script>
-<link rel="stylesheet" href="./studyt-ux2.css">
-<script src="./studyt-ux2.js" defer></script>
-<link rel="stylesheet" href="./studyt-evolve.css?v=3">
-<script src="./studyt-evolve.js?v=3" defer></script>
+<link rel="stylesheet" href="./studyt-premium.css?v=4" data-studyt-theme="aurora-v1">
+<script src="./studyt-premium.js?v=4" data-studyt-theme="aurora-v1"></script>
+<link rel="stylesheet" href="./studyt-ux2.css?v=4">
+<script src="./studyt-ux2.js?v=4" defer></script>
+<link rel="stylesheet" href="./studyt-evolve.css?v=4">
+<script src="./studyt-evolve.js?v=4" defer></script>
+<link rel="stylesheet" href="./studyt-refine.css?v=4">
 </body>
 </html>

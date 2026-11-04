@@ -76,7 +76,7 @@
  const topbar=$('#stux-topbar');
  const bell=topbar?.querySelector('[data-stux-action="news"]');
  const avatar=topbar?.querySelector('.stux-avatar');
- if(avatar){avatar.title='Mở Cài đặt';avatar.setAttribute('aria-label','Mở Cài đặt');avatar.removeAttribute('aria-haspopup')}
+ if(avatar){avatar.title='Tài khoản';avatar.setAttribute('aria-label','Mở menu tài khoản');avatar.setAttribute('aria-haspopup','menu')}
  if(bell&&topbar){
   const pop=document.createElement('section');pop.id='stux-news-panel';pop.hidden=true;pop.setAttribute('aria-label','Bảng tin StudyT');
   pop.innerHTML='<div class="stux-news-head"><span class="stux-news-head-icon">'+svg('bell',22)+'</span><div><strong>Bảng tin StudyT</strong><small>Thông báo và cập nhật mới nhất</small></div><button type="button" id="stux-news-close" aria-label="Đóng Bảng tin">'+svg('close',19)+'</button></div><div class="stux-news-body"><div id="stux-news-fallback">Chưa có thông báo mới.</div></div>';
@@ -104,21 +104,7 @@
   document.addEventListener('click',e=>{if(!pop.hidden&&!pop.contains(e.target)&&!bell.contains(e.target))closeNews()});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!pop.hidden){closeNews();bell.focus()}});
  }
- const settings=$('#stPane');
- if(settings){
-  // The original settings pane is preserved and remains directly navigable by the avatar.
-  // Its legacy sidebar button stays in DOM for existing scripts, but is visually hidden.
-  const actions=document.createElement('div');actions.id='stux-settings-actions';
-  actions.innerHTML='<div><strong>Trung tâm tài khoản</strong><span>Quản lý phiên đăng nhập và dữ liệu cá nhân.</span></div><div class="stux-settings-actions-buttons">'+(IS_ADMIN?'<button type="button" data-v2-action="backup">Sao lưu</button><button type="button" data-v2-action="restore">Khôi phục</button>':'')+'<button class="stux-settings-logout" type="button" data-v2-action="logout">Đăng xuất</button></div>';
-  const ensure=()=>{if(!settings.contains(actions))settings.prepend(actions)};
-  const obs=new MutationObserver(ensure);obs.observe(settings,{childList:true});ensure();
-  actions.addEventListener('click',e=>{
-   const act=e.target.closest('[data-v2-action]')?.dataset.v2Action;
-   if(act==='logout'){if(typeof window.doLogout==='function')window.doLogout()}
-   else if(act==='backup'){if(typeof window.backupAll==='function')window.backupAll()}
-   else if(act==='restore')$('#restoreFile')?.click();
-  });
- }
+ // Account actions live exclusively in the avatar dropdown.
  // User-facing settings are accessed via avatar, not duplicated on the sidebar.
  document.body.classList.toggle('stux-admin',IS_ADMIN);
 })();

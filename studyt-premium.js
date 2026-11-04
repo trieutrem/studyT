@@ -54,13 +54,13 @@
  }
  const topbar=document.createElement('div');topbar.id='stux-topbar';topbar.className='stux-topbar';
  topbar.innerHTML=`<button type="button" class="stux-mobile-nav" data-stux-action="menu" aria-label="Mở điều hướng">${icon('menu',22)}</button>
-  <button type="button" class="stux-search-trigger" data-stux-action="search" title="Tìm nhanh (Ctrl + K)">${icon('search',22)}<span>Tìm kiếm đề thi, tài liệu, ghi chú...</span><kbd>Ctrl + K</kbd></button>
+  <form id="stux-search-form" class="stux-search-trigger" role="search" aria-label="Tìm nội dung StudyT">${icon('search',22)}<input id="stux-search-input" type="search" name="q" placeholder="Tìm kiếm đề thi, tài liệu, ghi chú..." autocomplete="off" spellcheck="false" aria-label="Nhập từ khóa cần tìm"><button type="submit" class="stux-search-submit" aria-label="Bắt đầu tìm">${icon('arrow',17)}</button><span class="stux-sr-only" id="stux-search-status" aria-live="polite"></span></form>
   <div class="stux-top-actions"><button type="button" class="stux-tool-btn" data-stux-action="news" aria-label="Bảng tin và thông báo" title="Thông báo">${icon('bell',21)}<i class="stux-indicator"></i></button>
   <button type="button" class="stux-tool-btn" data-stux-action="theme" aria-label="Chuyển sáng/tối" title="Đổi giao diện">${icon('sun',20)}<span class="stux-tool-divider"></span>${icon('moon',18)}</button>
   <button type="button" class="stux-avatar" data-stux-action="accountMenu" aria-haspopup="menu" aria-expanded="false" aria-label="Mở tài khoản và cài đặt">${IS_ADMIN?'Q':'S'}</button></div>`;
  const accountMenu=document.createElement('div');accountMenu.id='stux-user-menu';accountMenu.className='stux-user-menu';accountMenu.setAttribute('role','menu');accountMenu.hidden=true;
  const menuItems=[
-  ['settings','settings','Cài đặt giao diện'],
+  ['settings','settings','Cài đặt'],
   ...(IS_ADMIN?[['users','users','Quản lý tài khoản'],['book','studentSite','Trang học viên'],['download','backup','Sao lưu dữ liệu'],['file','restore','Khôi phục dữ liệu']]:[]),
   ['logout','logout','Đăng xuất']
  ];
@@ -100,8 +100,8 @@
    const a=$('.stux-avatar');if(a)a.setAttribute('aria-expanded','false');
   }
   switch(action){
-   case 'accountMenu':runAction('settings');break;
-   case 'logout':{const btn=$('header.landing-nav button[onclick="doLogout()"]',root);if(btn)btn.click();break;}
+   case 'accountMenu':{const menu=$('#stux-user-menu');const avatar=$('.stux-avatar');if(menu){menu.hidden=!menu.hidden;if(avatar)avatar.setAttribute('aria-expanded',String(!menu.hidden))}break;}
+   case 'logout':{const btn=$('header.landing-nav button[onclick="doLogout()"]',root);if(btn)btn.click();else if(typeof window.doLogout==='function')window.doLogout();break;}
    case 'backup':{const btn=$('header.landing-nav button[onclick="backupAll()"]',root);if(btn)btn.click();break;}
    case 'restore':{const inp=$('#restoreFile');if(inp)inp.click();break;}
    case 'studentSite':location.href='index.html';break;
@@ -114,7 +114,7 @@
    case 'quiz':if(typeof window.openMode==='function')window.openMode('quiz');else nav('self');break;
    case 'essay':if(typeof window.openMode==='function')window.openMode('essay');else nav('self');break;
    case 'pro':source('stpro-launch');break;
-   case 'search':source('stp-launch');setTimeout(()=>{const p=$('#stp-panel');if(p){const i=$('input[type="search"],input[type="text"]',p);if(i)i.focus();}},90);break;
+   case 'search':$('#stux-search-input')?.focus();break;
    case 'settings':if(!nav('st'))source('btnUsers');break;
    case 'users':if(!source('btnUsers'))nav('st');break;
    case 'theme':{const sel=$('#themeSelect');if(sel){sel.value=(sel.value==='dark'?'light':'dark');sel.dispatchEvent(new Event('change',{bubbles:true}));}break;}
@@ -123,6 +123,35 @@
  }
  root.addEventListener('click',event=>{const target=event.target.closest('[data-stux-action]');if(!target||!root.contains(target))return;event.preventDefault();event.stopPropagation();runAction(target.dataset.stuxAction)});
  root.addEventListener('keydown',event=>{const target=event.target.closest('[data-stux-action][role="button"]');if(target&&(event.key==='Enter'||event.key===' ')){event.preventDefault();target.click()}});
+
+ const searchForm=$('#stux-search-form',topbar),searchInput=$('#stux-search-input',topbar),searchStatus=$('#stux-search-status',topbar);
+ let searchFlashTimer=null;
+ searchForm?.addEventListener('submit',event=>{
+  event.preventDefault();
+  const q=(searchInput?.value||'').normalize('NFC').trim().toLocaleLowerCase('vi');
+  if(!q){searchInput?.focus();return}
+  // Search only items already rendered for the logged-in user. No hidden network query.
+  const content=$$('#landingView .home-pane[data-pane] .subj, #landingView .home-pane[data-pane] .mode-card, #landingView .home-pane[data-pane] .exam-card, #landingView .home-pane[data-pane] .ex-card, #landingView .home-pane[data-pane] .yr-card, #landingView .home-pane[data-pane] .pf-card, #landingView .home-pane[data-pane] .stux-feature-card, #landingView .home-pane[data-pane] .dsh-card, #landingView .home-pane[data-pane] .news-item');
+  const eligible=content.filter(node=>!node.closest('#stnx-workspace, #stp-panel, #stpro-shell'));
+  const match=eligible.find(node=>(node.innerText||node.textContent||'').normalize('NFC').toLocaleLowerCase('vi').includes(q));
+  searchInput?.classList.remove('stux-search-miss');
+  if(!match){
+   if(searchStatus)searchStatus.textContent='Không tìm thấy từ khóa trong những nội dung đã tải.';
+   searchInput?.classList.add('stux-search-miss');searchInput.title='Chưa tìm thấy trong dữ liệu đang hiển thị trên website';
+   setTimeout(()=>searchInput?.classList.remove('stux-search-miss'),1800);
+   return;
+  }
+  const page=match.closest('.home-pane[data-pane]')?.dataset.pane;
+  if(page){const btn=$(`#homeTabs button[data-p="${page}"]`);if(btn&&!btn.classList.contains('on'))btn.click();}
+  clearTimeout(searchFlashTimer);
+  setTimeout(()=>{
+   match.scrollIntoView({behavior:'smooth',block:'center'});
+   match.classList.add('stux-search-match');
+   searchFlashTimer=setTimeout(()=>match.classList.remove('stux-search-match'),2200);
+  },90);
+  if(searchStatus)searchStatus.textContent='Đã tìm thấy kết quả trong nội dung đang tải.';
+ });
+
  document.addEventListener('click',event=>{if(!topbar.contains(event.target)){const m=$('#stux-user-menu');if(m)m.hidden=true;const a=$('.stux-avatar');if(a)a.setAttribute('aria-expanded','false')}});
  document.addEventListener('keydown',event=>{if(event.key==='Escape'){const m=$('#stux-user-menu');if(m&&!m.hidden){m.hidden=true;const a=$('.stux-avatar');if(a){a.setAttribute('aria-expanded','false');a.focus()}}}});
  function setText(id,val){const e=document.getElementById(id);if(e)e.textContent=val}
