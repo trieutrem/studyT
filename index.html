@@ -804,6 +804,7 @@ async function checkStorage(){let ls=false;try{_si.call(localStorage,'qm_t','1')
 const SB_URL='https://fptzipckjixsqghxtliy.supabase.co';   // ví dụ: https://abcdxyz.supabase.co
 const SB_KEY='sb_publishable_DnuhYQtrXe7ffbEQNlWUlQ_aOOghF8k';   // anon / publishable key (khóa công khai, không phải service_role)
 /* ================================================================== */
+const STUDYT_ADMIN_EMAIL='hktrieuvioletvc@gmail.com';
 let sb=null,me=null,exams=[],myAtt={},myGr={},readyServer=null,authMode='login';
 const EMAIL=u=>u+'@studyt.app',EMAIL_OLD=u=>u+'@quizmaster.app',fmtT=d=>new Date(d).toLocaleString('vi-VN',{dateStyle:'short',timeStyle:'short'});
 restoreExam=function(){};
@@ -832,7 +833,8 @@ $('auGo').onclick=async()=>{
    if(!nm){auMsg('Hãy nhập họ và tên.');return}
    const email=stuxGmail($('auEmail').value);
    if(!email){auMsg('Hãy nhập địa chỉ Gmail hợp lệ, ví dụ tenban@gmail.com.');return}
-   const {data,error}=await sb.auth.signUp({email,password:pw,options:{data:{full_name:nm,username:u}}});
+   if(email===STUDYT_ADMIN_EMAIL){auMsg('Gmail này dành riêng cho quản trị StudyT, không thể đăng ký tài khoản học viên.');return}
+   const {data,error}=await sb.auth.signUp({email,password:pw,options:{emailRedirectTo:location.origin+'/',data:{full_name:nm,username:u}}});
    if(error)throw error;
    if(!data?.session){auMsg('Nếu Gmail này chưa có tài khoản, hãy mở hộp thư Gmail để xác nhận đăng ký rồi đăng nhập.','info');return}
    await onLogin();
@@ -840,22 +842,23 @@ $('auGo').onclick=async()=>{
    let error=null;
    if(u.includes('@')){
     const email=stuxGmail(u)||u;
+    if(email===STUDYT_ADMIN_EMAIL){auMsg('Gmail quản trị không đăng nhập tại trang học viên. Hãy sử dụng admin.html.');return}
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){auMsg('Địa chỉ email chưa đúng định dạng.');return}
     const r=await sb.auth.signInWithPassword({email,password:pw});error=r.error;
    }else{
     if(!/^[a-z0-9._-]{3,30}$/.test(u)){auMsg('Tên đăng nhập cũ chưa hợp lệ.');return}
     const r=await sb.auth.signInWithPassword({email:EMAIL(u),password:pw});error=r.error;
-    if(error&&/Invalid login/i.test(error.message)){const r2=await sb.auth.signInWithPassword({email:EMAIL_OLD(u),password:pw});error=r2.error}
+    if(error&&/Invalid login|Email address.*invalid/i.test(error.message)){const r2=await sb.auth.signInWithPassword({email:EMAIL_OLD(u),password:pw});error=r2.error}
    }
    if(error)throw error;
    await onLogin();
   }
  }catch(e){
   const msg=String(e?.message||'Có lỗi khi kết nối, vui lòng thử lại.');
-  auMsg(msg==='IS_ADMIN'?'Tài khoản quản trị vui lòng đăng nhập tại trang quản trị.':/Invalid login/i.test(msg)?'Gmail / tên tài khoản hoặc mật khẩu không đúng.':/already registered|already exists|already in use/i.test(msg)?'Gmail này đã có tài khoản. Hãy chọn Đăng nhập.':msg);
+  auMsg(msg==='IS_ADMIN'?'Tài khoản quản trị vui lòng đăng nhập tại trang quản trị.':/Email address.*invalid/i.test(msg)?'Tài khoản cũ sử dụng email giả nên Supabase không chấp nhận đăng nhập. Quản trị viên cần chuyển email tài khoản cũ sang Gmail thật, giữ nguyên mã người dùng (UID).':/Invalid login/i.test(msg)?'Gmail / tên tài khoản hoặc mật khẩu không đúng. Nếu dùng tài khoản cũ @studyt.app, hãy liên hệ quản trị để đổi email.':/Email not confirmed/i.test(msg)?'Gmail chưa được xác nhận. Hãy mở email xác nhận mới nhất và kiểm tra đường dẫn quay về StudyT.':/already registered|already exists|already in use/i.test(msg)?'Gmail này đã có tài khoản. Hãy chọn Đăng nhập.':msg);
  }finally{$('auGo').disabled=false}
 };
-async function onLogin(){const {data:{user}}=await sb.auth.getUser();const {data:p,error}=await sb.from('profiles').select('*').eq('id',user.id).single();if(error)throw error;me={id:user.id,name:p.full_name||p.username,role:p.role};if(p.role==='admin'){await sb.auth.signOut();me=null;throw new Error('IS_ADMIN')}
+async function onLogin(){const {data:{user}}=await sb.auth.getUser();const {data:p,error}=await sb.from('profiles').select('*').eq('id',user.id).single();if(error)throw error;me={id:user.id,name:p.full_name||p.username,role:p.role};if(p.role==='admin'||String(user.email||'').toLowerCase()===STUDYT_ADMIN_EMAIL){await sb.auth.signOut();me=null;throw new Error('IS_ADMIN')}
  examRun=null;subjects=[];document.body.classList.add('authed');$('whoami').textContent=me.name+(me.role==='admin'?' · admin':'');document.body.classList.toggle('is-admin',me.role==='admin');$('landingView').style.display='block';$('quizView').style.display='none';$('essayView').style.display='none';$('examView').style.display='none';$('auPass').value='';await loadExams();renderHome()}
 async function doLogout(){if(!confirm('Đăng xuất?'))return;await sb.auth.signOut();me=null;examRun=null;subjects=[];saveExam();document.body.classList.remove('authed','is-admin');setAuthMode('login')}
 async function loadExams(){const [e,a,g]=await Promise.all([sb.from('exams').select('*').order('start_at',{ascending:false}),sb.from('attempts').select('id,exam_id,submitted_at,score').eq('user_id',me.id),sb.from('exam_grants').select('exam_id,remaining').eq('user_id',me.id)]);exams=e.data||[];myAtt={};(a.data||[]).forEach(x=>myAtt[x.exam_id]=x);myGr={};(g.data||[]).forEach(x=>myGr[x.exam_id]=x.remaining)}
@@ -6666,7 +6669,7 @@ trigger.addEventListener('click',()=>{const on=menu.classList.toggle('open');tri
 <script src="./studyt-evolve.js?v=4" defer></script>
 <link rel="stylesheet" href="./studyt-refine.css?v=4">
 
-<link rel="stylesheet" href="./studyt-v5.css?v=5.1">
-<script src="./studyt-v5.js?v=5.1" defer></script>
+<link rel="stylesheet" href="./studyt-v5.css?v=5.2">
+<script src="./studyt-v5.js?v=5.2" defer></script>
 </body>
 </html>

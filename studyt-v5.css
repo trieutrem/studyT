@@ -61,3 +61,11 @@ body.stux-admin #stnx-workspace .stnx-muted{color:#667399}
   #stv5-email-gate .stv5-card{padding:22px 18px 18px;border-radius:22px}
   #stv5-email-gate h3{font-size:24px}
 }
+
+/* V5.2: ensure legacy-email modal cannot be mistaken for a completed migration. */
+#stv5-email-gate .stv5-actions{justify-content:space-between}
+#stv5-email-gate .stv5-ghost[disabled],#stv5-email-gate .stv5-primary[disabled]{opacity:.55;cursor:wait}
+#stv5-email-gate .stv5-note{line-height:1.7}
+#stv5-email-gate .stv5-card{max-height:min(92vh,820px);overflow-y:auto}
+#stv5-email-gate #stv5CheckEmail{color:#4357b6}
+@media(max-width:480px){#stv5-email-gate .stv5-actions{display:grid;grid-template-columns:1fr 1fr}#stv5-email-gate .stv5-primary{grid-column:1/-1}}
