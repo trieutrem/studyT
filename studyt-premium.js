@@ -100,7 +100,7 @@
    const a=$('.stux-avatar');if(a)a.setAttribute('aria-expanded','false');
   }
   switch(action){
-   case 'accountMenu':{const menu=$('#stux-user-menu');if(menu){menu.hidden=!menu.hidden;const a=$('.stux-avatar');if(a)a.setAttribute('aria-expanded',String(!menu.hidden));const label=$('#whoami');const user=$('#stux-menu-user');if(user&&label)user.textContent=label.textContent.trim()||'Tài khoản hiện tại';}break;}
+   case 'accountMenu':runAction('settings');break;
    case 'logout':{const btn=$('header.landing-nav button[onclick="doLogout()"]',root);if(btn)btn.click();break;}
    case 'backup':{const btn=$('header.landing-nav button[onclick="backupAll()"]',root);if(btn)btn.click();break;}
    case 'restore':{const inp=$('#restoreFile');if(inp)inp.click();break;}
@@ -110,7 +110,7 @@
    case 'practice':nav('pr');break;
    case 'exam':nav('exam');break;
    case 'analytics':nav('home');setTimeout(()=>{const e=$('#dashHead')||$('#dashView');if(e)e.scrollIntoView({behavior:'smooth',block:'start'});},150);break;
-   case 'news':nav('home');setTimeout(()=>{const e=$('#newsHead');if(e)e.scrollIntoView({behavior:'smooth',block:'start'});},150);break;
+   case 'news':if(typeof window.stuxOpenNews==='function')window.stuxOpenNews();break;
    case 'quiz':if(typeof window.openMode==='function')window.openMode('quiz');else nav('self');break;
    case 'essay':if(typeof window.openMode==='function')window.openMode('essay');else nav('self');break;
    case 'pro':source('stpro-launch');break;
