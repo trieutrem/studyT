@@ -32,3 +32,11 @@ GIỮ NGUYÊN CÁC DỮ LIỆU
 - Không thay đổi bảng Supabase, SQL, RLS hoặc cấu trúc tài khoản.
 - Không xóa dữ liệu của V3. Chỉ gỡ lối truy cập đến module Góc học tập thông minh dành cho học viên.
 - Admin vẫn dùng Trung tâm vận hành V3.
+
+
+===== HOTFIX STUDYT AURORA V5.1 (2026-11-04) =====
+Sửa lỗi: JavaScript bị lộ dưới dạng văn bản khi thẻ script bị kết thúc sớm do chèn nhầm mã vào chuỗi xuất tài liệu.
+Sửa trong cả index.html và admin.html. Không thay đổi bảng/SQL Supabase.
+Thay toàn bộ tệp website trong repository GitHub và triển khai lại lên Vercel.
+Sau khi deploy, Ctrl+Shift+R hoặc kiểm tra/cập nhật service worker (nâng cache version).
+Nếu bật xác nhận email, thao tác yêu cầu cập nhật Gmail có thể cần xác minh trong hộp thư; chức năng này chưa được kiểm thử đầu cuối với dự án Supabase thật.
