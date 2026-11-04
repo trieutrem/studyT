@@ -1,0 +1,63 @@
+
+/* StudyT Aurora V5 refinements: academic polish, performance, legacy-email gate */
+:root{
+  --v5-ink:#24305f;
+  --v5-sub:#6d789d;
+  --v5-line:#dde3f6;
+  --v5-panel:#ffffff;
+  --v5-soft:#f7f9ff;
+  --v5-accent:#4d63d8;
+  --v5-accent-2:#6d63dc;
+  --v5-shadow:0 12px 28px rgba(55,63,128,.10);
+}
+body{font-family:Inter,"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--v5-ink)}
+/* Performance + cleaner academic look: remove floating premium launchers and mascot dock */
+#stp-launch,#stp-panel,#stpro-launch,#stpro-shell,#studyt-pig-dock{display:none!important}
+/* Legacy email gate */
+body.stv5-lock{overflow:hidden}
+#stv5-email-gate{position:fixed;inset:0;z-index:2147483640;background:rgba(240,243,255,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;padding:20px}
+#stv5-email-gate.show{display:flex}
+#stv5-email-gate .stv5-card{width:min(560px,calc(100vw - 24px));background:#fff;border:1px solid var(--v5-line);border-radius:28px;box-shadow:0 30px 90px rgba(31,40,101,.22);padding:26px 26px 22px;color:var(--v5-ink)}
+#stv5-email-gate .stv5-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#eef3ff;color:#4e5bd4;font-size:12px;font-weight:800;margin-bottom:12px}
+#stv5-email-gate h3{margin:0 0 10px;font-size:29px;line-height:1.15;letter-spacing:-.02em}
+#stv5-email-gate p{margin:0 0 14px;color:var(--v5-sub);line-height:1.7}
+#stv5-email-gate .stv5-note{padding:12px 14px;border-radius:16px;background:#f8faff;border:1px solid var(--v5-line);color:#53608d;font-size:13px;margin:0 0 16px}
+#stv5-email-gate label{display:block;font-size:13px;font-weight:800;margin:0 0 8px}
+#stv5-email-gate input{width:100%;padding:14px 16px;border:1px solid #ccd5ef;border-radius:15px;font:500 15px/1.5 inherit;color:var(--v5-ink);background:#fff;outline:none;box-shadow:inset 0 1px 2px rgba(52,64,130,.06)}
+#stv5-email-gate input:focus{border-color:#8b95f6;box-shadow:0 0 0 4px rgba(105,106,227,.14)}
+#stv5-email-gate .stv5-err{display:none;margin-top:10px;padding:12px 14px;border-radius:14px;background:#fff1f3;border:1px solid #f7d1da;color:#a22b56;font-size:13px}
+#stv5-email-gate .stv5-ok{display:none;margin-top:10px;padding:12px 14px;border-radius:14px;background:#ecfbf3;border:1px solid #bee8d0;color:#12714c;font-size:13px}
+#stv5-email-gate .stv5-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:18px}
+#stv5-email-gate button{border:1px solid transparent;border-radius:16px;padding:12px 16px;font:800 14px/1 inherit;font-family:inherit;cursor:pointer}
+#stv5-email-gate .stv5-ghost{background:#fff;color:#6d7596;border-color:var(--v5-line)}
+#stv5-email-gate .stv5-primary{background:linear-gradient(135deg,var(--v5-accent),var(--v5-accent-2));color:#fff;box-shadow:0 10px 22px rgba(93,97,221,.28)}
+/* Admin control center: more seamless and academic */
+body.stux-admin #stnx-workspace{background:linear-gradient(180deg,#f6f8ff,#f3f5fb 72%,#f7f8fc);box-shadow:-8px 0 30px rgba(45,52,107,.06)}
+body.stux-admin #stnx-workspace .stnx-work-header{padding:18px 24px 15px;background:#fff;border-bottom:1px solid #e7ebfa;box-shadow:none}
+body.stux-admin #stnx-workspace .stnx-work-tabs{padding:0 24px 14px;background:#fff;border-bottom:1px solid #e7ebfa;gap:10px}
+body.stux-admin #stnx-workspace .stnx-tab{padding:12px 16px;border:1px solid #e1e5f6;background:#f8faff;color:#4f5c8f;border-radius:14px}
+body.stux-admin #stnx-workspace .stnx-tab.active{background:linear-gradient(135deg,#5367db,#6c6fe1);color:#fff;box-shadow:0 8px 18px rgba(84,98,212,.24)}
+body.stux-admin #stnx-workspace .stnx-work-body{padding:22px 24px 56px}
+body.stux-admin #stnx-workspace .stnx-card{border-radius:22px;box-shadow:0 10px 24px rgba(55,63,128,.07);border-color:#e4e8f8}
+body.stux-admin #stnx-workspace .stnx-title h2,body.stux-admin #stnx-workspace .stnx-card h3{color:#24305f}
+body.stux-admin #stnx-workspace .stnx-muted{color:#667399}
+/* Notification panel alignment */
+#stnx-notifications .stnx-notif-head{padding:18px 18px 14px}
+#stnx-notifications .stnx-row{gap:10px}
+#stnx-notifications .stnx-row button{display:grid;place-items:center;line-height:1;padding:0}
+/* Search bar cleaner and direct typing */
+.stux-search-shortcut,.stux-search-chip,.stux-search-hint,.stux-search-panel,[data-stux-search-panel]{display:none!important}
+#stux-topbar .stux-search-wrap input{padding-right:20px!important}
+/* More academic global cards */
+.stux-hero-card,.stux-card,.stux-feature-card,.card,.panel,.essay-area,.hero-stat,.stnx-card{box-shadow:var(--v5-shadow)!important}
+/* Fine-tune buttons in floating/legacy dialogs if they appear */
+#stpro-head,#stp-panel .stp-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:16px}
+#stpro-close,#stp-panel .stp-close,#stux-news-close{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:44px;min-height:44px;line-height:1}
+#stpro-head strong,#stp-panel .stp-brand{display:block}
+/* Sharper top cards */
+#stux-news-panel,.stux-menu,.stux-account-menu{border:1px solid #dfe4f7!important;box-shadow:0 12px 30px rgba(49,61,126,.12)!important}
+/* Responsive gate */
+@media(max-width:700px){
+  #stv5-email-gate .stv5-card{padding:22px 18px 18px;border-radius:22px}
+  #stv5-email-gate h3{font-size:24px}
+}

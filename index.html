@@ -3889,7 +3889,9 @@ function pdf(){const f=filtered(),A=all();if(!f.length){alert('Hồ sơ chưa c�
  <div class="st"><div><b>${f.length}</b><span>Sản phẩm</span></div><div><b>${certs.length}</b><span>Chứng nhận</span></div><div><b>${new Set(f.map(x=>x.sem)).size}</b><span>Học kỳ</span></div><div><b>${sk.length}</b><span>Kỹ năng</span></div></div>
  ${sk.length?`<h2>Kỹ năng nổi bật</h2><div class="tg">${sk.slice(0,30).map(t=>`<i>${E(t)}</i>`).join('')}</div>`:''}
  ${bySem(f).map(([s,a])=>`<h2>${E(s)}</h2>${a.map(item).join('')}`).join('')}
- <div class="ft">Xuất từ StudyT · ${new Date().toLocaleDateString('vi-VN')}</div></body></html>`;
+ <div class="ft">Xuất từ StudyT · ${new Date().toLocaleDateString('vi-VN')}</div><link rel="stylesheet" href="./studyt-v5.css?v=5">
+<script src="./studyt-v5.js?v=5" defer></script>
+</body></html>`;
  const old=G('pfPrint');if(old)old.remove();
  const fr=document.createElement('iframe');fr.id='pfPrint';fr.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';document.body.appendChild(fr);
  fr.srcdoc=html;fr.onload=()=>{try{fr.contentWindow.focus();fr.contentWindow.print()}catch(e){alert('Trình duyệt không mở được hộp thoại in.')}}}
@@ -5794,7 +5796,9 @@ function guardKey(e){if(!S||dv.style.display!=='block'||dlAllowed())return;const
 function exportHtml(){if(!dlAllowed()){toast('Admin chưa cho phép tải tài liệu này.');return}
  const c=art.cloneNode(true);c.querySelectorAll('.qa-hit').forEach(e=>e.replaceWith(document.createTextNode(e.textContent)));c.querySelectorAll('.qa-card').forEach(e=>e.remove());c.removeAttribute('style');c.className='sd-art';
  const title=(($('docH')||{}).textContent||'Tài liệu').trim(),css=($('qmDocToolsCss')||{}).textContent||'';
- const html='<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title)+'</title><style>body{font:16px/1.7 system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 16px;color:#172033}.sd-art img{max-width:100%}.sd-pg img{width:100%;height:auto;display:block}.sd-anc{display:none}.sd-art{--line:#e3e9f2;--panel:#fff;--ink:#172033;--primary:#315efb}</style><style>'+css+'</style></head><body><h1>'+esc(title)+'</h1><article class="sd-art">'+c.innerHTML+'</article></body></html>';
+ const html='<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title)+'</title><style>body{font:16px/1.7 system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 16px;color:#172033}.sd-art img{max-width:100%}.sd-pg img{width:100%;height:auto;display:block}.sd-anc{display:none}.sd-art{--line:#e3e9f2;--panel:#fff;--ink:#172033;--primary:#315efb}</style><style>'+css+'</style></head><body><h1>'+esc(title)+'</h1><article class="sd-art">'+c.innerHTML+'</article><link rel="stylesheet" href="./studyt-v5.css?v=5">
+<script src="./studyt-v5.js?v=5" defer></script>
+</body></html>';
  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download=title.replace(/[\\/:*?"<>|]+/g,'_').slice(0,80)+'.html';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);toast('Đã tải tài liệu.')}
 /* ---------- lịch sử & phiên bản ---------- */
 const KIND={auto:'Tự động',manual:'Thủ công',restore:'Khôi phục'};
@@ -6665,5 +6669,7 @@ trigger.addEventListener('click',()=>{const on=menu.classList.toggle('open');tri
 <link rel="stylesheet" href="./studyt-evolve.css?v=4">
 <script src="./studyt-evolve.js?v=4" defer></script>
 <link rel="stylesheet" href="./studyt-refine.css?v=4">
+<link rel="stylesheet" href="./studyt-v5.css?v=5">
+<script src="./studyt-v5.js?v=5" defer></script>
 </body>
 </html>

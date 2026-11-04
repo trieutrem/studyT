@@ -3899,7 +3899,9 @@ function guardKey(e){if(!S||dv.style.display!=='block'||dlAllowed())return;const
 function exportHtml(){if(!dlAllowed()){toast('Admin chưa cho phép tải tài liệu này.');return}
  const c=art.cloneNode(true);c.querySelectorAll('.qa-hit').forEach(e=>e.replaceWith(document.createTextNode(e.textContent)));c.querySelectorAll('.qa-card').forEach(e=>e.remove());c.removeAttribute('style');c.className='sd-art';
  const title=(($('docH')||{}).textContent||'Tài liệu').trim(),css=($('qmDocToolsCss')||{}).textContent||'';
- const html='<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title)+'</title><style>body{font:16px/1.7 system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 16px;color:#172033}.sd-art img{max-width:100%}.sd-pg img{width:100%;height:auto;display:block}.sd-anc{display:none}.sd-art{--line:#e3e9f2;--panel:#fff;--ink:#172033;--primary:#315efb}</style><style>'+css+'</style></head><body><h1>'+esc(title)+'</h1><article class="sd-art">'+c.innerHTML+'</article></body></html>';
+ const html='<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title)+'</title><style>body{font:16px/1.7 system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 16px;color:#172033}.sd-art img{max-width:100%}.sd-pg img{width:100%;height:auto;display:block}.sd-anc{display:none}.sd-art{--line:#e3e9f2;--panel:#fff;--ink:#172033;--primary:#315efb}</style><style>'+css+'</style></head><body><h1>'+esc(title)+'</h1><article class="sd-art">'+c.innerHTML+'</article><link rel="stylesheet" href="./studyt-v5.css?v=5">
+<script src="./studyt-v5.js?v=5" defer></script>
+</body></html>';
  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download=title.replace(/[\\/:*?"<>|]+/g,'_').slice(0,80)+'.html';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);toast('Đã tải tài liệu.')}
 /* ---------- lịch sử & phiên bản ---------- */
 const KIND={auto:'Tự động',manual:'Thủ công',restore:'Khôi phục'};
@@ -4439,5 +4441,7 @@ trigger.addEventListener('click',()=>{const on=menu.classList.toggle('open');tri
 <link rel="stylesheet" href="./studyt-evolve.css?v=4">
 <script src="./studyt-evolve.js?v=4" defer></script>
 <link rel="stylesheet" href="./studyt-refine.css?v=4">
+<link rel="stylesheet" href="./studyt-v5.css?v=5">
+<script src="./studyt-v5.js?v=5" defer></script>
 </body>
 </html>
