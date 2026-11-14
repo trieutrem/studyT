@@ -374,7 +374,7 @@ img,video{max-width:100%}
       <div style="border-top:1px solid var(--line);margin-top:20px;padding-top:16px"><h3 style="font-size:14px">Cách nhận diện</h3><p class="small">Hệ thống đọc định dạng chữ trong Word để tìm đáp án. Sau khi phân tích, hãy kiểm tra lại các câu được cảnh báo trước khi ôn tập.</p></div>
     </aside>
     <main class="panel">
-      <div class="sectionhead"><div><h3 id="mainTitle">Bộ câu hỏi của bạn</h3><p class="sub" id="mainSub" style="margin:4px 0 0">Tải file Word để bắt đầu xây dựng ngân hàng câu hỏi.</p></div><div class="actions"><button class="ghost" id="exportBtn" disabled>Xuất JSON</button><button class="ghost" id="clearBtn" disabled>Xóa bộ đề</button></div></div>
+      <div class="sectionhead"><div><h3 id="mainTitle">Bộ câu hỏi của bạn</h3><p class="sub" id="mainSub" style="margin:4px 0 0">Tải file Word để bắt đầu xây dựng ngân hàng câu hỏi.</p></div><div class="actions"><button class="ghost" id="exportBtn" disabled>Xuất bản sao</button><button class="ghost" id="clearBtn" disabled>Xóa bộ đề</button></div></div>
       <div class="review-summary" id="summary">
         <div class="mini"><strong id="sTotal">0</strong><span>Tổng câu hỏi</span></div><div class="mini"><strong id="sGood">0</strong><span>Có đáp án</span></div><div class="mini"><strong id="sMissing">0</strong><span>Chưa xác định</span></div><div class="mini"><strong id="sMulti">0</strong><span>Nhiều đáp án</span></div>
       </div>
@@ -515,8 +515,8 @@ html[data-theme="dark"] .home-tabs button.on{color:#0d1220}
       <label class="essay-field"><span>Tiêu chí / thang điểm (không bắt buộc)</span><textarea id="essayFormRubric" class="essay-textarea" placeholder="Ví dụ: nêu khái niệm 2đ, phân tích 5đ..."></textarea></label>
       <div class="essay-buttonrow"><button class="teal" id="essaySaveQuestion">＋ Thêm câu hỏi</button><button class="ghost" id="essayNewForm">Làm mới</button></div>
       <p class="essay-small">Khi chọn một câu đã có, bấm “Nạp để sửa” để đưa nội dung vào biểu mẫu.</p></div>
-      <div class="essay-buttonrow"><button class="ghost" id="essayExportBtn">Xuất bản sao JSON</button><button class="ghost" id="essayImportBackupBtn">Nhập bản sao</button><input type="file" id="essayBackupFile" class="fileinput" accept=".json,application/json"><button class="ghost" id="essayClearBtn">Xóa ngân hàng</button></div>
-      <p class="essay-small">💾 Câu hỏi, bản nháp và lịch sử luyện viết được lưu trên trình duyệt này. Nên xuất JSON định kỳ để có bản sao riêng.</p>
+      <div class="essay-buttonrow"><button class="ghost" id="essayExportBtn">Xuất bản sao</button><button class="ghost" id="essayImportBackupBtn">Nhập bản sao</button><input type="file" id="essayBackupFile" class="fileinput" accept=".json,application/json"><button class="ghost" id="essayClearBtn">Xóa ngân hàng</button></div>
+      <p class="essay-small">💾 Câu hỏi, bản nháp và lịch sử luyện viết được lưu trên trình duyệt này. Nên tạo bản sao định kỳ để có bản sao riêng.</p>
     </aside>
     <main class="essay-area">
       <div class="sectionhead"><div><h3>Không gian luyện tự luận</h3><p class="sub" style="margin:4px 0 0">Chọn câu hỏi để đọc, ghi nhớ hoặc luyện viết.</p></div><div class="actions"><button class="ghost" id="essayEditCurrent" disabled>✎ Nạp để sửa</button><button class="ghost" id="essayFavoriteBtn" disabled>☆ Đánh dấu</button></div></div>
@@ -729,10 +729,10 @@ $('essayImportBtn').addEventListener('click',async()=>{if(!essayFileData)return;
  if(added.length){essaySelectedId=added[0].id;essayTab='study';renderEssayAll();essayNotice(`Đã nhập ${added.length} câu tự luận.`+(srcId?' Bấm tab “📄 Tài liệu gốc” để xem file đúng định dạng ban đầu.':' (Không dựng được bản gốc để xem lại.)'))}else essayNotice('Các câu này có vẻ đã tồn tại trong ngân hàng; không thêm bản trùng.')}
  catch(err){essayNotice(err.message||'Có lỗi khi đọc tài liệu.')}finally{window.__dnProg=null;$('essayImportBtn').disabled=false;$('essayImportBtn').textContent='Phân tích tài liệu tự luận'}});
 $('essaySaveQuestion').addEventListener('click',saveEssayQuestionFromForm);$('essayNewForm').addEventListener('click',clearEssayForm);$('essayEditCurrent').addEventListener('click',loadEssayFormForEdit);$('essayFavoriteBtn').addEventListener('click',()=>toggleEssayFavorite());$('essayQuestionSelect').addEventListener('change',e=>selectEssayQuestion(e.target.value));$('essayPrevBtn').addEventListener('click',()=>essayPrevNext(-1));$('essayNextBtn').addEventListener('click',()=>essayPrevNext(1));document.querySelectorAll('[data-essay-tab]').forEach(b=>b.addEventListener('click',()=>switchEssayTab(b.dataset.essayTab)));
-$('essayExportBtn').addEventListener('click',()=>{const payload={name:'StudyT - Ngân hàng tự luận',exportedAt:new Date().toISOString(),questions:essayQuestions};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='studyt-tu-luan-backup.json';a.click();URL.revokeObjectURL(a.href);essayNotice('Đã xuất bản sao JSON. Hãy giữ file này ở nơi an toàn.')});
+$('essayExportBtn').addEventListener('click',()=>{const payload={name:'StudyT - Ngân hàng tự luận',exportedAt:new Date().toISOString(),questions:essayQuestions};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='studyt-tu-luan-backup.json';a.click();URL.revokeObjectURL(a.href);essayNotice('Đã xuất bản sao. Hãy giữ file này ở nơi an toàn.')});
 
 $('essayImportBackupBtn').addEventListener('click',()=>$('essayBackupFile').click());
-$('essayBackupFile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!Array.isArray(data.questions))throw new Error('File JSON không có danh sách câu hỏi hợp lệ.');const imported=data.questions.filter(q=>q&&typeof q.question==='string'&&q.question.trim()).map(q=>({...makeEssayQ(q),...q,id:q.id||makeEssayQ(q).id,history:Array.isArray(q.history)?q.history:[]}));if(!imported.length)throw new Error('Không tìm thấy câu hỏi hợp lệ trong bản sao.');if(confirm(`Nhập ${imported.length} câu hỏi tự luận? Chọn OK để thay thế ngân hàng hiện tại, Cancel để gộp vào ngân hàng hiện tại.`)){essayQuestions=imported}else{const ids=new Set(essayQuestions.map(q=>q.question.trim()));const fresh=imported.filter(q=>!ids.has(q.question.trim()));essayQuestions.push(...fresh)}essaySelectedId=essayQuestions[0]?.id||'';essayTab='study';renderEssayAll();essayNotice(`Đã nhập bản sao JSON: ${imported.length} câu hỏi hợp lệ.`)}catch(err){essayNotice(err.message||'Không thể nhập bản sao JSON.')}finally{$('essayBackupFile').value=''}});
+$('essayBackupFile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!Array.isArray(data.questions))throw new Error('File sao lưu không có danh sách câu hỏi hợp lệ.');const imported=data.questions.filter(q=>q&&typeof q.question==='string'&&q.question.trim()).map(q=>({...makeEssayQ(q),...q,id:q.id||makeEssayQ(q).id,history:Array.isArray(q.history)?q.history:[]}));if(!imported.length)throw new Error('Không tìm thấy câu hỏi hợp lệ trong bản sao.');if(confirm(`Nhập ${imported.length} câu hỏi tự luận? Chọn OK để thay thế ngân hàng hiện tại, Cancel để gộp vào ngân hàng hiện tại.`)){essayQuestions=imported}else{const ids=new Set(essayQuestions.map(q=>q.question.trim()));const fresh=imported.filter(q=>!ids.has(q.question.trim()));essayQuestions.push(...fresh)}essaySelectedId=essayQuestions[0]?.id||'';essayTab='study';renderEssayAll();essayNotice(`Đã nhập bản sao: ${imported.length} câu hỏi hợp lệ.`)}catch(err){essayNotice(err.message||'Không thể nhập bản sao.')}finally{$('essayBackupFile').value=''}});
 
 $('essayClearBtn').addEventListener('click',()=>{if(confirm('Xóa toàn bộ ngân hàng tự luận và bản lưu trên trình duyệt này?')){essayQuestions=[];essaySelectedId='';essayEditingId='';localStorage.removeItem(ESSAY_SAVE_KEY);essayDB.clear();clearEssayForm();renderEssayAll();essayNotice('Đã xóa ngân hàng tự luận khỏi trình duyệt này.')}});
 window.addEventListener('beforeunload',()=>{saveState();saveEssayState();});
@@ -2580,7 +2580,7 @@ function list(){
  G('tkL').innerHTML=arr.length?arr.map(card).join(''):`<div class="gc-empty">${all.length?'Không có đầu việc phù hợp bộ lọc.':'Chưa có đầu việc nào. Bấm “+ Thêm đầu việc” để theo dõi bài tập lớn, thực hành, báo cáo, đồ án hay thuyết trình.'}</div>`}
 
 function render(){load();const P=G('tkPane');if(!P)return;
- P.innerHTML=`<div class="tk"><div class="tk-h"><div><h2>Bài tập &amp; Đồ án</h2><p>Theo dõi bài tập lớn, bài thực hành, báo cáo, đồ án và thuyết trình: trạng thái, hạn nộp, liên kết tài liệu và nhận xét sau khi hoàn thành.</p></div><button type="button" onclick="tkA.add()">+ Thêm đầu việc</button></div>
+ P.innerHTML=`<div class="tk"><div class="tk-h"><div><h2>Bài tập &amp; Đồ án</h2><p>Theo dõi bài tập lớn, bài thực hành, báo cáo, đồ án và thuyết trình: trạng thái, hạn nộp, liên kết tài liệu và nhận xét sau khi hoàn thành.</p></div><div class="tk-header-actions"><button type="button" class="tk-open-tasks ghost" onclick="document.querySelector('#homeTabs .nv-subs button[data-m=nv]')?.click()">🎯 Nhiệm vụ</button><button type="button" onclick="tkA.add()">+ Thêm đầu việc</button></div></div>
 <div class="tk-k" id="tkK"></div>
 <div class="tk-f">${[['all','Tất cả']].concat(ST.map(s=>[s[0],s[1]])).map(([v,l])=>`<button type="button" class="ghost ${F.st===v?'on':''}" onclick="tkA.fs('${v}')">${l}</button>`).join('')}<select onchange="tkA.ft(this.value)"><option value="all">Mọi loại</option>${TY.map(x=>`<option ${F.ty===x?'selected':''}>${x}</option>`).join('')}</select><input type="search" placeholder="Tìm đầu việc..." value="${esc(F.q)}" oninput="tkA.fq(this.value)"></div>
 <div id="tkL" class="tk-list"></div><datalist id="tkCo">${courses().map(n=>`<option value="${esc(n)}">`).join('')}</datalist></div>`;list()}
@@ -2754,7 +2754,7 @@ function setMode(m){P.dataset.mode=m;open=m==='nv';saveNv();if(subs)subs.querySe
 if(main){const lb=main.querySelector(':scope>span:last-child');if(lb)lb.textContent='Học tập';
  subs=document.createElement('div');subs.className='nv-subs';
  subs.innerHTML='<button type="button" data-m="tk"><span class="ic">📝</span><span>Bài tập &amp; Đồ án</span></button><button type="button" data-m="nv"><span class="ic">🎯</span><span>Nhiệm vụ</span></button>';
- main.after(subs);const KEYS=['gc','self','sp','km'];const place=()=>{const pb=bar.querySelector('button[data-p="pf"]'),tb=subs.querySelector('button[data-m="tk"]');if(pb&&tb)tb.after(pb);KEYS.forEach(k=>{const b=bar.querySelector('button[data-p="'+k+'"]');if(b)subs.appendChild(b)})};place();new MutationObserver(place).observe(bar,{childList:true});setTimeout(place,500);
+ main.after(subs);const KEYS=['gc','self','sp','km'];const place=()=>{const tb=subs.querySelector('button[data-m="tk"]');for(const k of ['pr','exam']){const b=bar.querySelector('button[data-p="'+k+'"]');if(b&&tb&&!subs.contains(b))subs.insertBefore(b,tb)}const pb=bar.querySelector('button[data-p="pf"]');if(pb&&tb)tb.after(pb);KEYS.forEach(k=>{const b=bar.querySelector('button[data-p="'+k+'"]');if(b&&!subs.contains(b))subs.appendChild(b)})};place();new MutationObserver(place).observe(bar,{childList:true});setTimeout(place,500);
  subs.querySelectorAll('button[data-m]').forEach(b=>b.onclick=e=>{e.stopPropagation();if(!P.classList.contains('on'))main.click();setMode(b.dataset.m)});
  main.addEventListener('click',()=>setMode('tk'));
  const sync=()=>{const on=P.classList.contains('on'),sOn=KEYS.concat(['pf']).some(k=>{const e=document.querySelector('#landingView .home-pane[data-pane="'+k+'"]');return e&&e.classList.contains('on')});subs.classList.toggle('show',on||sOn);main.classList.toggle('nv-x',on||sOn);subs.querySelectorAll('button[data-m]').forEach(b=>b.classList.toggle('on',on&&b.dataset.m===(P.dataset.mode||'tk')));fab()};
@@ -2901,7 +2901,7 @@ function note(m,err){const n=document.getElementById('dtNote');if(!n)return;n.te
 
 /* ---- nhập / khôi phục ---- */
 function modal(html){const o=document.createElement('div');o.className='nv-ov';o.innerHTML='<div class="nv-md">'+html+'</div>';o.addEventListener('mousedown',e=>{if(e.target===o)o.remove()});document.body.appendChild(o);return o}
-async function importFile(f){let j;try{j=JSON.parse(await f.text())}catch(e){note('File không đọc được (không phải JSON hợp lệ).',1);return}
+async function importFile(f){let j;try{j=JSON.parse(await f.text())}catch(e){note('Không thể đọc bản sao lưu này.',1);return}
  if(!j||!['quizmaster','studyt'].includes(j.app)||!j.data||typeof j.data!=='object'){note('Đây không phải file sao lưu của StudyT.',1);return}
  const cur=uid(),src=j.uid||null,map={};let skipped=0;
  for(const k of Object.keys(j.data)){if(typeof j.data[k]!=='string'||EXC.test(k))continue;let nk=k;
@@ -2946,8 +2946,8 @@ async function paint(){const b=box();if(!b)return;
  if(!box())return;
  b.innerHTML=`<div class="st-note" id="dtNote"></div>
  <div class="st-card"><h3>Sao lưu và khôi phục</h3><p class="st-sub">Dữ liệu học tập lưu trên trình duyệt này. Hãy sao lưu định kỳ, nhất là trước khi đổi máy hoặc xóa dữ liệu trình duyệt. Điểm thi và nhiệm vụ nhóm lưu trên máy chủ nên không nằm trong file.</p>
- ${R('Lần sao lưu gần nhất',last?`<b>${fdt(last)}</b> (${ago(last)})`:'<b style="color:#d97706">Chưa sao lưu lần nào</b>','<button type="button" class="primary" id="dtExp">Xuất dữ liệu (JSON)</button>')}
- ${R('Nhập từ bản sao lưu','Chọn file JSON đã xuất trước đó. Sẽ có bước xác nhận trước khi ghi đè.','<button type="button" class="secondary" id="dtImpB">Chọn file…</button><input type="file" id="dtImp" accept=".json,application/json" hidden>')}
+ ${R('Lần sao lưu gần nhất',last?`<b>${fdt(last)}</b> (${ago(last)})`:'<b style="color:#d97706">Chưa sao lưu lần nào</b>','<button type="button" class="primary" id="dtExp">Tải bản sao lưu</button>')}
+ ${R('Nhập từ bản sao lưu','Chọn bản sao lưu đã tải xuống trước đó. Sẽ có bước xác nhận trước khi khôi phục.','<button type="button" class="secondary" id="dtImpB">Chọn file…</button><input type="file" id="dtImp" accept=".json,application/json" hidden>')}
  </div>
  <div class="st-card"><h3>Dung lượng dữ liệu</h3>
  ${R('Dữ liệu của bạn',`<b>${fb(tot)}</b> trên trình duyệt này`,'')}
@@ -4661,7 +4661,7 @@ const pane=document.createElement('div');pane.className='home-pane';pane.dataset
 const tabBtn=document.createElement('button');tabBtn.type='button';tabBtn.dataset.p='st';
 tabBtn.innerHTML='<span class="ic">⚙️</span><span>Cài đặt</span>';bar.appendChild(tabBtn);
 let sec='look',USER=null,flashT=null;
-const SECS=ADMIN?[['look','Giao diện'],['acct','Tài khoản'],['notif','Thông báo'],['data','Dữ liệu'],['priv','Riêng tư'],['tools','Nâng cao'],['sys','Hệ thống & hỗ trợ']]:[['look','Giao diện'],['acct','Tài khoản'],['study','Học tập'],['notif','Thông báo'],['data','Dữ liệu'],['priv','Riêng tư'],['subj','Từng môn'],['tools','Nâng cao'],['sys','Hệ thống & hỗ trợ']];
+const SECS=ADMIN?[['look','Giao diện'],['acct','Tài khoản'],['notif','Thông báo'],['data','Dữ liệu'],['priv','Riêng tư'],['tools','Nâng cao'],['sys','Hệ thống & hỗ trợ']]:[['look','Giao diện'],['acct','Tài khoản'],['notif','Thông báo'],['data','Dữ liệu'],['priv','Riêng tư'],['subj','Từng môn'],['tools','Nâng cao'],['sys','Hệ thống & hỗ trợ']];
 
 const row=(t,d,c,cls)=>`<div class="st-row"><div class="st-rt"><b>${t}</b>${d?`<small>${d}</small>`:''}</div><div class="st-rc ${cls||''}">${c}</div></div>`;
 const seg=(k,opts,v)=>`<div class="st-seg" role="radiogroup" data-seg="${k}">${opts.map(o=>`<button type="button" role="radio" aria-checked="${String(o[0])===String(v)}" class="${String(o[0])===String(v)?'on':''}" data-v="${o[0]}">${o[1]}</button>`).join('')}</div>`;
@@ -4684,14 +4684,14 @@ function secLook(){
 function secAcct(){
  pullAv();const u=USER,name=(typeof me!=='undefined'&&me&&me.name)||'',av=getAv();
  const login=u&&u.email?u.email.replace(/@(?:quizmaster|studyt)\.app$/,''):'';
- const verified=u&&u.email_confirmed_at;
+ const verified=!!(u&&u.email_confirmed_at&&!/@(?:studyt|quizmaster)\.app$/i.test(u.email||''));
  const idn=(u&&u.identities)||[];
  const idHtml=idn.length?idn.map(i=>`<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="st-badge ok">Đang dùng</span><b>${i.provider==='email'?'Tên đăng nhập + mật khẩu':esc(i.provider)}</b></div>`).join(''):'<span class="st-badge ok">Tên đăng nhập + mật khẩu</span>';
  return `<div class="st-card"><h3>Hồ sơ</h3>
  ${row('Ảnh đại diện','Ảnh được thu nhỏ và đồng bộ theo tài khoản trên mọi thiết bị.',`<div class="st-av" id="stAv">${av?`<img alt="Ảnh đại diện" src="${av}">`:esc((name||'?').trim().charAt(0).toUpperCase())}</div><div style="display:grid;gap:6px"><button type="button" class="secondary" id="stAvPick">Chọn ảnh</button>${av?'<button type="button" class="ghost" id="stAvDel">Xóa ảnh</button>':''}</div><input type="file" id="stAvFile" accept="image/*" hidden>`)}
  ${row('Tên hiển thị','Tên này hiện ở góc trên và trong bảng xếp hạng. Đổi tối đa 5 lần. Còn lại: '+Math.max(0,5-nameUsed())+'.',`<input type="text" id="stName" maxlength="60" value="${esc(name)}" aria-label="Tên hiển thị" style="width:220px"><button type="button" class="primary" id="stNameSave">Lưu</button>`)}
  ${row('Tên đăng nhập','Dùng để đăng nhập, không thể đổi.',`<b>${esc(login||'—')}</b>`)}
- ${row('Email và xác thực',u?`<span style="word-break:break-all">${esc(login?login+'@studyt.app':'')}</span> (địa chỉ nội bộ do hệ thống tạo từ tên đăng nhập, không nhận thư).`:'Đang tải…',u?`<span class="st-badge ${verified?'ok':'warn'}">${verified?'Đã xác thực':'Chưa xác thực'}</span>`:'')}
+ ${row('Email và xác thực',u?(/@(?:studyt|quizmaster)\.app$/i.test(u.email||'')?'Chưa liên kết Gmail thật. Hãy cập nhật Gmail trong phần xác thực tài khoản.':`<span style="word-break:break-all">${esc(u.email||'—')}</span>`):'Đang tải…',u?`<span class="st-badge ${verified?'ok':'warn'}">${verified?'Đã xác thực':'Chưa xác thực'}</span>`:'')}
  </div>
  <div class="st-card"><h3>Đăng nhập và bảo mật</h3>
  ${row('Phương thức đăng nhập','Hệ thống hiện chỉ hỗ trợ tên đăng nhập và mật khẩu.',`<div style="display:grid;gap:6px">${idHtml}</div>`)}
@@ -4995,6 +4995,7 @@ const map={};Object.keys(DICT).forEach(k=>map[NF(k)]=DICT[k]);
 const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 const RX=new RegExp(keys.map(k=>(/^\p{L}/u.test(k)?'(?<!\\p{L})':'')+esc(k)+(/\p{L}$/u.test(k)?'(?!\\p{L})':'')).join('|'),'gu');
 const NONASCII=/[^\x00-\x7F]/,VN=/[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i;
+Object.assign(DICT,{"Điện tử":"Electronic","Xác nhận thông tin điện tử":"Electronic information","Nhập thông tin cơ bản để chuẩn bị cho tính năng sẽ được cập nhật sau.":"Enter basic information to prepare for an upcoming feature.","Mã ID":"ID number","Họ và tên":"Full name","Ngày sinh":"Date of birth","Tôi đã kiểm tra và xác nhận các thông tin trên là chính xác.":"I have checked and confirm the information above is accurate.","Xác nhận thông tin":"Confirm details","Tính năng điện tử sẽ được cập nhật sau. Hiện tại StudyT chưa thu thập hoặc lưu những thông tin bạn nhập tại đây.":"Electronic features are coming soon. StudyT does not collect or store this information yet.","Tính năng tiếp theo sẽ được cập nhật sau; thông tin chưa được lưu.":"More features are coming soon; your details have not been stored.","Bài tập & Đồ án":"Assignments & Projects","Bài tập &amp; Đồ án":"Assignments & Projects","Nhiệm vụ":"Tasks","🎯 Nhiệm vụ":"🎯 Tasks","+ Thêm đầu việc":"+ Add task","Bài ôn":"Practice","Kỳ thi":"Exams","Học tập":"Study","Cài đặt":"Settings","Email và xác thực":"Email & verification","Chưa liên kết Gmail thật. Hãy cập nhật Gmail trong phần xác thực tài khoản.":"No real Gmail linked yet. Please update your Gmail in account verification.","Chưa liên kết email thật.":"No real email linked yet.","Tải bản sao lưu":"Download backup","Chọn bản sao…":"Choose backup…","Xuất bản sao":"Export backup","Nhập bản sao":"Import backup","Khôi phục":"Restore","Đã xác thực":"Verified","Chưa xác thực":"Not verified","Tên đăng nhập":"Username","Sao lưu và khôi phục":"Backup and restore","Xuất dữ liệu (JSON)":"Export backup","Chọn bản sao lưu đã tải xuống trước đó. Sẽ có bước xác nhận trước khi khôi phục.":"Choose the previously exported backup. You will confirm before anything is overwritten."});
 const lang=()=>{try{return(JSON.parse(localStorage.getItem('qm_sys_v1_device')||'null')||{}).lang||'vi'}catch(e){return'vi'}};
 let L=lang();
 const MON=['January','February','March','April','May','June','July','August','September','October','November','December'],WD={T2:'Mon',T3:'Tue',T4:'Wed',T5:'Thu',T6:'Fri',T7:'Sat',CN:'Sun'};
@@ -6671,5 +6672,8 @@ trigger.addEventListener('click',()=>{const on=menu.classList.toggle('open');tri
 
 <link rel="stylesheet" href="./studyt-v5.css?v=5.2">
 <script src="./studyt-v5.js?v=5.2" defer></script>
+
+<link rel="stylesheet" href="./studyt-unified-v8.css?v=8.1">
+<script src="./studyt-unified-v8.js?v=8.1" defer></script>
 </body>
 </html>

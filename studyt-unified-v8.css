@@ -1,0 +1,133 @@
+/* StudyT V8 · Loaded after legacy styles to preserve modules while unifying visuals. */
+:root{--s8-blue:#286cff;--s8-edge:#e2e9f4;--s8-light:#f6f9ff;--s8-white:#fff}
+html:not([data-theme="dark"]){--bg:#f6f9ff;--panel:#fff;--ink:#182b53;--muted:#7182a3;--line:#e2e9f4;--primary:#286cff;--primary2:#175bd8;--stux-text:#1b2d53;--stux-muted:#7282a3;--stux-border:#e2e9f4;--stux-glass:#fff;--stux-shadow:0 7px 22px rgba(25,58,115,.065);--v5-ink:#1b2d53;--v5-line:#e2e9f4;--v5-panel:#fff}
+html:not([data-theme="dark"]) body,html:not([data-theme="dark"]) body #landingView#landingView{background:#f6f9ff!important;background-image:none!important;color:#1b2d53!important}
+html:not([data-theme="dark"]) body nav#homeTabs.home-tabs{background:#fff!important;background-image:none!important;border-right:1px solid #e2e9f4!important;box-shadow:4px 0 22px #253e5f0a!important}
+html:not([data-theme="dark"]) body nav#homeTabs.home-tabs::before,html:not([data-theme="dark"]) body nav#homeTabs.home-tabs::after{display:none!important}
+html:not([data-theme="dark"]) body .stux-brand{color:#172d5c!important;border-color:#e9edf6!important}
+html:not([data-theme="dark"]) body .stux-brand strong{text-shadow:none!important;color:#152b5e!important}
+html:not([data-theme="dark"]) body .stux-brand small{color:#7384a7!important}
+html:not([data-theme="dark"]) body nav#homeTabs.home-tabs>button{color:#273b63!important;text-shadow:none!important}
+html:not([data-theme="dark"]) body nav#homeTabs.home-tabs>button .ic{color:#3565b5!important;filter:none!important}
+html:not([data-theme="dark"]) body nav#homeTabs.home-tabs>button:hover:not(.on){background:#edf3ff!important;border-color:#e2eafd!important;color:#155cdb!important;transform:none!important}
+html:not([data-theme="dark"]) body nav#homeTabs.home-tabs>button.on{background:#276dff!important;border:1px solid #276dff!important;color:#fff!important;box-shadow:0 7px 15px #246bff2f!important}
+html:not([data-theme="dark"]) body nav#homeTabs.home-tabs>button.on .ic{color:#fff!important;filter:none!important}
+html:not([data-theme="dark"]) body nav#homeTabs .nv-subs button{color:#566a91!important;text-shadow:none!important}
+html:not([data-theme="dark"]) body nav#homeTabs .nv-subs button:hover,html:not([data-theme="dark"]) body nav#homeTabs .nv-subs button.on{background:#edf3ff!important;color:#1d5bcc!important}
+html:not([data-theme="dark"]) body .stux-sidefoot-card{background:#ebf3ff!important;border-color:#dce9fa!important;box-shadow:none!important;color:#244d85!important}
+html:not([data-theme="dark"]) body .stux-sidefoot-card span,html:not([data-theme="dark"]) body .stux-sidefoot-card a{color:#49699b!important}
+html:not([data-theme="dark"]) body #stux-topbar{background:#fff!important;border:1px solid #e4ebf6!important;border-radius:18px!important;box-shadow:0 7px 22px #193a7310!important;padding:7px 15px!important;min-height:66px}
+html:not([data-theme="dark"]) body #stux-topbar .stux-search-trigger{background:#f0f5ff!important;border-color:#e1eafb!important;border-radius:15px!important;box-shadow:none!important}
+html:not([data-theme="dark"]) body #stux-topbar .stux-tool-btn{background:#f8faff!important;border-color:#e0e9f8!important;box-shadow:none!important;color:#2862d0!important}
+html:not([data-theme="dark"]) body #stux-dashboard .stux-hero{min-height:237px!important;border-radius:23px!important;background:linear-gradient(110deg,#eaf3ff,#dceaff)!important;color:#1b3969!important;border:1px solid #dbe8f9!important;box-shadow:0 8px 22px #193a7310!important}
+html:not([data-theme="dark"]) body #stux-dashboard .stux-hero h1{color:#13366d!important;text-shadow:none!important}
+html:not([data-theme="dark"]) body #stux-dashboard .stux-hero p{color:#5b7399!important}
+html:not([data-theme="dark"]) body #stux-dashboard .stux-quote{background:#ffffffae!important;color:#3c5283!important;border:1px solid #dbe8f8!important}
+html:not([data-theme="dark"]) body #stux-dashboard .stux-stat-card{min-height:102px!important;background:#fff!important;border:1px solid #e1e9f4!important;box-shadow:0 8px 22px #193a7310!important}
+html:not([data-theme="dark"]) body #stux-dashboard .stux-stat-card strong{color:#163467!important}
+html:not([data-theme="dark"]) body #stux-dashboard .stux-stat-card small{color:#5c7197!important}
+html:not([data-theme="dark"]) body #stux-dashboard .stux-progress-card,
+html:not([data-theme="dark"]) body #stux-dashboard .stux-glass-card,
+html:not([data-theme="dark"]) body #stnx-workspace .stnx-card,
+html:not([data-theme="dark"]) body .panel{background:#fff!important;border:1px solid #e2e9f4!important;box-shadow:0 7px 22px #193a7310!important;backdrop-filter:none!important}
+html:not([data-theme="dark"]) body #stux-dashboard .stux-feature-card,
+html:not([data-theme="dark"]) body #stux-dashboard .stux-task{background:#f9fbff!important;border:1px solid #e7edf7!important;box-shadow:none!important}
+html:not([data-theme="dark"]) body #stux-dashboard .stux-feature-card strong,
+html:not([data-theme="dark"]) body #stux-dashboard .stux-task strong,
+html:not([data-theme="dark"]) body #stux-dashboard .stux-panel-title h2{color:#1b3566!important}
+html:not([data-theme="dark"]) body .primary{background:#286cff!important;border-color:#286cff!important;box-shadow:0 5px 12px #286cff2c!important}
+
+/* PURE-BLACK THEME — covers main shell, panes, overlays and core modules. */
+html[data-theme="dark"]{--bg:#000;--panel:#080808;--ink:#f0f4fd;--muted:#a4afc3;--line:#252525;--primary:#347bff;--primary2:#1c5cca;--shadow:0 12px 36px #000a;--stux-text:#edf4ff;--stux-muted:#9caac0;--stux-glass:#080808;--stux-border:#252525;--stux-shadow:none;--v5-ink:#f0f4fd;--v5-sub:#a4b0c6;--v5-panel:#080808;--v5-line:#252525;--v5-soft:#0e0e0e;--v5-shadow:none}
+html[data-theme="dark"] body,
+html[data-theme="dark"] body[style],
+html[data-theme="dark"] body #landingView#landingView,
+html[data-theme="dark"] body .app,
+html[data-theme="dark"] body #authView::before{background:#000!important;background-image:none!important;color:#f0f4fd!important}
+html[data-theme="dark"] body nav#homeTabs.home-tabs{background:#030303!important;background-image:none!important;border-right:1px solid #242424!important;box-shadow:none!important}
+html[data-theme="dark"] body nav#homeTabs.home-tabs::before,html[data-theme="dark"] body nav#homeTabs.home-tabs::after{display:none!important}
+html[data-theme="dark"] body nav#homeTabs.home-tabs>button{color:#c5d2e5!important}
+html[data-theme="dark"] body nav#homeTabs.home-tabs>button:hover:not(.on){background:#111!important;color:#fff!important;border-color:#222!important;transform:none!important}
+html[data-theme="dark"] body nav#homeTabs.home-tabs>button.on{background:#1655be!important;border-color:#347cff!important;box-shadow:none!important;color:#fff!important}
+html[data-theme="dark"] body nav#homeTabs.home-tabs>button .ic{color:#a9c1e2!important;filter:none!important}
+html[data-theme="dark"] body nav#homeTabs .nv-subs,html[data-theme="dark"] body nav#homeTabs .nv-subs button{background:#030303!important;border-color:#252525!important;box-shadow:none!important;color:#b8c8df!important;text-shadow:none!important}
+html[data-theme="dark"] body nav#homeTabs .nv-subs button.on,html[data-theme="dark"] body nav#homeTabs .nv-subs button:hover{background:#101c30!important;color:#fff!important}
+html[data-theme="dark"] body .stux-brand{color:#fff!important;border-bottom-color:#222!important}
+html[data-theme="dark"] body .stux-brand small{color:#a6b9d3!important}
+html[data-theme="dark"] body .stux-sidefoot-card{background:#0e0e0e!important;border:1px solid #252525!important;box-shadow:none!important;backdrop-filter:none!important;color:#f0f4fd!important}
+html[data-theme="dark"] body .stux-sidefoot-card span,html[data-theme="dark"] body .stux-sidefoot-card a{color:#b5c2d8!important}
+html[data-theme="dark"] body #stux-topbar{background:#050505!important;border:1px solid #242424!important;border-radius:18px!important;box-shadow:none!important;padding:7px 14px!important;min-height:66px}
+html[data-theme="dark"] body #stux-topbar .stux-search-trigger,html[data-theme="dark"] body #stux-topbar .stux-tool-btn{background:#0d0d0d!important;border-color:#252525!important;box-shadow:none!important;color:#dbe9ff!important}
+html[data-theme="dark"] body #stux-topbar .stux-search-trigger input{background:transparent!important;color:#f0f4fd!important}
+html[data-theme="dark"] body #stux-dashboard .stux-hero{min-height:237px!important;background:#080808!important;border:1px solid #252525!important;box-shadow:none!important}
+html[data-theme="dark"] body #stux-dashboard .stux-hero::before{display:none!important}
+html[data-theme="dark"] body #stux-dashboard .stux-hero h1{color:#f5f8ff!important;text-shadow:none!important}
+html[data-theme="dark"] body #stux-dashboard .stux-hero p{color:#b5c4d8!important}
+html[data-theme="dark"] body #stux-dashboard .stux-quote{background:#101010!important;border-color:#282828!important;color:#e4edfc!important}
+html[data-theme="dark"] body #stux-dashboard .stux-progress-card,
+html[data-theme="dark"] body #stux-dashboard .stux-stat-card,
+html[data-theme="dark"] body #stux-dashboard .stux-glass-card,
+html[data-theme="dark"] body #stux-dashboard .stux-feature-card,
+html[data-theme="dark"] body #stux-dashboard .stux-task,
+html[data-theme="dark"] body #stux-dashboard .stux-activity-card,
+html[data-theme="dark"] body #stux-dashboard .stux-banner,
+html[data-theme="dark"] body #landingView .subj,
+html[data-theme="dark"] body #landingView .mode-card,
+html[data-theme="dark"] body #landingView .news-item,
+html[data-theme="dark"] body .dsh-card,
+html[data-theme="dark"] body .panel,
+html[data-theme="dark"] body .modal,
+html[data-theme="dark"] body .essay-area,
+html[data-theme="dark"] body .qcard,
+html[data-theme="dark"] body .st-card,
+html[data-theme="dark"] body .tk-c,
+html[data-theme="dark"] body .nv,
+html[data-theme="dark"] body .gc-card,
+html[data-theme="dark"] body #stnx-workspace,
+html[data-theme="dark"] body #stnx-workspace .stnx-card,
+html[data-theme="dark"] body #stnx-workspace .stnx-work-header,
+html[data-theme="dark"] body #stnx-workspace .stnx-work-tabs,
+html[data-theme="dark"] body #stux-user-menu,
+html[data-theme="dark"] body #stnx-notifications,
+html[data-theme="dark"] body #stv5-email-gate .stv5-card{background:#080808!important;background-image:none!important;border-color:#252525!important;box-shadow:none!important;color:#eef4ff!important;backdrop-filter:none!important}
+html[data-theme="dark"] body #stux-dashboard .stux-stat-card strong,
+html[data-theme="dark"] body #stux-dashboard .stux-feature-card strong,
+html[data-theme="dark"] body #stux-dashboard .stux-task strong,
+html[data-theme="dark"] body #stux-dashboard .stux-panel-title h2,
+html[data-theme="dark"] body #stnx-workspace .stnx-title h2,
+html[data-theme="dark"] body #stnx-workspace .stnx-card h3,
+html[data-theme="dark"] body #stnx-workspace .stnx-line strong,
+html[data-theme="dark"] body #landingView .home-h{color:#eff4ff!important}
+html[data-theme="dark"] body #stux-dashboard .stux-stat-card small,
+html[data-theme="dark"] body #stux-dashboard .stux-feature-card>span:last-child,
+html[data-theme="dark"] body #stux-dashboard .stux-task small,
+html[data-theme="dark"] body #stnx-workspace .stnx-muted{color:#a5b4c8!important}
+html[data-theme="dark"] body #stux-dashboard .stux-feature-img{background:#101010!important;filter:none!important}
+html[data-theme="dark"] body :is(input:not([type=checkbox]):not([type=radio]),select,textarea,.st-seg,.st-tabs,.st-row,.option,.stat,.mini,.drop,.practicebar,.stnx-personal-note,.stnx-notif-pane){background-color:#101010!important;color:#f0f5ff!important;border-color:#282828!important;box-shadow:none!important}
+html[data-theme="dark"] body .primary{background:#1a5bce!important;border-color:#2875ea!important;box-shadow:none!important}
+html[data-theme="dark"] body .ghost{background:#101010!important;color:#dfeaff!important;border-color:#282828!important;box-shadow:none!important}
+html[data-theme="dark"] body #stv5-email-gate{background:rgba(0,0,0,.9)!important;backdrop-filter:none!important}
+html[data-theme="dark"] body #stv5-email-gate .stv5-note{background:#101010!important;border-color:#282828!important;color:#b5c4d8!important}
+/* Requested Study submenu/task relocation */
+#homeTabs .nv-subs button[data-m="nv"]{display:none!important}
+.tk-header-actions{display:flex;flex-direction:column;gap:8px;align-items:stretch;min-width:166px}
+.tk-header-actions>button{min-width:160px}
+.stux-avatar{overflow:hidden}
+.stux-avatar .stux-user-photo{width:100%;height:100%;display:block;object-fit:cover;border-radius:inherit}
+/* Electronic feature: form only, no identity data is stored until secure backend exists. */
+.studyt-electronic{max-width:1050px;margin:8px auto 36px;border:1px solid var(--line);border-radius:24px;padding:28px;background:var(--panel);box-shadow:0 8px 24px rgba(30,50,90,.07)}
+.studyt-electronic .se-kicker{font-size:11px;letter-spacing:.15em;color:var(--primary);font-weight:850}
+.studyt-electronic h2{font-size:clamp(24px,3vw,34px);margin:8px 0 10px}
+.studyt-electronic p{color:var(--muted);margin:0 0 22px}
+.studyt-electronic-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.studyt-electronic label{display:grid;gap:7px;font-size:13px;color:var(--ink);font-weight:700}
+.studyt-electronic label.se-check{grid-column:1/-1;display:flex;align-items:flex-start;gap:11px;font-weight:600}
+.studyt-electronic label.se-check input{margin-top:4px}
+.studyt-electronic input[type=text],.studyt-electronic input[type=date]{min-width:0;width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;color:var(--ink);background:var(--panel)}
+.studyt-electronic .se-info{margin:22px 0;border:1px dashed var(--line);border-radius:16px;padding:15px;background:rgba(40,108,255,.05);font-size:13px;color:var(--muted)}
+.studyt-electronic .se-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px}
+.studyt-electronic .se-message{font-size:13px;font-weight:750;color:var(--good)}
+html[data-theme="dark"] body .studyt-electronic{background:#080808!important;box-shadow:none!important;border-color:#252525!important}
+html[data-theme="dark"] body .studyt-electronic .se-info{background:#101010!important}
+@media(max-width:700px){.tk-header-actions{width:100%;min-width:0}.tk-header-actions>button{width:100%}.studyt-electronic{padding:18px}.studyt-electronic-grid{grid-template-columns:1fr}.studyt-electronic label.se-check{grid-column:auto}}
+@media(prefers-reduced-motion:reduce){html body .stux-brand img,html body #stux-dashboard .stux-hero-pig{animation:none!important}}

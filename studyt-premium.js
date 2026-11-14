@@ -190,6 +190,8 @@
  // Expose a read-only manual refresh hook for diagnostics; no backend side effects.
  window.stuxRefresh=refresh;
  const avatar=$('.stux-avatar');
- const updateAvatar=()=>{const w=$('#whoami');const raw=w?.textContent?.trim()||'';const m=raw.match(/[A-Za-zÀ-ỹ0-9]/);if(avatar&&m)avatar.textContent=m[0].toUpperCase()};
+ const updateAvatar=()=>{if(!avatar)return;const w=$('#whoami');const raw=w?.textContent?.trim()||'';const m=raw.match(/[A-Za-zÀ-ỹ0-9]/);let id=null;try{id=typeof me!=='undefined'&&me?.id||null}catch(_){}let photo='';try{if(id)photo=localStorage.getItem('qm_avatar_v1_'+id)||''}catch(_){}if(photo&&(/^(data:image\/(?:png|jpeg|webp);base64,|https:\/\/)/i.test(photo))){const img=document.createElement('img');img.src=photo;img.alt='Ảnh đại diện';img.className='stux-user-photo';if(avatar.querySelector('img')?.src!==img.src)avatar.replaceChildren(img)}else if(m&&avatar.textContent!==m[0].toUpperCase()){avatar.textContent=m[0].toUpperCase()}};
  updateAvatar();const who=$('#whoami');if(who)new MutationObserver(updateAvatar).observe(who,{childList:true,characterData:true,subtree:true});
+ let fetchedUid='';async function syncAvatar(){let id=null;try{id=typeof me!=='undefined'&&me?.id||null}catch(_){}if(!id){fetchedUid='';return}updateAvatar();if(id===fetchedUid)return;fetchedUid=id;try{const k='qm_avatar_v1_'+id;let photo=localStorage.getItem(k)||'';if(!photo&&typeof sb!=='undefined'&&sb){const r=await sb.from('profiles').select('avatar').eq('id',id).maybeSingle();photo=r.data?.avatar||'';if(photo&&(/^(data:image\/(?:png|jpeg|webp);base64,|https:\/\/)/i.test(photo)))localStorage.setItem(k,photo)}updateAvatar()}catch(_){}}
+ setInterval(syncAvatar,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden){fetchedUid='';syncAvatar()}});syncAvatar();
 })();
