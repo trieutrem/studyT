@@ -1,0 +1,2 @@
+# V1.0.3
+Chạy migration supabase/migrations/20261117_freefire_official_name.sql sau migration Free Fire cũ. Sau đó triển khai website. Không cấp lại tài khoản. Họ tên chính thức là bí danh đăng nhập mới; email Auth nội bộ và mật khẩu giữ nguyên. Bí danh cũ vẫn đăng nhập được để khôi phục, nhưng không bỏ qua bước bắt buộc. Tên trùng phải liên hệ quản trị. RPC tra cứu tên chỉ trả email nội bộ, không trả mật khẩu. Chưa kiểm thử Supabase thực tế.

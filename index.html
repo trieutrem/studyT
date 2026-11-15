@@ -846,8 +846,10 @@ $('auGo').onclick=async()=>{
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){auMsg('Địa chỉ email chưa đúng định dạng.');return}
     const r=await sb.auth.signInWithPassword({email,password:pw});error=r.error;
    }else{
-    if(!/^[a-z0-9._-]{3,30}$/.test(u)){auMsg('Tên đăng nhập cũ chưa hợp lệ.');return}
-    const r=await sb.auth.signInWithPassword({email:EMAIL(u),password:pw});error=r.error;
+    const resolved=await sb.rpc('ff_resolve_login',{p_name:u});
+    const officialEmail=resolved.data;
+    if(!officialEmail&&!/^[a-z0-9._-]{3,30}$/.test(u)){auMsg('Không tìm thấy tên đăng nhập chính thức.');return}
+    const r=await sb.auth.signInWithPassword({email:officialEmail||EMAIL(u),password:pw});error=r.error;
     if(error&&/Invalid login|Email address.*invalid/i.test(error.message)){const r2=await sb.auth.signInWithPassword({email:EMAIL_OLD(u),password:pw});error=r2.error}
    }
    if(error)throw error;
@@ -6665,7 +6667,7 @@ trigger.addEventListener('click',()=>{const on=menu.classList.toggle('open');tri
 
 <link rel="stylesheet" href="./studyt-v92.css?v=9.2">
 <link rel="stylesheet" href="./studyt-v93.css?v=9.6">
-<link rel="stylesheet" href="./studyt-freefire.css?v=1.0">
-<script src="./studyt-freefire.js?v=1.0" defer></script>
+<link rel="stylesheet" href="./studyt-freefire.css?v=1.0.4">
+<script src="./studyt-freefire.js?v=1.0.4" defer></script>
 </body>
 </html>

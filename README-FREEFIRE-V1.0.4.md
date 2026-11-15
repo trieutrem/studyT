@@ -1,0 +1,1 @@
+V1.0.4: Cúp SVG vàng/bạc/đồng theo Kỳ thi, hiệu ứng nổi và ánh sáng, bục xếp hạng cả ba chế độ ở thí sinh và quản trị. Hạng tạm thời được ghi rõ; không đổi công thức điểm hoặc SQL. Cập nhật website, Ctrl+F5. Nếu chưa chạy migration V1.0.3 thì vẫn cần chạy.
