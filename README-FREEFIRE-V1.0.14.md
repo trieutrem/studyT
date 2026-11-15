@@ -1,0 +1,3 @@
+# Bốc thăm thi đấu V1.0.14
+Chạy migration supabase/migrations/20261120_freefire_draw.sql sau các migration trước. Sau đó triển khai toàn bộ website, tải lại cache. Admin > Giải đấu Free Fire > Bốc thăm thi đấu.
+Chỉ tài khoản ffplayer01–15 hoạt động, đã đổi tên và được duyệt nội dung được bốc thăm. Tử chiến 5 trận 4v4, ưu tiên ít lượt đã chốt; random lại trước khi chốt. Điểm cá nhân theo đội hình từng trận. Độc Lang 9–15 người, vòng loại giảm còn 8, miễn đấu ngẫu nhiên nếu cần, khóa từng vòng; thắng đi tiếp, thua bán kết tranh ba. Không có chức năng sửa tỷ số đã chốt; cần quy trình xử lý quản trị DB nếu nhập sai. Không trộn kết quả cũ với nhánh mới; dữ liệu cũ không bị xóa. Tên đội đăng ký chỉ tham khảo. SQL chưa chạy trên Supabase thực tế.

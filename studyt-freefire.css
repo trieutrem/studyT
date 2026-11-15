@@ -130,3 +130,13 @@ body.ff-restricted #studyt-electronic-pane{max-width:1180px}
 body:not(.ff-restricted) #homeTabs button[data-p="dientu"]{opacity:.45!important;filter:grayscale(1)!important;cursor:not-allowed!important}
 body:not(.ff-restricted) #homeTabs button[data-p="dientu"]::after{content:"🔒";margin-left:auto;font-size:12px}
 body:not(.ff-restricted) #studyt-electronic-pane{display:none!important}
+
+/* V1.0.13 — inscription on the metal pedestal, moving with the statue */
+.ff-cup-art .ff-statue-inscribed{position:relative;width:min(100%,230px);animation:ffWarriorFloat 4s ease-in-out infinite;isolation:isolate;container-type:inline-size}
+.rank-1 .ff-cup-art .ff-statue-inscribed{width:min(100%,290px);animation-duration:3.4s}
+.rank-3 .ff-cup-art .ff-statue-inscribed{animation-delay:-1s}
+.ff-cup-art .ff-statue-inscribed .ff-cup-photo{display:block;width:100%;height:auto;aspect-ratio:auto;animation:none!important;margin:0}
+.ff-cup-art .ff-statue-inscribed .ff-award-engraving{position:absolute;left:50%;top:92.7%;transform:translate(-50%,-50%);width:70%;max-width:none;margin:0;padding:0;border:0!important;border-radius:0;background:none!important;box-shadow:none!important;color:#e7eef8;font-size:clamp(6px,5.2cqw,15px);font-weight:900;line-height:1;letter-spacing:.035em;text-transform:uppercase;white-space:nowrap;text-align:center;text-shadow:0 1px 1px #000,0 -1px 1px #fff8,0 0 3px #000;pointer-events:none}
+.rank-1 .ff-cup-art .ff-statue-inscribed .ff-award-engraving{top:92.5%;color:#fff0a5}
+.rank-3 .ff-cup-art .ff-statue-inscribed .ff-award-engraving{top:92.5%;color:#ffd2a9}
+@media(prefers-reduced-motion:reduce){.ff-cup-art .ff-statue-inscribed{animation:none!important}}
