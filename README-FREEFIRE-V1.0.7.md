@@ -1,0 +1,1 @@
+V1.0.7: Thay cúp truyền thống bằng tượng chiến binh cầm súng, ruy băng vàng/bạc/đồng, nền sân khấu SVG và hiệu ứng CSS. Không cần migration mới. Tượng là ảnh 2D render 3D, không phải mô hình 3D tương tác.

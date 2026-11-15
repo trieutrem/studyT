@@ -1,0 +1,1 @@
+V1.0.6: Cúp hình nhân vật cầm súng, ruy băng vàng/bạc/đồng, nền sân khấu chuyển động CSS. Ảnh WebP lưu cục bộ. Không cần migration mới nếu đã chạy V1.0.5. Giữ nguyên dữ liệu và luật thi đấu. Hỗ trợ giảm chuyển động theo thiết lập thiết bị.
