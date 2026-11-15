@@ -77,3 +77,20 @@ html[data-theme="dark"] body #stux-dashboard .stux-hero-copy{width:100%!importan
 html[data-theme="dark"] body #stux-dashboard .aurora-hero-art{position:relative!important;right:auto!important;bottom:auto!important;width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:512/337;align-self:end;object-fit:contain!important;object-position:center!important;border-radius:0 0 24px 0;mask-image:linear-gradient(to right,transparent 0%,#000 9%,#000 100%);-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 9%,#000 100%);animation:none!important}
 html[data-theme="dark"] body #stux-dashboard .stux-hero::after{display:none!important}
 @media(max-width:640px){html body #dtBox .st-card{padding:16px!important}html body #dtBox .st-card .st-row{padding:12px!important}html[data-theme="dark"] body #stux-dashboard .stux-hero{grid-template-columns:1fr;gap:0;padding:20px 16px 0!important}html[data-theme="dark"] body #stux-dashboard .stux-hero-copy{padding:0!important}html[data-theme="dark"] body #stux-dashboard .aurora-hero-art{width:min(100%,420px)!important;justify-self:center;mask-image:linear-gradient(to bottom,transparent,#000 7%);-webkit-mask-image:linear-gradient(to bottom,transparent,#000 7%);border-radius:0 0 20px 20px}}
+
+/* V9.6 — horizontal analytics navigation and rounded settings rows */
+html body #dashView .dsh{display:grid;grid-template-columns:minmax(0,1fr)!important;gap:18px;align-items:start;min-width:0}
+html body #dashView #dshNav{position:static!important;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center;gap:8px;padding:10px!important;width:100%;min-width:0;box-sizing:border-box;overflow-x:auto;overflow-y:hidden;border-radius:20px!important;scrollbar-width:thin;scroll-padding:10px}
+html body #dashView #dshNav button{flex:1 0 auto;justify-content:center;white-space:nowrap;min-height:44px;padding:10px 14px!important;border-radius:13px!important;transform:none!important}
+html body #dashView #dshNav button.on{background:linear-gradient(135deg,#4169f4,#7950ed)!important;color:#fff!important;box-shadow:0 3px 10px #5344cf44!important}
+html body #dashView #dshNav button:focus-visible{outline:2px solid #8d9dff;outline-offset:-3px}
+html body #dashView #dshNav .dsh-badge{margin-left:4px;flex-shrink:0}
+html body #dashView .dsh-main{width:100%;min-width:0}
+html body .st-card{padding:18px 20px!important;border-radius:24px!important;overflow:hidden}
+html body .st-card>h3{margin:0 0 12px!important}
+html body .st-card .st-row{box-sizing:border-box;min-width:0;margin:8px 0 0!important;padding:14px 16px!important;border:1px solid var(--line)!important;border-radius:15px!important;background:rgba(120,140,200,.055)!important}
+html[data-theme="dark"] body .st-card .st-row{background:linear-gradient(135deg,#242635,#1d1f2c)!important;border-color:#36394a!important}
+html body .st-card .st-rt{overflow-wrap:anywhere}
+html body .st-card .st-rc{min-width:0}
+html body .st-card .st-rc input:not([type=checkbox]):not([type=radio]){max-width:100%;box-sizing:border-box}
+@media(max-width:640px){html body #dashView #dshNav{padding:7px!important;gap:6px;border-radius:16px!important}html body #dashView #dshNav button{flex:0 0 auto;padding:9px 12px!important}html body .st-card{padding:14px!important}html body .st-card .st-row{padding:12px!important}}
