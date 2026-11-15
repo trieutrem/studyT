@@ -40,3 +40,15 @@ html[data-theme="dark"] body .stux-sidefoot-card{background:linear-gradient(135d
 html body #stux-dashboard .aurora-extra{margin-top:16px!important}html body #stux-dashboard .aurora-extra .stux-task-ico{font-size:22px;display:grid;place-items:center}html body #stux-dashboard .aurora-extra .stux-task{width:100%;text-align:left}html body #stux-dashboard .aurora-extra .stux-empty{padding:20px 4px}
 html body #stux-dashboard #aurora-schedule .stux-task-ico{font-size:22px;display:grid;place-items:center}html body #stux-dashboard #aurora-schedule .stux-task{width:100%;text-align:left}
 html[data-theme="dark"] body #stux-dashboard .stux-hero-copy{z-index:3}html[data-theme="dark"] body #stux-dashboard .stux-hero-copy h1{color:#fff!important}
+/* 9.4 — theme-specific mascots; transparent light artwork, no clipping. */
+html:not([data-theme="dark"]) body #stux-dashboard .stux-hero{background:radial-gradient(ellipse at 80% 55%,#c7f4ff 0%,transparent 55%),linear-gradient(125deg,#f5f9ff,#e8e9ff)!important;overflow:hidden!important}
+html:not([data-theme="dark"]) body #stux-dashboard .stux-hero-pig{width:43%!important;height:90%!important;max-height:310px!important;right:3%!important;bottom:5%!important;object-fit:contain!important;object-position:center!important;filter:drop-shadow(0 12px 14px #6a8ac344)!important}
+html:not([data-theme="dark"]) body #stux-dashboard .stux-hero-copy{position:relative;z-index:3}
+html:not([data-theme="dark"]) body .stux-brand img,html:not([data-theme="dark"]) body .stux-sidefoot>img{object-fit:contain!important;content:url('./assets/pig-light.webp');background:transparent!important;border-radius:0!important;mask-image:none!important}
+html:not([data-theme="dark"]) body #stux-dashboard .stux-banner img{content:url('./assets/pig-light.webp');height:90%!important;width:40%!important;left:2%!important;bottom:3%!important;object-fit:contain!important;mask-image:none!important}
+html[data-theme="dark"] body .stux-brand img{content:url('./assets/pig-dark-logo.webp');border-radius:50%!important;object-fit:contain!important}
+html[data-theme="dark"] body .stux-sidefoot>img{content:url('./assets/pig-dark-side.webp');border-radius:14px!important;object-fit:contain!important}
+html[data-theme="dark"] body .stux-sidefoot{background:linear-gradient(135deg,#211d38,#3b253c)!important}
+html[data-theme="dark"] body #stux-dashboard .aurora-hero-art{object-fit:contain!important;object-position:right bottom!important;mask-image:linear-gradient(to right,transparent,#000 14%);animation:none!important}
+html[data-theme="dark"] body #stux-dashboard .stux-hero{background:radial-gradient(ellipse at 75% 70%,#34256d,transparent 65%),linear-gradient(125deg,#141b3b,#11152a 60%,#25173d)!important}
+@media(max-width:640px){html:not([data-theme="dark"]) body #stux-dashboard .stux-hero-pig{width:37%!important;right:0!important;height:75%!important;bottom:4%!important}}
