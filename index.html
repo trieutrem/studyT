@@ -863,8 +863,8 @@ $('auGo').onclick=async()=>{
 async function onLogin(){const {data:{user}}=await sb.auth.getUser();const {data:p,error}=await sb.from('profiles').select('*').eq('id',user.id).single();if(error)throw error;me={id:user.id,name:p.full_name||p.username,role:p.role};if(p.role==='admin'||String(user.email||'').toLowerCase()===STUDYT_ADMIN_EMAIL){await sb.auth.signOut();me=null;throw new Error('IS_ADMIN')}
  // Restricted tournament-only accounts come from server-side ff_accounts, never a client-defined list.
  let ffLocked=false;
- const ffAccess=await sb.from('ff_accounts').select('user_id,active').eq('user_id',user.id).maybeSingle();
- if(!ffAccess.error&&ffAccess.data){if(!ffAccess.data.active){await sb.auth.signOut();me=null;throw new Error('Tài khoản giải đấu đã bị quản trị viên tạm khóa.')}ffLocked=true;}
+ const ffAccess=await sb.from('ff_accounts').select('user_id,active,alias').eq('user_id',user.id).maybeSingle();
+ if(!ffAccess.error&&ffAccess.data&&/^ffplayer(?:0[1-9]|1[0-5])$/.test(ffAccess.data.alias)){if(!ffAccess.data.active){await sb.auth.signOut();me=null;throw new Error('Tài khoản giải đấu đã bị quản trị viên tạm khóa.')}ffLocked=true;}
  document.body.classList.toggle('ff-restricted',ffLocked);window.__ffRestricted=ffLocked;
  examRun=null;subjects=[];document.body.classList.add('authed');$('whoami').textContent=me.name+(ffLocked?' · Điện tử':'');document.body.classList.toggle('is-admin',me.role==='admin');$('landingView').style.display='block';$('quizView').style.display='none';$('essayView').style.display='none';$('examView').style.display='none';$('auPass').value='';if(!ffLocked){await loadExams();renderHome()}else{exams=[];myAtt={};myGr={};}window.StudyTFreeFire?.onLogin?.()}
 
@@ -6667,7 +6667,7 @@ trigger.addEventListener('click',()=>{const on=menu.classList.toggle('open');tri
 
 <link rel="stylesheet" href="./studyt-v92.css?v=9.2">
 <link rel="stylesheet" href="./studyt-v93.css?v=9.6">
-<link rel="stylesheet" href="./studyt-freefire.css?v=1.0.11">
-<script src="./studyt-freefire.js?v=1.0.11" defer></script>
+<link rel="stylesheet" href="./studyt-freefire.css?v=1.0.12">
+<script src="./studyt-freefire.js?v=1.0.12" defer></script>
 </body>
 </html>

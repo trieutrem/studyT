@@ -100,7 +100,7 @@ async function nameGate(){
  f.onsubmit=async e=>{e.preventDefault();const b=f.querySelector('button[type=submit]');b.disabled=true;try{const n=await req(client().rpc('ff_set_official_name',{p_name:f.elements.official.value.trim().replace(/\s+/g,' ')}));st.official=n;user().name=n;const who=$('#whoami');if(who)who.textContent=n+' · Điện tử';overlay.remove();await loadUser(true);if(form){form.elements.studentId.focus();form.scrollIntoView({block:'center',behavior:'smooth'});form.classList.add('ff-identity-spot');} }catch(e){$('#ffNameError').textContent=e.code==='23505'?'Họ tên đã được sử dụng. Liên hệ quản trị viên nếu trùng tên.':errMsg(e);}finally{b.disabled=false}};
  return false;
 }
-async function loadUser(readIdentity=true){if(!ready()||ADMIN)return;try{
+async function loadUser(readIdentity=true){if(!ready()||ADMIN||!isRestricted())return;try{
  if(!await nameGate())return;
  if(readIdentity){st.identity=await req(client().from('ff_identities').select('*').eq('user_id',user().id).maybeSingle());}
  if(!st.identity){drawUser();return}
@@ -112,7 +112,7 @@ async function loadUser(readIdentity=true){if(!ready()||ADMIN)return;try{
  req(client().from('ff_duel_matches').select('*'))]);
  st.regs=r||[];st.players=p||[];st.br=b||[];st.clash=c||[];st.duel=d||[];st.loaded=true;drawUser();
  }catch(e){drawUser();toast(errMsg(e),true)}}
-async function submitRegistration(e){e.preventDefault();const f=e.currentTarget;if(!ready()||!st.identity)return toast(t('Phiên đăng nhập không hợp lệ.','Invalid login session.'),true);
+async function submitRegistration(e){e.preventDefault();const f=e.currentTarget;if(!ready()||!isRestricted()||!st.identity)return toast(t('Phiên đăng nhập không hợp lệ.','Invalid login session.'),true);
  const uid=f.elements.uid.value.trim(),nickname=f.elements.nickname.value.trim(),team=f.elements.team.value.trim();
  const selected=modes.map(m=>m[0]).filter(m=>!st.regs.some(r=>r.mode===m));
  if(!/^[0-9]{5,20}$/.test(uid))return toast(t('UID phải gồm 5–20 chữ số.','UID must contain 5–20 digits.'),true);
@@ -123,7 +123,7 @@ async function submitRegistration(e){e.preventDefault();const f=e.currentTarget;
  const button=$('button[type=submit]',f);button.disabled=true;try{await req(client().rpc('ff_register_all',{p_uid:uid,p_nickname:nickname,p_team:team}))
  st.tab='register';await loadUser(false);toast(t('Đã gửi đăng ký thành công. Vui lòng chờ quản trị viên duyệt.','Registration submitted; awaiting administrator approval.'));
  }catch(e){await loadUser(false);toast(errMsg(e),true)}finally{button.disabled=false}}
-async function confirmIdentity({id,name,birth}){if(!ready())throw Error(t('Hãy đăng nhập StudyT trước.','Please sign in first.'));
+async function confirmIdentity({id,name,birth}){if(!ready()||!isRestricted())throw Error(t('Chỉ tài khoản thi đấu được cấp mới có quyền truy cập Điện tử.','Only issued tournament accounts may access Digital ID.'));
  if(isRestricted()&&!await nameGate())throw Error("Cần đổi tên chính thức trước.");
  if(isRestricted())name=st.official;
  const value={user_id:user().id,student_code:id,full_name:name,birth_date:birth};
@@ -197,11 +197,16 @@ function mount(){if(ADMIN){const bar=$('#homeTabs'),landing=$('#landingView');if
  if(!$('#ffTournament')){const app=document.createElement('div');app.id='ffTournament';app.className='ff-tournament';app.hidden=true;pane.append(app);}
  const b=$('#homeTabs button[data-p="dientu"]');if(b&&!b.dataset.ffBound){b.dataset.ffBound='1';b.addEventListener('click',()=>{if(ready())loadUser(true)})}
  }return true}
-function updateNav(){if(ADMIN||!isRestricted())return;const btn=$('#homeTabs button[data-p="dientu"]');if(btn){const p=$('#landingView .home-pane.on');if(!p||p.dataset.pane!=='dientu')btn.click()}}
-function onLogin(){setTimeout(()=>{mount();if(ADMIN)return;if(isRestricted())updateNav();const pane=$('#studyt-electronic-pane');if(pane&&ready())loadUser(true)},70)}
+function updateNav(){if(ADMIN)return;
+ const nav=$('#homeTabs button[data-p="dientu"]');const pane=$('#studyt-electronic-pane');const allowed=isRestricted()&&ready();
+ if(nav){nav.classList.toggle('ff-access-denied',!allowed);nav.setAttribute('aria-disabled',String(!allowed));}
+ if(pane){pane.inert=!allowed;if(!allowed&&pane.classList.contains('on')){$('#homeTabs button[data-p="home"]')?.click();pane.classList.remove('on');}}
+ if(!allowed)return;const btn=$('#homeTabs button[data-p="dientu"]');if(btn){const p=$('#landingView .home-pane.on');if(!p||p.dataset.pane!=='dientu')btn.click()}}
+function onLogin(){setTimeout(()=>{mount();if(ADMIN)return;updateNav();const pane=$('#studyt-electronic-pane');if(pane&&ready())loadUser(true)},70)}
 function onLogout(){$('#ffNameGuide')?.remove();const f=$('#studyt-electronic-form');if(f){f.elements.fullName.readOnly=false;f.classList.remove('ff-identity-spot');}Object.assign(st,{official:null,identity:null,regs:[],players:[],br:[],clash:[],duel:[],loaded:false});const x=$('#ffTournament');if(x){x.hidden=true;x.innerHTML=''}}
-window.StudyTFreeFire={confirm:confirmIdentity,onLogin,onLogout,loadUser,loadAdmin,openElectronic(){mount();$('#homeTabs button[data-p="dientu"]')?.click();}};
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{mount();},{once:true});else mount();
-new MutationObserver(()=>{if(!$('#ffTournament')&&!ADMIN||ADMIN&&!$('#studyt-ff-admin-pane'))mount()}).observe(document.body,{childList:true,subtree:true});
+window.StudyTFreeFire={confirm:confirmIdentity,onLogin,onLogout,loadUser,loadAdmin,openElectronic(){if(!isRestricted())return;mount();$('#homeTabs button[data-p="dientu"]')?.click();}};
+if(!ADMIN)document.addEventListener('click',e=>{if(e.target.closest?.('#homeTabs button[data-p="dientu"]')&&(!ready()||!isRestricted())){e.preventDefault();e.stopImmediatePropagation();alert(t('Khu vực Điện tử chỉ dành cho 15 tài khoản thi đấu được ban tổ chức cấp.','Digital ID is restricted to the 15 issued tournament accounts.'));}},true);
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{mount();updateNav();},{once:true});else {mount();updateNav();}
+new MutationObserver(()=>{if(!$('#ffTournament')&&!ADMIN||ADMIN&&!$('#studyt-ff-admin-pane')){mount();updateNav()}}).observe(document.body,{childList:true,subtree:true});
 new MutationObserver(()=>{if(ready()){if(ADMIN&&$('#studyt-ff-admin-pane')?.classList.contains('on'))loadAdmin();else if(!ADMIN&&$('#studyt-electronic-pane')?.classList.contains('on'))loadUser(true)}updateNav()}).observe(document.body,{attributes:true,subtree:false,attributeFilter:['class']});
 })();

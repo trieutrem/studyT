@@ -125,3 +125,8 @@ body.ff-restricted #studyt-electronic-pane{max-width:1180px}
 .ff-standings-stage .ff-table td{background:transparent!important;color:#f5f7ff!important;border-bottom:1px solid #ffffff20!important}
 .ff-standings-stage .ff-table .ff-empty{color:#c3cde0!important}
 @media(prefers-reduced-motion:reduce){.ff-standings-stage::after{animation:none!important}}
+
+/* V1.0.12: ordinary accounts cannot enter Digital ID. */
+body:not(.ff-restricted) #homeTabs button[data-p="dientu"]{opacity:.45!important;filter:grayscale(1)!important;cursor:not-allowed!important}
+body:not(.ff-restricted) #homeTabs button[data-p="dientu"]::after{content:"🔒";margin-left:auto;font-size:12px}
+body:not(.ff-restricted) #studyt-electronic-pane{display:none!important}
