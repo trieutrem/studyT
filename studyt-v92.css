@@ -1,0 +1,25 @@
+/* Aurora 9.2 — transparent mascot, contrast, accessible navigation */
+html body #stux-dashboard .stux-hero-pig{width:min(43%,380px)!important;height:auto!important;right:4%!important;bottom:8%!important;object-fit:contain!important;mask-image:none!important;-webkit-mask-image:none!important;filter:drop-shadow(0 16px 20px #7855d94a)!important;animation:auroraFloat 4s ease-in-out infinite!important}
+@keyframes auroraFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-12px) rotate(2deg)}}
+html body .stux-sidefoot{flex:0 0 auto!important;min-height:0!important;padding-top:0!important;margin-top:auto!important;position:relative!important;gap:8px!important}
+html body .stux-sidefoot>img{position:relative!important;inset:auto!important;width:min(100%,180px)!important;height:auto!important;align-self:center;mask-image:none!important;-webkit-mask-image:none!important;animation:auroraFloat 4.5s ease-in-out infinite!important}
+html body nav#homeTabs.home-tabs{overflow-y:auto!important;overscroll-behavior:contain;min-height:0!important}
+html body nav#homeTabs .nv-subs{flex:0 0 auto!important;max-height:none!important;overflow:visible!important;position:static!important;transform:none!important;inset:auto!important}
+html body nav#homeTabs.nv-open:not(.nv-fold) .nv-subs{display:flex!important}
+html body nav#homeTabs.nv-fold .nv-subs{display:none!important}
+html body nav#homeTabs .nv-subs button{flex:0 0 auto!important;min-height:40px!important;white-space:normal!important;line-height:1.4!important}
+html body #stux-dashboard .stux-stat-icon,html body #stux-dashboard .stux-task-ico{background:transparent!important;box-shadow:none!important;filter:drop-shadow(0 5px 5px #5865aa40);transform:none!important}
+html body #stux-dashboard .stux-stat-icon img,html body #stux-dashboard .stux-task-ico img{width:100%;height:100%;object-fit:contain;display:block}
+html body #stux-dashboard .stux-feature-img{background:transparent!important;filter:none!important}
+html body #stux-dashboard .stux-feature-img img{filter:drop-shadow(0 7px 8px #7563bd40) saturate(1.18)!important;transition:transform .25s}
+html body #stux-dashboard .stux-feature-card:hover img{transform:translateY(-5px) rotate(-4deg) scale(1.06)}
+html:not([data-theme="dark"]) body #stux-dashboard .stux-section-heading h2,html:not([data-theme="dark"]) body #stux-dashboard .stux-progress-legend,html:not([data-theme="dark"]) body #stux-dashboard .stux-progress-legend strong{color:#243d69!important}
+html:not([data-theme="dark"]) body #stux-dashboard .stux-eyebrow{color:#4938a3!important;background:#e1e5ff!important;border-color:#c5cdf5!important}
+html:not([data-theme="dark"]) body #stux-dashboard .stux-progress-link{background:#315bd4!important;color:white!important}
+html[data-theme="dark"] body #stux-dashboard .stux-progress-legend,html[data-theme="dark"] body #stux-dashboard .stux-section-heading h2{color:#e7edf9!important}
+html[data-theme="dark"] body #stux-dashboard .stux-hero{background:radial-gradient(ellipse at 80% 55%,#23143c 0%,#101020 38%,#080808 72%)!important}
+html[data-theme="dark"] body #stux-dashboard .stux-eyebrow{color:#e1d9ff!important;background:#251c3b!important;border-color:#57417d!important}
+html[data-theme="dark"] body #stux-dashboard .stux-progress-link{background:#365cc9!important;color:#fff!important}
+@media(max-width:900px) and (min-width:641px){html body nav#homeTabs .nv-subs{padding:2px!important;width:100%!important}html body nav#homeTabs .nv-subs button{font-size:10px!important;padding:6px 2px!important;overflow-wrap:anywhere}html body .stux-sidefoot>img{width:75px!important}}
+@media(max-width:640px){html body nav#homeTabs.home-tabs{overflow:visible!important}html body nav#homeTabs .nv-subs{position:absolute!important;left:50%!important;bottom:calc(100% + 10px)!important;top:auto!important;right:auto!important;transform:translateX(-50%)!important;width:min(300px,calc(100vw - 24px))!important;max-height:65vh!important;overflow-y:auto!important;background:var(--panel)!important;border:1px solid var(--line)!important;z-index:250!important}html body .stux-sidefoot{display:none!important}html body #stux-dashboard .stux-hero-pig{width:42%!important;right:1%!important;bottom:5%!important}}
+@media(prefers-reduced-motion:reduce){html body #stux-dashboard .stux-hero-pig,html body .stux-sidefoot>img{animation:none!important}}
