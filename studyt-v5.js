@@ -55,6 +55,12 @@ function isReady(user){
  if(IS_ADMIN)return email===ADMIN_EMAIL && Boolean(user?.email_confirmed_at);
  return GMAIL_RE.test(email)&&!LEGACY_RE.test(email)&&Boolean(user?.email_confirmed_at);
 }
+async function isTournamentAccount(s,user){
+ if(IS_ADMIN||!user?.id)return false;
+ const {data,error}=await s.from('ff_accounts').select('user_id,active').eq('user_id',user.id).maybeSingle();
+ if(error)throw error;
+ return data?.active===true;
+}
 function renderProfileMessage(user){
  const p=$('#stv5GateDescription');if(!p)return;
  const current=String(user?.email||'');
@@ -74,7 +80,7 @@ async function check(manual=false){
    if(manual){const refreshed=await s.auth.refreshSession();if(refreshed.error)throw refreshed.error;}
    const res=await s.auth.getUser();if(res.error)throw res.error;
    const u=res.data?.user;
-   if(isReady(u)){display(false);return true}
+   if(isReady(u)||await isTournamentAccount(s,u)){display(false);return true}
    display(true);renderProfileMessage(u);
    if(manual)status('Gmail chưa được xác nhận hoặc vẫn đang chờ thay đổi. Hãy mở liên kết trong Gmail, hoặc liên hệ quản trị nếu email cũ không nhận được thư.',false);
    return false;
@@ -94,6 +100,8 @@ async function submit(){
  const send=$('#stv5GateSave'),checkBtn=$('#stv5CheckEmail');
  if(send)send.disabled=true;if(checkBtn)checkBtn.disabled=true;
  try{
+  const current=await s.auth.getUser();if(current.error)throw current.error;
+  if(await isTournamentAccount(s,current.data?.user)){display(false);return}
   const redirect=location.origin + (IS_ADMIN?'/admin.html':'/');
   const {data,error}=await s.auth.updateUser({email},{emailRedirectTo:redirect});
   if(error)throw error;
