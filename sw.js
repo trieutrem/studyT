@@ -1,6 +1,6 @@
 /* StudyT Aurora — only static app shell is cached, never Supabase/auth/data requests. */
-const VERSION='studyt-aurora-v8-unified-20261114';
-const SHELL=['./','./index.html','./admin.html','./studyt-premium.css','./studyt-premium.js','./studyt-ux2.js','./studyt-ux2.css','./studyt-evolve.js','./studyt-evolve.css','./studyt-refine.css','./studyt-v5.css','./studyt-v5.js','./studyt-unified-v8.css','./studyt-unified-v8.js','./manifest.webmanifest','./assets/pig-hero.png','./assets/pig-sidebar.png','./assets/pig-logo.png','./assets/pig-trophy.png','./assets/feature-notebook.png','./assets/feature-brain.png','./assets/feature-timer.png','./assets/feature-chart.png','./icons/icon-192.png','./icons/icon-512.png'];
+const VERSION='studyt-aurora-v9-20261115';
+const SHELL=['./studyt-v9.css?v=9.0','./studyt-v9.js?v=9.0','./','./index.html','./admin.html','./studyt-premium.css','./studyt-premium.js','./studyt-ux2.js','./studyt-ux2.css','./studyt-evolve.js','./studyt-evolve.css','./studyt-refine.css','./studyt-v5.css','./studyt-v5.js','./studyt-unified-v8.css','./studyt-unified-v8.js','./manifest.webmanifest','./assets/pig-hero.png','./assets/pig-sidebar.png','./assets/pig-logo.png','./assets/pig-trophy.png','./assets/feature-notebook.png','./assets/feature-brain.png','./assets/feature-timer.png','./assets/feature-chart.png','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(VERSION).then(cache=>Promise.allSettled(SHELL.map(url=>cache.add(url)))).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('studyt-')&&k!==VERSION).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
@@ -8,5 +8,5 @@ self.addEventListener('fetch',event=>{
  if(request.method!=='GET'||new URL(request.url).origin!==self.location.origin)return;
  const u=new URL(request.url);
  if(!SHELL.some(path=>new URL(path,self.registration.scope).pathname===u.pathname))return;
- event.respondWith(fetch(request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(VERSION).then(cache=>cache.put(request,copy));}return response;}).catch(()=>caches.match(request)));
+ event.respondWith(fetch(request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(VERSION).then(cache=>cache.put(request,copy));}return response;}).catch(()=>caches.match(request).then(hit=>hit||caches.match(u.pathname))));
 });
