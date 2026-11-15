@@ -22,3 +22,9 @@ Các chức năng: dashboard từ dữ liệu V9, môn học, tính điểm cu�
 
 ## Kiểm thử
 `node --check studyt-v9.js` và `node --check sw.js` đã chạy thành công. Fixture `tests/workspace-smoke.html` có thể mở qua HTTP để kiểm tra thêm môn, nhiệm vụ, lịch flashcard và các tab; môi trường tạo file chặn điều hướng Chromium nên chưa xác nhận kết quả chạy fixture. Chưa kiểm thử tài khoản thật, RLS thực tế hoặc triển khai Vercel. Không dùng bản thử nghiệm để thay bản production trước khi kiểm thử.
+
+## V9.1 hotfix
+- Removed two accidental V9 asset injections inside HTML export templates; V9 assets are loaded once at the real document end.
+- Scoped document-open handler/style to actual file buttons; guarded navigation against missing pane IDs.
+- Positioned workspace link before sidebar footer; raised actual dialogs above navigation; reset scroll on auth transitions.
+- Updated service-worker cache version. No database migration changes. Browser navigation was blocked in the test environment; verify on Vercel preview before production.

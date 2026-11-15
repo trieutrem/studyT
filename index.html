@@ -1509,7 +1509,7 @@ function homeSetup(){const L=$('landingView');if(!L||L.querySelector('.home-tabs
  {const dv=$('dashView');dv.classList.remove('home-pane');delete dv.dataset.pane;const dh=document.createElement('h2');dh.className='home-h';dh.id='dashHead';dh.innerHTML='Phân tích <small>Kết quả học tập của bạn</small>';panes.home.appendChild(dh);panes.home.appendChild(dv)}
  const bar=document.createElement('nav');bar.className='home-tabs';bar.id='homeTabs';
  bar.innerHTML=HP_TABS.map(t=>`<button type="button" data-p="${t[0]}"><span class="ic">${t[1]}</span><span>${t[2]}</span></button>`).join('');
- bar.onclick=e=>{const b=e.target.closest('button');if(b)homePane(b.dataset.p)};
+ bar.onclick=e=>{const b=e.target.closest('button[data-p]');if(b&&b.dataset.p&&document.querySelector('#landingView .home-pane[data-pane="'+CSS.escape(b.dataset.p)+'"]'))homePane(b.dataset.p)};
  const hd=L.querySelector('header.landing-nav');hd.insertAdjacentElement('afterend',bar);homePane(HP,true)}
 async function homePane(p,silent){HP=p;document.querySelectorAll('#landingView .home-pane').forEach(e=>e.classList.toggle('on',e.dataset.pane===p));document.querySelectorAll('#homeTabs button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));
  if(p==='home'){DSH.tab='overview';DSH.subj='all';if(window.dshRefresh)window.dshRefresh()}
@@ -3892,9 +3892,7 @@ function pdf(){const f=filtered(),A=all();if(!f.length){alert('Hồ sơ chưa c�
  <div class="st"><div><b>${f.length}</b><span>Sản phẩm</span></div><div><b>${certs.length}</b><span>Chứng nhận</span></div><div><b>${new Set(f.map(x=>x.sem)).size}</b><span>Học kỳ</span></div><div><b>${sk.length}</b><span>Kỹ năng</span></div></div>
  ${sk.length?`<h2>Kỹ năng nổi bật</h2><div class="tg">${sk.slice(0,30).map(t=>`<i>${E(t)}</i>`).join('')}</div>`:''}
  ${bySem(f).map(([s,a])=>`<h2>${E(s)}</h2>${a.map(item).join('')}`).join('')}
- <div class="ft">Xuất từ StudyT · ${new Date().toLocaleDateString('vi-VN')}</div><link rel="stylesheet" href="./studyt-v9.css?v=9.0">
-<script defer src="./studyt-v9.js?v=9.0"></script>
-</body></html>`;
+ <div class="ft">Xuất từ StudyT · ${new Date().toLocaleDateString('vi-VN')}</div></body></html>`;
  const old=G('pfPrint');if(old)old.remove();
  const fr=document.createElement('iframe');fr.id='pfPrint';fr.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';document.body.appendChild(fr);
  fr.srcdoc=html;fr.onload=()=>{try{fr.contentWindow.focus();fr.contentWindow.print()}catch(e){alert('Trình duyệt không mở được hộp thoại in.')}}}
@@ -5800,9 +5798,7 @@ function guardKey(e){if(!S||dv.style.display!=='block'||dlAllowed())return;const
 function exportHtml(){if(!dlAllowed()){toast('Admin chưa cho phép tải tài liệu này.');return}
  const c=art.cloneNode(true);c.querySelectorAll('.qa-hit').forEach(e=>e.replaceWith(document.createTextNode(e.textContent)));c.querySelectorAll('.qa-card').forEach(e=>e.remove());c.removeAttribute('style');c.className='sd-art';
  const title=(($('docH')||{}).textContent||'Tài liệu').trim(),css=($('qmDocToolsCss')||{}).textContent||'';
- const html='<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title)+'</title><style>body{font:16px/1.7 system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 16px;color:#172033}.sd-art img{max-width:100%}.sd-pg img{width:100%;height:auto;display:block}.sd-anc{display:none}.sd-art{--line:#e3e9f2;--panel:#fff;--ink:#172033;--primary:#315efb}</style><style>'+css+'</style></head><body><h1>'+esc(title)+'</h1><article class="sd-art">'+c.innerHTML+'</article><link rel="stylesheet" href="./studyt-v9.css?v=9.0">
-<script defer src="./studyt-v9.js?v=9.0"></script>
-</body></html>';
+ const html='<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title)+'</title><style>body{font:16px/1.7 system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 16px;color:#172033}.sd-art img{max-width:100%}.sd-pg img{width:100%;height:auto;display:block}.sd-anc{display:none}.sd-art{--line:#e3e9f2;--panel:#fff;--ink:#172033;--primary:#315efb}</style><style>'+css+'</style></head><body><h1>'+esc(title)+'</h1><article class="sd-art">'+c.innerHTML+'</article></body></html>';
  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download=title.replace(/[\\/:*?"<>|]+/g,'_').slice(0,80)+'.html';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);toast('Đã tải tài liệu.')}
 /* ---------- lịch sử & phiên bản ---------- */
 const KIND={auto:'Tự động',manual:'Thủ công',restore:'Khôi phục'};
@@ -5998,7 +5994,7 @@ html body .dsh-hero{background:var(--primary)!important}
 .landing-nav .pill,.pill{border-radius:4px}
 /* tài liệu của nhóm */
 .nv-fa{display:flex;gap:14px;flex-shrink:0}.nv-fa a{font-weight:600;color:var(--primary);text-decoration:underline;text-underline-offset:3px}
-.nv-open{min-height:34px;padding:4px 14px!important;border:1px solid var(--primary)!important;background:transparent!important;color:var(--primary)!important;font-weight:700;cursor:pointer}
+button.nv-open[data-u]{min-height:34px;padding:4px 14px!important;border:1px solid var(--primary)!important;background:transparent!important;color:var(--primary)!important;font-weight:700;cursor:pointer}
 .nv-note{display:block;margin-top:4px;font-size:11px;color:var(--muted)}
 .nvv{position:fixed;inset:0;z-index:900;display:flex;flex-direction:column;background:var(--bg);padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 .nvv-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--panel)}
@@ -6069,7 +6065,7 @@ window.qmCalExport=()=>{
  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([lines],{type:'text/calendar;charset=utf-8'}));a.download='studyt-lich.ics';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
  alert('Đã tạo tệp lịch. Mở tệp này bằng ứng dụng Lịch để thêm sự kiện.')};
 /* Thành viên: chỉ xem tài liệu trong ứng dụng, không có nút tải */
-document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.nv-open');if(!b)return;e.preventDefault();
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('button.nv-open[data-u]');if(!b)return;e.preventDefault();
   const u=b.dataset.u,n=b.dataset.n||'',canDl=b.dataset.dl==='1';const o=document.createElement('div');o.className='nvv';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');
   o.innerHTML='<div class="nvv-h"><b>'+esc(n)+'</b><button type="button" class="ghost" data-x>Đóng</button></div>'+(/\.pdf$/i.test(n)?'<iframe title="'+esc(n)+'" src="'+esc(u)+(canDl?'':'#toolbar=0&navpanes=0')+'"></iframe>':'<div class="nvv-m">Định dạng này chưa xem trực tuyến được trong ứng dụng.</div>');
   if(!canDl)o.addEventListener('contextmenu',ev=>ev.preventDefault());
@@ -6669,7 +6665,7 @@ trigger.addEventListener('click',()=>{const on=menu.classList.toggle('open');tri
 <link rel="stylesheet" href="./studyt-premium.css?v=4" data-studyt-theme="aurora-v1">
 <script src="./studyt-premium.js?v=4" data-studyt-theme="aurora-v1"></script>
 <link rel="stylesheet" href="./studyt-ux2.css?v=4">
-<script src="./studyt-ux2.js?v=4" defer></script>
+<script src="./studyt-ux2.js?v=9.1" defer></script>
 <link rel="stylesheet" href="./studyt-evolve.css?v=4">
 <script src="./studyt-evolve.js?v=4" defer></script>
 <link rel="stylesheet" href="./studyt-refine.css?v=4">
@@ -6679,7 +6675,7 @@ trigger.addEventListener('click',()=>{const on=menu.classList.toggle('open');tri
 
 <link rel="stylesheet" href="./studyt-unified-v8.css?v=8.1">
 <script src="./studyt-unified-v8.js?v=8.1" defer></script>
-<link rel="stylesheet" href="./studyt-v9.css?v=9.0">
-<script defer src="./studyt-v9.js?v=9.0"></script>
+<link rel="stylesheet" href="./studyt-v9.css?v=9.1">
+<script defer src="./studyt-v9.js?v=9.1"></script>
 </body>
 </html>

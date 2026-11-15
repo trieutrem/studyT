@@ -108,3 +108,6 @@
  // User-facing settings are accessed via avatar, not duplicated on the sidebar.
  document.body.classList.toggle('stux-admin',IS_ADMIN);
 })();
+
+/* Reset the document scroll when switching between guest and authenticated views. */
+(()=>{let authed=document.body.classList.contains('authed');new MutationObserver(()=>{const next=document.body.classList.contains('authed');if(next===authed)return;authed=next;requestAnimationFrame(()=>window.scrollTo(0,0));}).observe(document.body,{attributes:true,attributeFilter:['class']});})();
