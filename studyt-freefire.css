@@ -140,3 +140,9 @@ body:not(.ff-restricted) #studyt-electronic-pane{display:none!important}
 .rank-1 .ff-cup-art .ff-statue-inscribed .ff-award-engraving{top:92.5%;color:#fff0a5}
 .rank-3 .ff-cup-art .ff-statue-inscribed .ff-award-engraving{top:92.5%;color:#ffd2a9}
 @media(prefers-reduced-motion:reduce){.ff-cup-art .ff-statue-inscribed{animation:none!important}}
+
+/* V1.0.15 — cast metal lettering, following the curved pedestal face. */
+.ff-cup-art .ff-statue-inscribed .ff-award-engraving{top:90.5%;left:51%;width:76%;height:5.5%;transform:translate(-50%,-50%);display:block;overflow:visible;filter:none;text-shadow:none!important;color:inherit!important}
+.rank-2 .ff-cup-art .ff-statue-inscribed .ff-award-engraving{top:91%;left:53%}
+.rank-3 .ff-cup-art .ff-statue-inscribed .ff-award-engraving{top:91.4%;left:50%}
+.ff-award-engraving svg{display:block;width:100%;height:100%;overflow:visible;filter:none!important;animation:none!important}
