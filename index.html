@@ -1499,22 +1499,22 @@ function dshRender(){dshNav();const m=$('dshMain');if(!DSH.recs.length){m.innerH
  m.innerHTML=({overview:dOverview,scores:dScores,compare:dCompare,accuracy:dAccuracy,alerts:dAlertsV})[DSH.tab]()}
 let HP='home',dshReady=false,dshT=null;
 window.dshRefresh=async()=>{if(!$('dshMain')||!document.body.classList.contains('authed'))return;try{await dshLoad();dshRender()}catch(e){}};
-const HP_TABS=[['home','🏠','Trang chủ'],['pr','📚','Bài ôn'],['self','📝','Tự ôn từ file'],['exam','🎯','Kỳ thi']];
+const HP_TABS=[['home','🏠','Trang chủ'],['pr','📚','Bài ôn'],['self','📝','Tự ôn từ file'],['exam','🎯','Kỳ thi'],['dash','📊','Phân tích']];
 function homeSetup(){const L=$('landingView');if(!L||L.querySelector('.home-tabs'))return;
- const panes={home:document.createElement('div'),exam:document.createElement('div'),pr:document.createElement('div'),self:document.createElement('div')};
+ const panes={home:document.createElement('div'),exam:document.createElement('div'),pr:document.createElement('div'),self:document.createElement('div'),dash:document.createElement('div')};
  Object.keys(panes).forEach(k=>{panes[k].className='home-pane';panes[k].dataset.pane=k});
  const kids=[...L.children],start=kids.findIndex(e=>e.id==='homeNote')+1;let cur='home';
  kids.slice(start).forEach(e=>{if(e.id==='dashView'||e.classList.contains('home-tabs'))return;if(e.classList&&e.classList.contains('home-h')){const t=e.textContent;cur=/Bảng tin/.test(t)?'home':/[Kk]ỳ thi/.test(t)?'exam':/Bài ôn/.test(t)?'pr':'self'}panes[cur].appendChild(e)});
- L.appendChild(panes.home);L.appendChild(panes.exam);L.appendChild(panes.pr);L.appendChild(panes.self);
- {const dv=$('dashView');dv.classList.remove('home-pane');delete dv.dataset.pane;const dh=document.createElement('h2');dh.className='home-h';dh.id='dashHead';dh.innerHTML='Phân tích <small>Kết quả học tập của bạn</small>';panes.home.appendChild(dh);panes.home.appendChild(dv)}
+ L.appendChild(panes.home);L.appendChild(panes.exam);L.appendChild(panes.pr);L.appendChild(panes.self);L.appendChild(panes.dash);
+ {const dv=$('dashView');dv.classList.remove('home-pane');delete dv.dataset.pane;const dh=document.createElement('h2');dh.className='home-h';dh.id='dashHead';dh.innerHTML='Phân tích <small>Kết quả học tập của bạn</small>';panes.dash.appendChild(dh);panes.dash.appendChild(dv)}
  const bar=document.createElement('nav');bar.className='home-tabs';bar.id='homeTabs';
  bar.innerHTML=HP_TABS.map(t=>`<button type="button" data-p="${t[0]}"><span class="ic">${t[1]}</span><span>${t[2]}</span></button>`).join('');
  bar.onclick=e=>{const b=e.target.closest('button[data-p]');if(b&&b.dataset.p&&document.querySelector('#landingView .home-pane[data-pane="'+CSS.escape(b.dataset.p)+'"]'))homePane(b.dataset.p)};
  const hd=L.querySelector('header.landing-nav');hd.insertAdjacentElement('afterend',bar);homePane(HP,true)}
 async function homePane(p,silent){HP=p;document.querySelectorAll('#landingView .home-pane').forEach(e=>e.classList.toggle('on',e.dataset.pane===p));document.querySelectorAll('#homeTabs button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));
- if(p==='home'){DSH.tab='overview';DSH.subj='all';if(window.dshRefresh)window.dshRefresh()}
+ if(p==='home'||p==='dash'){DSH.tab='overview';DSH.subj='all';if(window.dshRefresh)window.dshRefresh()}
  if(!silent)window.scrollTo({top:0,behavior:'smooth'})}
-const openDash=()=>{$('landingView').style.display='block';homePane('home')};
+const openDash=()=>{$('landingView').style.display='block';homePane('dash')};
 const dshClose=()=>homePane('home');
 /* ===== NĂM HỌC / ĐỀ THAM KHẢO ===== */
 /* ===== Bài ôn: Năm học → Môn học → (Tài liệu đọc: Trắc nghiệm + Tài liệu đọc theo chương) | (Đề tham khảo) ===== */
@@ -2757,10 +2757,10 @@ function setMode(m){P.dataset.mode=m;open=m==='nv';saveNv();if(subs)subs.querySe
 if(main){const lb=main.querySelector(':scope>span:last-child');if(lb)lb.textContent='Học tập';
  subs=document.createElement('div');subs.className='nv-subs';
  subs.innerHTML='<button type="button" data-m="tk"><span class="ic">📝</span><span>Bài tập &amp; Đồ án</span></button><button type="button" data-m="nv"><span class="ic">🎯</span><span>Nhiệm vụ</span></button>';
- main.after(subs);const KEYS=['gc','self','sp','km'];const place=()=>{const tb=subs.querySelector('button[data-m="tk"]');for(const k of ['pr','exam']){const b=bar.querySelector('button[data-p="'+k+'"]');if(b&&tb&&!subs.contains(b))subs.insertBefore(b,tb)}const pb=bar.querySelector('button[data-p="pf"]');if(pb&&tb)tb.after(pb);KEYS.forEach(k=>{const b=bar.querySelector('button[data-p="'+k+'"]');if(b&&!subs.contains(b))subs.appendChild(b)})};place();new MutationObserver(place).observe(bar,{childList:true});setTimeout(place,500);
+ main.after(subs);const KEYS=['gc','self','sp','km'];const place=()=>{const tb=subs.querySelector('button[data-m="tk"]');for(const k of ['pr','exam','dash']){const b=bar.querySelector('button[data-p="'+k+'"]');if(b&&tb&&!subs.contains(b))subs.insertBefore(b,tb)}const pb=bar.querySelector('button[data-p="pf"]');if(pb&&tb)tb.after(pb);KEYS.forEach(k=>{const b=bar.querySelector('button[data-p="'+k+'"]');if(b&&!subs.contains(b))subs.appendChild(b)})};place();new MutationObserver(place).observe(bar,{childList:true});setTimeout(place,500);
  subs.querySelectorAll('button[data-m]').forEach(b=>b.onclick=e=>{e.stopPropagation();if(!P.classList.contains('on'))main.click();setMode(b.dataset.m)});
  main.addEventListener('click',()=>setMode('tk'));
- const sync=()=>{const on=P.classList.contains('on'),sOn=KEYS.concat(['pf']).some(k=>{const e=document.querySelector('#landingView .home-pane[data-pane="'+k+'"]');return e&&e.classList.contains('on')});subs.classList.toggle('show',on||sOn);main.classList.toggle('nv-x',on||sOn);subs.querySelectorAll('button[data-m]').forEach(b=>b.classList.toggle('on',on&&b.dataset.m===(P.dataset.mode||'tk')));fab()};
+ const sync=()=>{const on=P.classList.contains('on'),sOn=KEYS.concat(['pf','pr','exam','dash']).some(k=>{const e=document.querySelector('#landingView .home-pane[data-pane="'+k+'"]');return e&&e.classList.contains('on')});subs.classList.toggle('show',on||sOn);main.classList.toggle('nv-x',on||sOn);subs.querySelectorAll('button[data-m]').forEach(b=>b.classList.toggle('on',on&&b.dataset.m===(P.dataset.mode||'tk')));fab()};
  new MutationObserver(sync).observe(P,{attributes:true,attributeFilter:['class']});const LV=document.getElementById('landingView');if(LV)new MutationObserver(sync).observe(LV,{attributes:true,subtree:true,attributeFilter:['class']});sync()}
 new MutationObserver(()=>{mount();fab()}).observe(P,{childList:true});
 /* đổi tài khoản → xóa dữ liệu cũ */
@@ -5301,7 +5301,7 @@ window.addEventListener('click',function(e){
   else{bar.classList.remove('nv-fold');bar.classList.add('nv-open');main.classList.add('nv-x')}
   return}
  if(!t.closest('.nv-subs'))bar.classList.remove('nv-open');
- else if(main){bar.classList.remove('nv-open');bar.classList.add('nv-fold');main.classList.remove('nv-x')}
+ else if(main){if(t.dataset.p==='dash'&&matchMedia('(min-width:901px)').matches){bar.classList.remove('nv-fold');bar.classList.add('nv-open');main.classList.add('nv-x')}else{bar.classList.remove('nv-open');bar.classList.add('nv-fold');main.classList.remove('nv-x')}}
 },true);
 
 /* ---- Tài liệu đọc: thu bài ---- */
@@ -6644,7 +6644,7 @@ trigger.addEventListener('click',()=>{const on=menu.classList.toggle('open');tri
 
 
 <link rel="stylesheet" href="./studyt-premium.css?v=4" data-studyt-theme="aurora-v1">
-<script src="./studyt-premium.js?v=9.4" data-studyt-theme="aurora-v1"></script>
+<script src="./studyt-premium.js?v=9.5" data-studyt-theme="aurora-v1"></script>
 <link rel="stylesheet" href="./studyt-ux2.css?v=4">
 <script src="./studyt-ux2.js?v=9.1" defer></script>
 <link rel="stylesheet" href="./studyt-evolve.css?v=4">
@@ -6658,6 +6658,6 @@ trigger.addEventListener('click',()=>{const on=menu.classList.toggle('open');tri
 <script src="./studyt-unified-v8.js?v=8.1" defer></script>
 
 <link rel="stylesheet" href="./studyt-v92.css?v=9.2">
-<link rel="stylesheet" href="./studyt-v93.css?v=9.4">
+<link rel="stylesheet" href="./studyt-v93.css?v=9.5">
 </body>
 </html>

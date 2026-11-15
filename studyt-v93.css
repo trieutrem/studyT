@@ -52,3 +52,28 @@ html[data-theme="dark"] body .stux-sidefoot{background:linear-gradient(135deg,#2
 html[data-theme="dark"] body #stux-dashboard .aurora-hero-art{object-fit:contain!important;object-position:right bottom!important;mask-image:linear-gradient(to right,transparent,#000 14%);animation:none!important}
 html[data-theme="dark"] body #stux-dashboard .stux-hero{background:radial-gradient(ellipse at 75% 70%,#34256d,transparent 65%),linear-gradient(125deg,#141b3b,#11152a 60%,#25173d)!important}
 @media(max-width:640px){html:not([data-theme="dark"]) body #stux-dashboard .stux-hero-pig{width:37%!important;right:0!important;height:75%!important;bottom:4%!important}}
+
+/* 9.5 — softer data surfaces, profile contrast, complete mascot composition. */
+html body #dtBox{display:grid;gap:16px;min-width:0}
+html body #dtBox .st-note:empty{display:none}
+html body #dtBox .st-card{padding:20px 24px!important;border-radius:24px!important;overflow:hidden}
+html body #dtBox .st-card>h3{margin:0 0 8px!important}
+html body #dtBox .st-card>.st-sub{margin-bottom:16px!important;line-height:1.6}
+html body #dtBox .st-card .st-row{padding:15px 16px!important;margin:8px 0 0!important;border:1px solid var(--line)!important;border-radius:15px!important;min-width:0}
+html[data-theme="dark"] body #dtBox .st-card{background:linear-gradient(145deg,#1b1d2b,#151722)!important;border:1px solid #34374a!important;box-shadow:0 8px 24px #0003!important;color:#f0f2ff!important}
+html[data-theme="dark"] body #dtBox .st-card .st-row{background:linear-gradient(135deg,#242737,#202230)!important;border-color:#373b50!important;color:#eef1ff!important}
+html[data-theme="dark"] body #dtBox :is(.st-sub,.st-rt small){color:#b9c3d8!important}
+html[data-theme="dark"] body #dtBox .st-rt small b[style]{color:#ffbc66!important}
+html[data-theme="dark"] body #dtBox .st-card.st-zone{border-color:#65404e!important}
+html[data-theme="dark"] body #pfId .pf-id{background:radial-gradient(ellipse at 0% 0%,#39305b,transparent 65%),linear-gradient(135deg,#202437,#191b2b)!important;border:1px solid #44435d!important;box-shadow:0 10px 28px #0004!important;color:#f5f5ff!important;border-radius:26px!important}
+html[data-theme="dark"] body #pfId .pf-id h3{color:#f5f5ff!important}
+html[data-theme="dark"] body #pfId .pf-id .hl{color:#9de8ef!important}
+html[data-theme="dark"] body #pfId .pf-id :is(.m,.ab){color:#c2c9de!important}
+html:not([data-theme="dark"]) body #pfId .pf-id h3{color:#20345e!important}
+html:not([data-theme="dark"]) body #pfId .pf-id .hl{color:#405ca5!important}
+html body #pfId .pf-id .tx{min-width:0;overflow-wrap:anywhere}
+html[data-theme="dark"] body #stux-dashboard .stux-hero{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:8px;padding:24px 0 0 30px!important;align-items:center!important;min-height:320px!important;background:radial-gradient(ellipse at 76% 58%,#29236b 0%,#191a3c 43%,#14182f 75%)!important}
+html[data-theme="dark"] body #stux-dashboard .stux-hero-copy{width:100%!important;padding:0 0 24px!important;max-width:none!important}
+html[data-theme="dark"] body #stux-dashboard .aurora-hero-art{position:relative!important;right:auto!important;bottom:auto!important;width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:512/337;align-self:end;object-fit:contain!important;object-position:center!important;border-radius:0 0 24px 0;mask-image:linear-gradient(to right,transparent 0%,#000 9%,#000 100%);-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 9%,#000 100%);animation:none!important}
+html[data-theme="dark"] body #stux-dashboard .stux-hero::after{display:none!important}
+@media(max-width:640px){html body #dtBox .st-card{padding:16px!important}html body #dtBox .st-card .st-row{padding:12px!important}html[data-theme="dark"] body #stux-dashboard .stux-hero{grid-template-columns:1fr;gap:0;padding:20px 16px 0!important}html[data-theme="dark"] body #stux-dashboard .stux-hero-copy{padding:0!important}html[data-theme="dark"] body #stux-dashboard .aurora-hero-art{width:min(100%,420px)!important;justify-self:center;mask-image:linear-gradient(to bottom,transparent,#000 7%);-webkit-mask-image:linear-gradient(to bottom,transparent,#000 7%);border-radius:0 0 20px 20px}}

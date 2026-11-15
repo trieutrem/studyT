@@ -117,7 +117,7 @@
    case 'assignments':{const b=$('#homeTabs button[data-m="tk"]');if(b)b.click();else nav('tk');break;}
    case 'calendar':{if(!nav('sp')){const b=$('#homeTabs button[data-m="sp"]');if(b)b.click();else nav('pr');}break;}
    case 'exam':nav('exam');break;
-   case 'analytics':nav('home');setTimeout(()=>{const e=$('#dashHead')||$('#dashView');if(e)e.scrollIntoView({behavior:'smooth',block:'start'});},150);break;
+   case 'analytics':if(!IS_ADMIN&&nav('dash'))break;nav('home');setTimeout(()=>{const e=$('#dashHead')||$('#dashView');if(e)e.scrollIntoView({behavior:'smooth',block:'start'});},150);break;
    case 'news':if(typeof window.stuxOpenNews==='function')window.stuxOpenNews();break;
    case 'quiz':if(typeof window.openMode==='function')window.openMode('quiz');else nav('self');break;
    case 'essay':if(typeof window.openMode==='function')window.openMode('essay');else nav('self');break;
