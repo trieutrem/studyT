@@ -845,7 +845,7 @@ $('auGo').onclick=async()=>{
  }finally{$('auGo').disabled=false}
 };
 async function onLogin(){const {data:{user}}=await sb.auth.getUser();const {data:p,error}=await sb.from('profiles').select('*').eq('id',user.id).single();if(error)throw error;me={id:user.id,name:p.full_name||p.username,role:p.role,em:!!p.exam_manager};if(String(user.email||'').toLowerCase()!==STUDYT_ADMIN_EMAIL){await sb.auth.signOut();me=null;throw new Error('ADMIN_EMAIL')}if(p.role!=='admin'){await sb.auth.signOut();me=null;throw new Error('NOT_ADMIN')}
- examRun=null;subjects=[];document.body.classList.add('authed');$('whoami').textContent=me.name+(me.role==='admin'?(me.em?' · quản lý kỳ thi':' · admin'):'');document.body.classList.toggle('is-admin',me.role==='admin');document.body.classList.toggle('exam-mgr',!!me.em);$('landingView').style.display='block';$('quizView').style.display='none';$('essayView').style.display='none';$('examView').style.display='none';$('auPass').value='';await loadExams();renderHome();if(me.em&&typeof homePane==='function'&&!['home','exam','st'].includes(HP))homePane('home')}
+ examRun=null;subjects=[];document.body.classList.add('authed');$('whoami').textContent=me.name+(me.role==='admin'?(me.em?' · quản lý kỳ thi':' · admin'):'');document.body.classList.toggle('is-admin',me.role==='admin');document.body.classList.toggle('exam-mgr',!!me.em);$('landingView').style.display='block';$('quizView').style.display='none';$('essayView').style.display='none';$('examView').style.display='none';$('auPass').value='';await loadExams();renderHome();if(me.em&&typeof homePane==='function'&&!['home','exam','st'].includes(HP))homePane('home');window.StudyTFreeFire?.onLogin?.()}
 async function doLogout(){if(!confirm('Đăng xuất?'))return;await sb.auth.signOut();me=null;examRun=null;subjects=[];saveExam();document.body.classList.remove('authed','is-admin','exam-mgr');setAuthMode('login')}
 async function loadExams(){const [e,a,g]=await Promise.all([sb.from('exams').select('*').order('start_at',{ascending:false}),sb.from('attempts').select('id,exam_id,submitted_at,score').eq('user_id',me.id),sb.from('exam_grants').select('exam_id,remaining').eq('user_id',me.id)]);exams=e.data||[];await autoHideExpired();myAtt={};(a.data||[]).forEach(x=>myAtt[x.exam_id]=x);myGr={};(g.data||[]).forEach(x=>myGr[x.exam_id]=x.remaining)}
 renderHome=function(){const adm=me&&me.role==='admin';let h=exams.map(e=>{const at=myAtt[e.id],n=Date.now(),st=+new Date(e.start_at),en=+new Date(e.end_at);const stt=at&&at.submitted_at?`Đã thi · ${(+at.score).toFixed(1)}/10${(myGr[e.id]||0)>0?` · còn ${myGr[e.id]} lượt thi lại`:''}`:at?'Đang làm dở, bấm để tiếp tục':n<st?'Chưa mở':n>en?'Đã đóng':'Đang mở · bấm để vào thi';
@@ -4445,5 +4445,7 @@ trigger.addEventListener('click',()=>{const on=menu.classList.toggle('open');tri
 <script src="./studyt-unified-v8.js?v=8.1" defer></script>
 <link rel="stylesheet" href="./studyt-v92.css?v=9.2">
 <link rel="stylesheet" href="./studyt-v93.css?v=9.5">
+<link rel="stylesheet" href="./studyt-freefire.css?v=1.0">
+<script src="./studyt-freefire.js?v=1.0" defer></script>
 </body>
 </html>

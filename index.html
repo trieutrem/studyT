@@ -859,8 +859,14 @@ $('auGo').onclick=async()=>{
  }finally{$('auGo').disabled=false}
 };
 async function onLogin(){const {data:{user}}=await sb.auth.getUser();const {data:p,error}=await sb.from('profiles').select('*').eq('id',user.id).single();if(error)throw error;me={id:user.id,name:p.full_name||p.username,role:p.role};if(p.role==='admin'||String(user.email||'').toLowerCase()===STUDYT_ADMIN_EMAIL){await sb.auth.signOut();me=null;throw new Error('IS_ADMIN')}
- examRun=null;subjects=[];document.body.classList.add('authed');$('whoami').textContent=me.name+(me.role==='admin'?' · admin':'');document.body.classList.toggle('is-admin',me.role==='admin');$('landingView').style.display='block';$('quizView').style.display='none';$('essayView').style.display='none';$('examView').style.display='none';$('auPass').value='';await loadExams();renderHome()}
-async function doLogout(){if(!confirm('Đăng xuất?'))return;await sb.auth.signOut();me=null;examRun=null;subjects=[];saveExam();document.body.classList.remove('authed','is-admin');setAuthMode('login')}
+ // Restricted tournament-only accounts come from server-side ff_accounts, never a client-defined list.
+ let ffLocked=false;
+ const ffAccess=await sb.from('ff_accounts').select('user_id,active').eq('user_id',user.id).maybeSingle();
+ if(!ffAccess.error&&ffAccess.data){if(!ffAccess.data.active){await sb.auth.signOut();me=null;throw new Error('Tài khoản giải đấu đã bị quản trị viên tạm khóa.')}ffLocked=true;}
+ document.body.classList.toggle('ff-restricted',ffLocked);window.__ffRestricted=ffLocked;
+ examRun=null;subjects=[];document.body.classList.add('authed');$('whoami').textContent=me.name+(ffLocked?' · Điện tử':'');document.body.classList.toggle('is-admin',me.role==='admin');$('landingView').style.display='block';$('quizView').style.display='none';$('essayView').style.display='none';$('examView').style.display='none';$('auPass').value='';if(!ffLocked){await loadExams();renderHome()}else{exams=[];myAtt={};myGr={};}window.StudyTFreeFire?.onLogin?.()}
+
+async function doLogout(){if(!confirm('Đăng xuất?'))return;await sb.auth.signOut();me=null;examRun=null;subjects=[];saveExam();document.body.classList.remove('authed','is-admin','ff-restricted');window.__ffRestricted=false;window.StudyTFreeFire?.onLogout?.();setAuthMode('login')}
 async function loadExams(){const [e,a,g]=await Promise.all([sb.from('exams').select('*').order('start_at',{ascending:false}),sb.from('attempts').select('id,exam_id,submitted_at,score').eq('user_id',me.id),sb.from('exam_grants').select('exam_id,remaining').eq('user_id',me.id)]);exams=e.data||[];myAtt={};(a.data||[]).forEach(x=>myAtt[x.exam_id]=x);myGr={};(g.data||[]).forEach(x=>myGr[x.exam_id]=x.remaining)}
 renderHome=function(){const adm=me&&me.role==='admin';let h=exams.map(e=>{const at=myAtt[e.id],n=Date.now(),st=+new Date(e.start_at),en=+new Date(e.end_at);const stt=at&&at.submitted_at?`Đã thi · ${(+at.score).toFixed(1)}/10${(myGr[e.id]||0)>0?` · còn ${myGr[e.id]} lượt thi lại`:''}`:at?'Đang làm dở, bấm để tiếp tục':n<st?'Chưa mở':n>en?'Đã đóng':'Đang mở · bấm để vào thi';
  return `<div class="subj" onclick="openServerExam('${e.id}')"><h3>${esc(e.title)}</h3><span>${e.num_questions} câu · ${e.duration_min} phút${adm&&!e.published?' · <b>chưa công bố</b>':''}</span><span><b>${stt}</b></span><div class="subj-act">${(adm||(at&&at.submitted_at))?`<button class="ghost" onclick="event.stopPropagation();lbOpen('${e.id}')">🏆 Xếp hạng</button>`:`<button class="ghost lb-lock" type="button" title="Thi xong mới xem được xếp hạng" onclick="event.stopPropagation();alert('Bạn cần thi xong kỳ thi này mới xem được bảng xếp hạng.')">🏆 Xếp hạng</button>`} ${adm?`<button class="ghost" onclick="event.stopPropagation();adminResults('${e.id}')">Xem điểm</button> <button class="ghost" onclick="event.stopPropagation();togglePub('${e.id}',${!e.published})">${e.published?'Ẩn':'Công bố'}</button> <button class="ghost" onclick="event.stopPropagation();delExam('${e.id}')">Xóa</button>`:''}</div></div>`}).join('');
@@ -1511,7 +1517,7 @@ function homeSetup(){const L=$('landingView');if(!L||L.querySelector('.home-tabs
  bar.innerHTML=HP_TABS.map(t=>`<button type="button" data-p="${t[0]}"><span class="ic">${t[1]}</span><span>${t[2]}</span></button>`).join('');
  bar.onclick=e=>{const b=e.target.closest('button[data-p]');if(b&&b.dataset.p&&document.querySelector('#landingView .home-pane[data-pane="'+CSS.escape(b.dataset.p)+'"]'))homePane(b.dataset.p)};
  const hd=L.querySelector('header.landing-nav');hd.insertAdjacentElement('afterend',bar);homePane(HP,true)}
-async function homePane(p,silent){HP=p;document.querySelectorAll('#landingView .home-pane').forEach(e=>e.classList.toggle('on',e.dataset.pane===p));document.querySelectorAll('#homeTabs button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));
+async function homePane(p,silent){if(document.body.classList.contains('ff-restricted')&&p!=='dientu')p='dientu';HP=p;document.querySelectorAll('#landingView .home-pane').forEach(e=>e.classList.toggle('on',e.dataset.pane===p));document.querySelectorAll('#homeTabs button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));
  if(p==='home'||p==='dash'){DSH.tab='overview';DSH.subj='all';if(window.dshRefresh)window.dshRefresh()}
  if(!silent)window.scrollTo({top:0,behavior:'smooth'})}
 const openDash=()=>{$('landingView').style.display='block';homePane('dash')};
@@ -6659,5 +6665,7 @@ trigger.addEventListener('click',()=>{const on=menu.classList.toggle('open');tri
 
 <link rel="stylesheet" href="./studyt-v92.css?v=9.2">
 <link rel="stylesheet" href="./studyt-v93.css?v=9.6">
+<link rel="stylesheet" href="./studyt-freefire.css?v=1.0">
+<script src="./studyt-freefire.js?v=1.0" defer></script>
 </body>
 </html>
