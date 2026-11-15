@@ -1,0 +1,1 @@
+Chạy migration 20261122_freefire_fixed_team_names.sql sau V1.0.22. Tên đội đặt một lần, áp dụng mọi trận; đội hình random lại, điểm cá nhân giữ nguyên. Migration dừng nếu tên đội trong kết quả đã chốt không thống nhất. Không xóa dữ liệu. Nên bốc và chốt lần lượt từng trận để ưu tiên lượt chơi chính xác.
