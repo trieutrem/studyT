@@ -1,0 +1,1 @@
+V1.0.18: Ẩn hoàn toàn phong thư trước khi đủ kết quả từng nội dung. Solo: đủ 5 trận cho mọi thí sinh đã duyệt. Clash: đủ trận 1–5. Duel: đủ chung kết, tranh hạng ba và các cặp đã bốc thăm. Tổng: cả ba hoàn tất. Không cần SQL mới. Cập nhật toàn bộ website và tải lại.
