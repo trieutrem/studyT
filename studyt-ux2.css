@@ -132,3 +132,17 @@ html body #stux-guest .stux-guest-feature-icon.st3d-icon{width:clamp(88px,10vw,1
 .st3d-arrow{animation:st3dArrow 3.5s ease-in-out infinite}@keyframes st3dArrow{0%,100%{transform:translate(-2px,3px)}50%{transform:translate(2px,-3px)}}
 @media(max-width:700px){html body #stux-guest .stux-guest-feature:has(.st3d-icon){display:grid!important;grid-template-columns:90px minmax(0,1fr);column-gap:12px;row-gap:4px}html body #stux-guest .stux-guest-feature-icon.st3d-icon{width:90px!important;grid-row:1/3;margin:0!important}html body #stux-guest .stux-guest-feature:has(.st3d-icon) p{margin:0!important;width:auto!important}}
 @media(prefers-reduced-motion:reduce){#stux-guest .st3d-icon *{animation:none!important;transform:none!important}}
+
+/* V1.0.21 — luminous mascot, isolated behind the original transparent PNG */
+#stux-guest .stux-guest-visual{isolation:isolate;overflow:hidden}
+#stux-guest .stux-pig-energy{position:absolute;inset:5%;z-index:0;pointer-events:none;display:grid;place-items:center;perspective:800px;filter:drop-shadow(0 0 12px #a9a2ff80)}
+#stux-guest .stux-pig-energy i{position:absolute;width:94%;height:65%;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 20%,#a7e9ff 27%,#fff 29%,transparent 35% 61%,#c9a4ff 70%,#fff 72%,transparent 78%);mask:radial-gradient(ellipse,transparent 65%,#000 67% 69%,transparent 71%);animation:stuxEnergyOrbit 7s linear infinite;transform:rotate(-25deg);opacity:.8}
+#stux-guest .stux-pig-energy i:nth-child(2){width:82%;height:82%;animation-duration:10s;animation-direction:reverse;opacity:.65}
+#stux-guest .stux-pig-energy i:nth-child(3){width:100%;height:48%;animation-duration:5s;opacity:.7}
+#stux-guest .stux-pig-energy b{position:absolute;width:85%;height:85%;border-radius:50%;background:radial-gradient(ellipse,#d9c5ff66 0%,#878bff33 40%,transparent 72%);animation:stuxEnergyPulse 4s ease-in-out infinite}
+#stux-guest .stux-guest-pig{animation:stuxPigDepth 6s ease-in-out infinite;transform-origin:center;max-width:min(590px,94%);filter:drop-shadow(0 20px 24px #19165d80)}
+@keyframes stuxEnergyOrbit{from{transform:rotate(-25deg) scale(.94)}to{transform:rotate(335deg) scale(.94)}}
+@keyframes stuxEnergyPulse{0%,100%{transform:scale(.85);opacity:.55}50%{transform:scale(1.12);opacity:1}}
+@keyframes stuxPigDepth{0%,100%{transform:translateY(0) scale(.96)}50%{transform:translateY(-7px) scale(1.025)}}
+@media(max-width:700px){#stux-guest .stux-pig-energy{inset:0 5%}#stux-guest .stux-guest-pig{max-width:90%}}
+@media(prefers-reduced-motion:reduce){#stux-guest .stux-pig-energy i,#stux-guest .stux-pig-energy b,#stux-guest .stux-guest-pig{animation:none!important}}
